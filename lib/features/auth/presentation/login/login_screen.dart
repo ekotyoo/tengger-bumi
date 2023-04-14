@@ -95,9 +95,7 @@ class LoginScreen extends ConsumerWidget {
     });
     return [
         ElevatedButton(
-          onPressed: () {
-            ref.read(loginControllerProvider.notifier).onSubmit();
-          },
+          onPressed: () => ref.read(loginControllerProvider.notifier).onSubmit(),
           child: const Text(SWStrings.labelLogin),
         ),
         const SizedBox(height: SWSizes.s16),

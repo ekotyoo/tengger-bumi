@@ -1,21 +1,21 @@
 import 'package:equatable/equatable.dart';
 import '../../models/email_text_input.dart';
-import '../../models/password_text_input.dart';
+import '../../models/password_login_text_input.dart';
 
 class LoginState extends Equatable {
   const LoginState({
     this.emailTextInput = const EmailTextInput.pure(),
-    this.passwordTextInput = const PasswordTextInput.pure(),
+    this.passwordTextInput = const PasswordLoginTextInput.pure(),
     this.status = false,
   });
 
   final EmailTextInput emailTextInput;
-  final PasswordTextInput passwordTextInput;
+  final PasswordLoginTextInput passwordTextInput;
   final bool status;
 
   LoginState copyWith({
     EmailTextInput? emailTextInput,
-    PasswordTextInput? passwordTextInput,
+    PasswordLoginTextInput? passwordTextInput,
     bool? status,
   }) {
     return LoginState(

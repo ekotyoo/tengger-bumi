@@ -23,7 +23,10 @@ class SWStrings {
   static const descEmailCannotBeEmpty = 'Email tidak boleh kosong';
   static const descEmailInvalid = 'Email tidak valid';
   static const descPasswordCannotBeEmpty = 'Password tidak boleh kosong';
-  static const descPasswordInvalid = 'Password minimal terdiri dari 8 karakter\nPassword terdiri dari kombinasi huruf kecil, kapital, dan angka';
+  static const descPasswordInvalid = 'Password minimal terdiri dari 8 karakter kombinasi huruf dan angka';
+  static const descPasswordTooShort = 'Password minimal terdiri dari 8 karakter';
+  static const descNameCannotBeEmpty = 'Nama tidak boleh kosong';
+  static const descNameInvalid = 'Nama tidak valid';
 
   // Home
   static const labelReportTimeline = 'Feed Laporan';

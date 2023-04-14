@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
 import '../../models/email_text_input.dart';
-import '../../models/password_text_input.dart';
+import '../../models/password_login_text_input.dart';
 import './login_state.dart';
 
 class LoginController extends StateNotifier<LoginState> {
@@ -13,14 +13,14 @@ class LoginController extends StateNotifier<LoginState> {
   }
 
   void onPasswordChange(value) {
-    final password = PasswordTextInput.dirty(value: value);
+    final password = PasswordLoginTextInput.dirty(value: value);
     state = state.copyWith(passwordTextInput: password);
   }
 
   void onSubmit() {
     state = state.copyWith(
       emailTextInput: EmailTextInput.dirty(value: state.emailTextInput.value),
-      passwordTextInput: PasswordTextInput.dirty(value: state.passwordTextInput.value),
+      passwordTextInput: PasswordLoginTextInput.dirty(value: state.passwordTextInput.value),
       status: Formz.validate([state.emailTextInput, state.passwordTextInput]),
     );
   }
