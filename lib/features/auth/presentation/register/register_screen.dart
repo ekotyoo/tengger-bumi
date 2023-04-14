@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../common/widgets/sw_text_field.dart';
+import 'register_controller.dart';
 import '../../../../common/routing/routes.dart';
 import '../../../../common/widgets/app_logo.dart';
 import '../../../../common/constants/constant.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends ConsumerWidget {
   const RegisterScreen({super.key});
 
   void _navigateBack(BuildContext context) => context.pop();
 
   void _navigateToLogin(BuildContext context) => context.goNamed(Routes.login);
 
+  void _navigateToHome(BuildContext context) => context.goNamed(Routes.home);
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -28,9 +33,9 @@ class RegisterScreen extends StatelessWidget {
               const SizedBox(height: SWSizes.s32),
               ..._buildHeader(context),
               const SizedBox(height: SWSizes.s32),
-              ..._buildRegisterInputs(context),
+              ..._buildRegisterInputs(context, ref),
               const Spacer(),
-              ..._buildRegisterActions(context),
+              ..._buildRegisterActions(context, ref),
               const SizedBox(height: SWSizes.s32),
             ],
           ),
@@ -53,42 +58,51 @@ class RegisterScreen extends StatelessWidget {
         ),
       ];
 
-  _buildRegisterInputs(BuildContext context) => [
-        TextField(
-          textInputAction: TextInputAction.next,
-          maxLines: 1,
-          style: Theme.of(context).textTheme.bodyMedium,
-          decoration: const InputDecoration(hintText: SWStrings.labelName),
-        ),
-        const SizedBox(height: SWSizes.s16),
-        TextField(
-          keyboardType: TextInputType.emailAddress,
-          textInputAction: TextInputAction.next,
-          maxLines: 1,
-          style: Theme.of(context).textTheme.bodyMedium,
-          decoration: const InputDecoration(hintText: SWStrings.labelEmail),
-        ),
-        const SizedBox(height: SWSizes.s16),
-        TextField(
-          keyboardType: TextInputType.visiblePassword,
-          style: Theme.of(context).textTheme.bodyMedium,
-          decoration: InputDecoration(
-            hintText: SWStrings.labelPassword,
-            suffixIcon: GestureDetector(
-              onTap: () {},
-              child: const Icon(
-                Icons.visibility_off_rounded,
-              ),
-            ),
-          ),
-          obscureText: true,
-          maxLines: 1,
-        ),
-      ];
+  _buildRegisterInputs(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(registerControllerProvider);
 
-  _buildRegisterActions(BuildContext context) => [
+    return [
+      SWTextField(
+        action: TextInputAction.next,
+        hint: SWStrings.labelName,
+        onChanged: (value) => ref.read(registerControllerProvider.notifier).onNameChange(value),
+        errorText: state.nameTextInput.isPure
+            ? null
+            : state.nameTextInput.error?.getErrorMessage(),
+      ),
+      const SizedBox(height: SWSizes.s16),
+      SWTextField(
+        action: TextInputAction.next,
+        hint: SWStrings.labelEmail,
+        onChanged: (value) => ref.read(registerControllerProvider.notifier).onEmailChange(value),
+        type: SWTextFieldType.email,
+        errorText: state.emailTextInput.isPure
+            ? null
+            : state.emailTextInput.error?.getErrorMessage(),
+      ),
+      const SizedBox(height: SWSizes.s16),
+      SWTextField(
+        action: TextInputAction.done,
+        hint: SWStrings.labelPassword,
+        onChanged: (value) => ref.read(registerControllerProvider.notifier).onPasswordChange(value),
+        type: SWTextFieldType.password,
+        errorText: state.passwordTextInput.isPure
+            ? null
+            : state.passwordTextInput.error?.getErrorMessage(),
+      ),
+    ];
+  }
+
+  _buildRegisterActions(BuildContext context, WidgetRef ref) {
+    ref.listen(registerControllerProvider, (previous, next) {
+      if (next.status == true) {
+        _navigateToHome(context);
+      }
+    });
+
+    return [
         ElevatedButton(
-          onPressed: () {},
+          onPressed: () => ref.read(registerControllerProvider.notifier).onSubmit(),
           child: const Text(SWStrings.labelRegister),
         ),
         const SizedBox(height: SWSizes.s16),
@@ -97,4 +111,5 @@ class RegisterScreen extends StatelessWidget {
           child: const Text(SWStrings.descAlreadyHaveAccount),
         ),
       ];
+  }
 }
