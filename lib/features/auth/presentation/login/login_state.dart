@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:school_watch_semeru/features/auth/login/models/email_text_input.dart';
-import 'package:school_watch_semeru/features/auth/login/models/password_text_input.dart';
+import '../../models/email_text_input.dart';
+import '../../models/password_text_input.dart';
 
 class LoginState extends Equatable {
   const LoginState({

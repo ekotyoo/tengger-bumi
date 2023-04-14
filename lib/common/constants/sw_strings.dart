@@ -20,6 +20,10 @@ class SWStrings {
   static const labelName = 'Nama';
   static const labelEmail = 'Email';
   static const labelPassword = 'Password';
+  static const descEmailCannotBeEmpty = 'Email tidak boleh kosong';
+  static const descEmailInvalid = 'Email tidak valid';
+  static const descPasswordCannotBeEmpty = 'Password tidak boleh kosong';
+  static const descPasswordInvalid = 'Password minimal terdiri dari 8 karakter\nPassword terdiri dari kombinasi huruf kecil, kapital, dan angka';
 
   // Home
   static const labelReportTimeline = 'Feed Laporan';

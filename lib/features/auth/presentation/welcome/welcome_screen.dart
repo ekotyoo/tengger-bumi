@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../common/constants/constant.dart';
-import '../../../common/routing/routes.dart';
+import '../../../../common/constants/constant.dart';
+import '../../../../common/routing/routes.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -16,6 +16,7 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Padding(
           padding: const EdgeInsets.all(SWSizes.s16),
           child: Column(

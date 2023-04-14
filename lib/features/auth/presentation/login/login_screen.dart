@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:school_watch_semeru/common/widgets/sw_text_field.dart';
-import 'package:school_watch_semeru/features/auth/login/presentation/login_controller.dart';
 
+import '../../../../common/widgets/sw_text_field.dart';
 import '../../../../common/routing/routes.dart';
 import '../../../../common/widgets/app_logo.dart';
 import '../../../../common/constants/constant.dart';
+import './login_controller.dart';
 
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
@@ -34,7 +34,7 @@ class LoginScreen extends ConsumerWidget {
               const SizedBox(height: SWSizes.s32),
               ..._buildLoginInputs(context, ref),
               const Spacer(),
-              ..._buildLoginActions(context),
+              ..._buildLoginActions(context, ref),
               const SizedBox(height: SWSizes.s32),
             ],
           ),
@@ -57,15 +57,17 @@ class LoginScreen extends ConsumerWidget {
         ),
       ];
 
-  _buildLoginInputs(BuildContext context, WidgetRef ref) => [
+  _buildLoginInputs(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(loginControllerProvider);
+
+    return [
         SWTextField(
           action: TextInputAction.next,
           hint: SWStrings.labelEmail,
           type: SWTextFieldType.email,
           onChanged: (value) =>
               ref.read(loginControllerProvider.notifier).onEmailChange(value),
-          errorText: ref
-              .watch(loginControllerProvider)
+          errorText: state.emailTextInput.isPure ? null : state
               .emailTextInput
               .error
               ?.getErrorMessage(),
@@ -78,17 +80,24 @@ class LoginScreen extends ConsumerWidget {
           onChanged: (value) => ref
               .read(loginControllerProvider.notifier)
               .onPasswordChange(value),
-          errorText: ref
-              .watch(loginControllerProvider)
-              .passwordTextInput
+          errorText: state.passwordTextInput.isPure ? null : state.passwordTextInput
               .error
               ?.getErrorMessage(),
         ),
       ];
+  }
 
-  _buildLoginActions(BuildContext context) => [
+  _buildLoginActions(BuildContext context, WidgetRef ref) {
+    ref.listen(loginControllerProvider, (previous, next) {
+      if (next.status == true) {
+        _navigateToHome(context);
+      }
+    });
+    return [
         ElevatedButton(
-          onPressed: () => _navigateToHome(context),
+          onPressed: () {
+            ref.read(loginControllerProvider.notifier).onSubmit();
+          },
           child: const Text(SWStrings.labelLogin),
         ),
         const SizedBox(height: SWSizes.s16),
@@ -97,4 +106,5 @@ class LoginScreen extends ConsumerWidget {
           child: const Text(SWStrings.descDidNotHaveAccount),
         ),
       ];
+  }
 }

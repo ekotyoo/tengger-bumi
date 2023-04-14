@@ -1,6 +1,7 @@
 import 'package:formz/formz.dart';
 
-import '../../../../utils/string_validator.dart';
+import '../../../common/constants/constant.dart';
+import '../../../utils/string_validator.dart';
 
 enum EmailTextInputError {
   empty,
@@ -9,9 +10,9 @@ enum EmailTextInputError {
   String getErrorMessage() {
     switch (this) {
       case empty:
-        return 'Email tidak boleh kosong';
+        return SWStrings.descEmailCannotBeEmpty;
       case invalid:
-        return 'Email tidak valid';
+        return SWStrings.descEmailInvalid;
     }
   }
 }
@@ -23,11 +24,11 @@ class EmailTextInput extends FormzInput<String, EmailTextInputError> {
 
   @override
   EmailTextInputError? validator(String value) {
-    if (!EmailInputValidator().isValid(value)) {
-      return EmailTextInputError.invalid;
-    }
     if (!NotEmptyInputValidator().isValid(value)) {
       return EmailTextInputError.empty;
+    }
+    if (!EmailInputValidator().isValid(value)) {
+      return EmailTextInputError.invalid;
     }
 
     return null;

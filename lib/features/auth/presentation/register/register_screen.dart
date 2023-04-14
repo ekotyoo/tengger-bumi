@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../common/routing/routes.dart';
-import '../../../common/widgets/app_logo.dart';
-import '../../../common/constants/constant.dart';
+import '../../../../common/routing/routes.dart';
+import '../../../../common/widgets/app_logo.dart';
+import '../../../../common/constants/constant.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
