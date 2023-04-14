@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
-import '../../models/email_text_input.dart';
-import '../../models/password_login_text_input.dart';
+import '../models/email_text_input.dart';
+import '../models/password_login_text_input.dart';
 
 class LoginState extends Equatable {
   const LoginState({

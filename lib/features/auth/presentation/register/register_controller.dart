@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
 
-import '../../models/email_text_input.dart';
-import '../../models/password_text_input.dart';
-import '../../models/name_text_input.dart';
+import '../models/email_text_input.dart';
+import '../models/password_text_input.dart';
+import '../models/name_text_input.dart';
 import 'register_state.dart';
 
 class RegisterController extends StateNotifier<RegisterState> {

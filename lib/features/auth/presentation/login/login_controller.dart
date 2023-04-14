@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
-import '../../models/email_text_input.dart';
-import '../../models/password_login_text_input.dart';
+import '../models/email_text_input.dart';
+import '../models/password_login_text_input.dart';
 import './login_state.dart';
 
 class LoginController extends StateNotifier<LoginState> {

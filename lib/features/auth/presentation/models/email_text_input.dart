@@ -1,7 +1,7 @@
 import 'package:formz/formz.dart';
 
-import '../../../common/constants/constant.dart';
-import '../../../utils/string_validator.dart';
+import '../../../../common/constants/constant.dart';
+import '../../../../utils/string_validator.dart';
 
 enum EmailTextInputError {
   empty,

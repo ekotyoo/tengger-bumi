@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 
-import '../../models/name_text_input.dart';
-import '../../models/email_text_input.dart';
-import '../../models/password_text_input.dart';
+import '../models/name_text_input.dart';
+import '../models/email_text_input.dart';
+import '../models/password_text_input.dart';
 
 class RegisterState extends Equatable {
   const RegisterState({
