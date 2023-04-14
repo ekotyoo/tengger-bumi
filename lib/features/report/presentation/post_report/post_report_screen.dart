@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../common/constants/constant.dart';
-import './widgets/pick_report_type_form.dart';
-import './widgets/pick_school_form.dart';
-import './widgets/report_info_form.dart';
+import '../../../../common/constants/constant.dart';
+import 'widgets/pick_report_type_form.dart';
+import 'widgets/pick_school_form.dart';
+import 'widgets/report_info_form.dart';
 import 'post_report_form_notifier.dart';
 
 final dummySchools = List.generate(

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:school_watch_semeru/features/home/report_detail_screen.dart';
 import '../../features/home/map_screen.dart';
-import '../../features/report/post_report/post_report_screen.dart';
+import '../../features/report/presentation/post_report/post_report_screen.dart';
 import '../../features/home/profile_screen.dart';
 import '../../features/home/school_screen.dart';
 import '../../features/auth/presentation/login/login_screen.dart';

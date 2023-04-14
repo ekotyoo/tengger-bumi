@@ -1,4 +1,4 @@
-part of 'post_report_form_notifier.dart';
+part of './post_report_form_notifier.dart';
 
 class PostReportFormState extends Equatable {
   const PostReportFormState({

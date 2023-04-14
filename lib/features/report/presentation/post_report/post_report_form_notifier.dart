@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:school_watch_semeru/features/report/post_report/widgets/pick_report_type_form.dart';
 
+import 'widgets/pick_report_type_form.dart';
 import 'widgets/pick_school_form.dart';
 
 part './post_report_form_state.dart';

@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../common/constants/constant.dart';
-import '../../../../common/widgets/option_item.dart';
-import '../../../../common/widgets/title_with_caption.dart';
+import '../../../../../common/constants/constant.dart';
+import '../../../../../common/widgets/option_item.dart';
+import '../../../../../common/widgets/title_with_caption.dart';
 
 class SchoolOption extends Equatable {
   const SchoolOption({required this.id, required this.name});

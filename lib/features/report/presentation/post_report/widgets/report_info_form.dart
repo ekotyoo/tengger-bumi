@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../common/constants/constant.dart';
-import '../../../../common/widgets/loading_image.dart';
-import '../../../../common/widgets/title_with_caption.dart';
+import '../../../../../common/constants/constant.dart';
+import '../../../../../common/widgets/loading_image.dart';
+import '../../../../../common/widgets/title_with_caption.dart';
 
 class ReportInfoForm extends StatelessWidget {
   const ReportInfoForm({super.key});
