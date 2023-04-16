@@ -116,9 +116,10 @@ class ReportInfoForm extends ConsumerWidget {
 }
 
 class ImagePickerInput extends ConsumerWidget {
-  ImagePickerInput({Key? key}) : super(key: key);
+  ImagePickerInput({Key? key, this.errorText}) : super(key: key);
 
   final _imagePicker = ImagePicker();
+  final String? errorText;
 
   void _pickImageFromGallery(WidgetRef ref) async {
     try {
@@ -168,7 +169,7 @@ class ImagePickerInput extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(postReportControllerProvider);
-    final images = state.selectedImages;
+    final images = state.imageInput.value;
 
     final emptyImagePlaceholder = DottedBorder(
       borderType: BorderType.RRect,
@@ -192,6 +193,7 @@ class ImagePickerInput extends ConsumerWidget {
     );
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
           height: SWSizes.s80,
@@ -220,6 +222,17 @@ class ImagePickerInput extends ConsumerWidget {
             )
           ],
         ),
+        if (!state.imageInput.isPure && state.imageInput.error != null) ...[
+          const SizedBox(height: SWSizes.s4),
+          Text(
+            state.imageInput.error!.getErrorMessage(),
+            style: Theme.of(context)
+                .textTheme
+                .labelSmall
+                ?.copyWith(color: Theme.of(context).colorScheme.error),
+          ),
+          const SizedBox(height: SWSizes.s4),
+        ]
       ],
     );
   }

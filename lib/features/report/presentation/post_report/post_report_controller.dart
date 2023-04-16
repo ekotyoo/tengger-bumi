@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../models/image_pick_input.dart';
 import '../models/information_text_input.dart';
 import '../models/label_text_input.dart';
 import '../../domain/latlng.dart';
@@ -96,14 +97,16 @@ class PostReportController extends StateNotifier<PostReportState> {
   }
 
   void onImagesSelected(List<XFile> images) {
-    state = state.copyWith(selectedImages: state.selectedImages + images);
+    state = state.copyWith(
+      imageInput: ImagePickInput.dirty(value: state.imageInput.value + images),
+    );
   }
 
   void onImageDeleted(XFile image) {
-    final newList = state.selectedImages;
+    final newList = state.imageInput.value;
     newList.remove(image);
 
-    state = state.copyWith(selectedImages: newList);
+    state = state.copyWith(imageInput: ImagePickInput.dirty(value: newList));
   }
 
   void onSubmit() {
@@ -126,6 +129,9 @@ class PostReportController extends StateNotifier<PostReportState> {
                     value: e.informationInput.value)),
           )
           .toList(),
+      imageInput: ImagePickInput.dirty(
+        value: state.imageInput.value
+      ),
     );
 
     Formz.validate([
@@ -134,6 +140,7 @@ class PostReportController extends StateNotifier<PostReportState> {
       state.locationInput,
       ...state.additionalInfoInputs.map((e) => e.labelInput).toList(),
       ...state.additionalInfoInputs.map((e) => e.informationInput).toList(),
+      state.imageInput,
     ]);
   }
 }

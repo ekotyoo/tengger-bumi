@@ -49,7 +49,8 @@ class SWStrings {
   static const descLocationCannotBeEmpty = 'Lokasi tidak boleh kosong';
   static const descInformationCannotBeEmpty = 'Informasi tidak boleh kosong';
   static const descLabelCannotBeEmpty = 'Label tidak boleh kosong';
-  static const descNoImagePicked = 'Belum ada gambar terpilih';
+  static const descNoImagePicked = 'Belum ada foto terpilih';
+  static const descImageCannotBeEmpty = 'Foto tidak boleh kosong';
 
   // School
   static const labelSchoolList = 'Daftar Sekolah';
