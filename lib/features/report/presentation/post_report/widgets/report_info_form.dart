@@ -1,5 +1,9 @@
+import 'dart:io';
+
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../../common/widgets/sw_dropdown.dart';
 import '../../models/additional_info_input_wrapper.dart';
@@ -7,7 +11,6 @@ import '../../models/location_pick_input.dart';
 import '../post_report_controller.dart';
 import '../../../../../common/widgets/sw_text_field.dart';
 import '../../../../../common/constants/constant.dart';
-import '../../../../../common/widgets/loading_image.dart';
 import '../../../../../common/widgets/title_with_caption.dart';
 
 class ReportInfoForm extends ConsumerWidget {
@@ -30,28 +33,7 @@ class ReportInfoForm extends ConsumerWidget {
             children: [
               ..._buildFormInputFields(context, ref),
               const Divider(),
-              _buildSelectedImageList(context),
-              const SizedBox(height: SWSizes.s8),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    child: const Icon(
-                      Icons.camera_alt_outlined,
-                      color: kColorNeutral80,
-                    ),
-                    onTap: () {},
-                  ),
-                  const SizedBox(width: SWSizes.s8),
-                  GestureDetector(
-                    child: const Icon(
-                      Icons.image,
-                      color: kColorNeutral80,
-                    ),
-                    onTap: () {},
-                  )
-                ],
-              ),
+              ImagePickerInput(),
             ],
           ),
         ),
@@ -131,48 +113,159 @@ class ReportInfoForm extends ConsumerWidget {
         ),
     ];
   }
+}
 
-  _buildSelectedImageList(BuildContext context) {
-    return SizedBox(
-      height: SWSizes.s80,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) => Stack(
+class ImagePickerInput extends ConsumerWidget {
+  ImagePickerInput({Key? key}) : super(key: key);
+
+  final _imagePicker = ImagePicker();
+
+  void _pickImageFromGallery(WidgetRef ref) async {
+    try {
+      final images = await _imagePicker.pickMultiImage(
+        maxWidth: 600,
+        maxHeight: 600,
+        imageQuality: 70,
+      );
+      ref.read(postReportControllerProvider.notifier).onImagesSelected(images);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  void _pickImageFromCamera(WidgetRef ref) async {
+    try {
+      final image = await _imagePicker.pickImage(
+        source: ImageSource.camera,
+        maxWidth: 600,
+        maxHeight: 600,
+        imageQuality: 70,
+      );
+      if (image != null) {
+        ref
+            .read(postReportControllerProvider.notifier)
+            .onImagesSelected([image]);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  _buildImageList(List<XFile> images, WidgetRef ref) {
+    return ListView.separated(
+      scrollDirection: Axis.horizontal,
+      itemBuilder: (context, index) => ImageCard(
+        path: images[index].path,
+        onDelete: () => ref
+            .read(postReportControllerProvider.notifier)
+            .onImageDeleted(images[index]),
+      ),
+      separatorBuilder: (context, index) => const SizedBox(width: SWSizes.s8),
+      itemCount: images.length,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(postReportControllerProvider);
+    final images = state.selectedImages;
+
+    final emptyImagePlaceholder = DottedBorder(
+      borderType: BorderType.RRect,
+      radius: const Radius.circular(SWSizes.s8),
+      dashPattern: const [5, 4],
+      strokeWidth: 1.5,
+      strokeCap: StrokeCap.round,
+      color: kColorNeutral200,
+      child: SizedBox(
+        height: SWSizes.s80,
+        child: Center(
+          child: Text(
+            SWStrings.descNoImagePicked,
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                ?.copyWith(color: kColorNeutral200),
+          ),
+        ),
+      ),
+    );
+
+    return Column(
+      children: [
+        SizedBox(
+          height: SWSizes.s80,
+          child: images.isNotEmpty
+              ? _buildImageList(images, ref)
+              : emptyImagePlaceholder,
+        ),
+        const SizedBox(height: SWSizes.s8),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
-              height: SWSizes.s80,
-              width: SWSizes.s80,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(SWSizes.s8),
-                child: const LoadingImage(
-                  url: 'https://picsum.photos/80/80',
-                  fit: BoxFit.cover,
-                ),
+            GestureDetector(
+              onTap: () => _pickImageFromCamera(ref),
+              child: const Icon(
+                Icons.camera_alt_outlined,
+                color: kColorNeutral80,
               ),
             ),
-            Positioned(
-              top: SWSizes.s4,
-              right: SWSizes.s4,
-              child: GestureDetector(
-                onTap: () {},
-                child: Container(
-                  padding: const EdgeInsets.all(SWSizes.s2),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(SWSizes.s8),
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                  ),
-                  child: const Icon(
-                    Icons.delete_outlined,
-                    size: 18,
-                  ),
-                ),
+            const SizedBox(width: SWSizes.s8),
+            GestureDetector(
+              onTap: () => _pickImageFromGallery(ref),
+              child: const Icon(
+                Icons.image,
+                color: kColorNeutral80,
               ),
             )
           ],
         ),
-        separatorBuilder: (context, index) => const SizedBox(width: SWSizes.s8),
-        itemCount: 3,
-      ),
+      ],
+    );
+  }
+}
+
+class ImageCard extends StatelessWidget {
+  const ImageCard({Key? key, required this.path, this.onDelete})
+      : super(key: key);
+
+  final String path;
+  final VoidCallback? onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        SizedBox(
+          height: SWSizes.s80,
+          width: SWSizes.s80,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(SWSizes.s8),
+            child: Image.file(
+              File(path),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        Positioned(
+          top: SWSizes.s4,
+          right: SWSizes.s4,
+          child: GestureDetector(
+            onTap: onDelete,
+            child: Container(
+              padding: const EdgeInsets.all(SWSizes.s2),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(SWSizes.s8),
+                color: Theme.of(context).scaffoldBackgroundColor,
+              ),
+              child: const Icon(
+                Icons.delete_outlined,
+                size: 18,
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 }
@@ -192,7 +285,8 @@ class _AdditionalInfoTextField extends StatefulWidget {
   final Function(String)? onInformationChanged;
 
   @override
-  State<_AdditionalInfoTextField> createState() => _AdditionalInfoTextFieldState();
+  State<_AdditionalInfoTextField> createState() =>
+      _AdditionalInfoTextFieldState();
 }
 
 class _AdditionalInfoTextFieldState extends State<_AdditionalInfoTextField> {
@@ -201,8 +295,10 @@ class _AdditionalInfoTextFieldState extends State<_AdditionalInfoTextField> {
 
   @override
   void initState() {
-    _labelController = TextEditingController(text: widget.input.labelInput.value);
-    _informationController = TextEditingController(text: widget.input.informationInput.value);
+    _labelController =
+        TextEditingController(text: widget.input.labelInput.value);
+    _informationController =
+        TextEditingController(text: widget.input.informationInput.value);
     super.initState();
   }
 
@@ -282,7 +378,8 @@ class _PickLocationButton extends StatelessWidget {
             ],
           ),
         ),
-        if (!locationInput.isPure && locationInput.error?.getErrorMessage() != null) ...[
+        if (!locationInput.isPure &&
+            locationInput.error?.getErrorMessage() != null) ...[
           const SizedBox(height: SWSizes.s4),
           Text(
             locationInput.error!.getErrorMessage(),

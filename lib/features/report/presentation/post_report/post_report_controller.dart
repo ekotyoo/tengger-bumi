@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../models/information_text_input.dart';
 import '../models/label_text_input.dart';
@@ -92,6 +93,17 @@ class PostReportController extends StateNotifier<PostReportState> {
     newList[index] = newItem;
 
     state = state.copyWith(additionalInfoInputs: newList);
+  }
+
+  void onImagesSelected(List<XFile> images) {
+    state = state.copyWith(selectedImages: state.selectedImages + images);
+  }
+
+  void onImageDeleted(XFile image) {
+    final newList = state.selectedImages;
+    newList.remove(image);
+
+    state = state.copyWith(selectedImages: newList);
   }
 
   void onSubmit() {

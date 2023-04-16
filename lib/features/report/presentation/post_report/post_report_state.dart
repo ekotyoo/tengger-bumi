@@ -10,6 +10,7 @@ class PostReportState extends Equatable {
     this.categoryInput = const CategoryOptionInput.pure(),
     this.locationInput = const LocationPickInput.pure(),
     this.additionalInfoInputs = const [],
+    this.selectedImages = const [],
   });
 
   final int currentPage;
@@ -20,6 +21,7 @@ class PostReportState extends Equatable {
   final CategoryOptionInput categoryInput;
   final LocationPickInput locationInput;
   final List<AdditionalInfoInputWrapper> additionalInfoInputs;
+  final List<XFile> selectedImages;
 
   PostReportState copyWith({
     int? currentPage,
@@ -30,6 +32,7 @@ class PostReportState extends Equatable {
     CategoryOptionInput? categoryInput,
     LocationPickInput? locationInput,
     List<AdditionalInfoInputWrapper>? additionalInfoInputs,
+    List<XFile>? selectedImages,
   }) {
     return PostReportState(
       currentPage: currentPage ?? this.currentPage,
@@ -40,6 +43,7 @@ class PostReportState extends Equatable {
       categoryInput: categoryInput ?? this.categoryInput,
       locationInput: locationInput ?? this.locationInput,
       additionalInfoInputs: additionalInfoInputs ?? this.additionalInfoInputs,
+      selectedImages: selectedImages ?? this.selectedImages,
     );
   }
 
