@@ -37,6 +37,18 @@ class SWStrings {
   static const labelChooseReportType = 'Pilih Jenis Laporan';
   static const labelCompleteReport = 'Lengkapi Laporan';
   static const labelReportDetail = 'Detail Laporan';
+  static const descDescriptionCannotBeEmpty = 'Deskripsi tidak boleh kosong';
+  static const descDescriptionTooShort = 'Deskripsi minimal terdiri dari 3 karkter';
+  static const labelDescription = 'Deksripsi';
+  static const labelCategory = 'Kategori';
+  static const labelLocation = 'Lokasi';
+  static const labelAddAdditionalInfo = 'Informasi Tambahan';
+  static const labelLabel = 'Label';
+  static const labelInformation = 'Informasi';
+  static const descCategoryCannotBeEmpty = 'Kategori tidak boleh kosong';
+  static const descLocationCannotBeEmpty = 'Lokasi tidak boleh kosong';
+  static const descInformationCannotBeEmpty = 'Informasi tidak boleh kosong';
+  static const descLabelCannotBeEmpty = 'Label tidak boleh kosong';
 
   // School
   static const labelSchoolList = 'Daftar Sekolah';

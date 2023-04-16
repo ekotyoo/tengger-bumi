@@ -6,7 +6,7 @@ import '../../../../common/constants/constant.dart';
 import 'widgets/pick_report_type_form.dart';
 import 'widgets/pick_school_form.dart';
 import 'widgets/report_info_form.dart';
-import 'post_report_form_notifier.dart';
+import 'post_report_controller.dart';
 
 final dummySchools = List.generate(
   10,
@@ -43,22 +43,25 @@ class PostReportScreen extends ConsumerStatefulWidget {
 
 class _PostReportScreenState extends ConsumerState<PostReportScreen> {
   late PageController _pageController;
+  late TextEditingController _descriptionController;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController(viewportFraction: 1.1, initialPage: 0);
+    _descriptionController = TextEditingController();
   }
 
   @override
   void dispose() {
     super.dispose();
     _pageController.dispose();
+    _descriptionController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(postReportFormNotifierProvider);
+    final state = ref.watch(postReportControllerProvider);
     final screenWidth = MediaQuery.of(context).size.width - (2 * SWSizes.s16);
 
     final canGoBack = state.currentPage > 0;
@@ -70,8 +73,8 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
           schools: dummySchools,
           selectedSchool: state.selectedSchool,
           onSchoolSelected: (school) => ref
-              .read(postReportFormNotifierProvider.notifier)
-              .onSchoolSelected(school),
+              .read(postReportControllerProvider.notifier)
+              .onSchoolChange(school),
         ),
       ),
       FractionallySizedBox(
@@ -80,13 +83,15 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
           types: reportTypes,
           selectedType: state.selectedReportType,
           onTypeSelected: (type) => ref
-              .read(postReportFormNotifierProvider.notifier)
-              .onReportTypeSelected(type),
+              .read(postReportControllerProvider.notifier)
+              .onReportTypeChange(type),
         ),
       ),
       FractionallySizedBox(
         widthFactor: 1 / _pageController.viewportFraction,
-        child: const ReportInfoForm(),
+        child: ReportInfoForm(
+          descriptionController: _descriptionController,
+        ),
       ),
     ];
 
@@ -137,7 +142,7 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
                   scrollDirection: Axis.horizontal,
                   controller: _pageController,
                   onPageChanged: (value) => ref
-                      .read(postReportFormNotifierProvider.notifier)
+                      .read(postReportControllerProvider.notifier)
                       .onPageChange(value),
                   physics: const NeverScrollableScrollPhysics(),
                   children: forms,
@@ -163,7 +168,7 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
 
   _buildFormActions(
     BuildContext context,
-    PostReportFormState state,
+    PostReportState state,
     List<Widget> forms,
   ) {
     var disabled = false;
@@ -182,8 +187,7 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
               if (currentPage < forms.length - 1) {
                 _animateToPage(currentPage + 1);
               } else {
-                // TODO: Handle form submission
-                context.pop();
+                ref.read(postReportControllerProvider.notifier).onSubmit();
               }
             },
       child: Text(
