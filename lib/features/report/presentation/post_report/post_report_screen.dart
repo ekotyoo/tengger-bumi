@@ -96,62 +96,67 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
     ];
 
     return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          title: const Text(SWStrings.labelPostReport),
-          centerTitle: true,
-          leading: IconButton(
-            onPressed: () {
-              if (canGoBack) {
-                _pageController.animateToPage(
-                  state.currentPage - 1,
-                  duration: kDurationShort,
-                  curve: Curves.easeInOut,
-                );
-              } else {
-                context.pop();
-              }
-            },
-            icon: Icon(canGoBack ? Icons.arrow_back : Icons.close_rounded),
+      child: WillPopScope(
+        onWillPop: () async {
+          if (canGoBack) {
+            _animateToPage(state.currentPage - 1);
+            return false;
+          }
+          return true;
+        },
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            title: const Text(SWStrings.labelPostReport),
+            centerTitle: true,
+            leading: IconButton(
+              onPressed: () {
+                if (canGoBack) {
+                  _animateToPage(state.currentPage - 1);
+                } else {
+                  context.pop();
+                }
+              },
+              icon: Icon(canGoBack ? Icons.arrow_back : Icons.close_rounded),
+            ),
           ),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(SWSizes.s16),
-          child: Column(
-            children: [
-              Stack(
-                alignment: Alignment.centerLeft,
-                children: [
-                  Container(
-                    color: kColorPrimary50,
-                    width: screenWidth,
-                    height: SWSizes.s4,
-                  ),
-                  AnimatedContainer(
-                    duration: kDurationShort,
-                    color: kColorPrimary500,
-                    width: screenWidth * state.currentPage / (forms.length - 1),
-                    height: SWSizes.s4,
-                  ),
-                ],
-              ),
-              const SizedBox(height: SWSizes.s16),
-              Expanded(
-                child: PageView(
-                  scrollDirection: Axis.horizontal,
-                  controller: _pageController,
-                  onPageChanged: (value) => ref
-                      .read(postReportControllerProvider.notifier)
-                      .onPageChange(value),
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: forms,
+          body: Padding(
+            padding: const EdgeInsets.all(SWSizes.s16),
+            child: Column(
+              children: [
+                Stack(
+                  alignment: Alignment.centerLeft,
+                  children: [
+                    Container(
+                      color: kColorPrimary50,
+                      width: screenWidth,
+                      height: SWSizes.s4,
+                    ),
+                    AnimatedContainer(
+                      duration: kDurationShort,
+                      color: kColorPrimary500,
+                      width: screenWidth * state.currentPage / (forms.length - 1),
+                      height: SWSizes.s4,
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(height: SWSizes.s16),
-              _buildFormActions(context, state, forms),
-              const SizedBox(height: SWSizes.s32)
-            ],
+                const SizedBox(height: SWSizes.s16),
+                Expanded(
+                  child: PageView(
+                    scrollDirection: Axis.horizontal,
+                    controller: _pageController,
+                    onPageChanged: (value) => ref
+                        .read(postReportControllerProvider.notifier)
+                        .onPageChange(value),
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: forms,
+                  ),
+                ),
+                const SizedBox(height: SWSizes.s16),
+                _buildFormActions(context, state, forms),
+                const SizedBox(height: SWSizes.s32)
+              ],
+            ),
           ),
         ),
       ),
