@@ -10,4 +10,5 @@ class Routes {
   static const register = 'register';
 
   static const reportDetail = 'reportdetail';
+  static const locationPicker = 'locationpicker';
 }

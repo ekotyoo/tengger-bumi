@@ -1,7 +1,7 @@
 import 'package:formz/formz.dart';
 
 import '../../../../common/constants/constant.dart';
-import '../../domain/latlng.dart';
+import '../../domain/position.dart';
 
 enum LocationPickInputError {
   empty;
@@ -14,13 +14,13 @@ enum LocationPickInputError {
   }
 }
 
-class LocationPickInput extends FormzInput<LatLng?, LocationPickInputError> {
+class LocationPickInput extends FormzInput<Position?, LocationPickInputError> {
   const LocationPickInput.pure(): super.pure(null);
 
-  const LocationPickInput.dirty({LatLng? value}): super.dirty(value);
+  const LocationPickInput.dirty({Position? value}): super.dirty(value);
 
   @override
-  LocationPickInputError? validator(LatLng? value) {
+  LocationPickInputError? validator(Position? value) {
     if (value == null) return LocationPickInputError.empty;
 
     return null;

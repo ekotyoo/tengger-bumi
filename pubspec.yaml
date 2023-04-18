@@ -42,6 +42,9 @@ dependencies:
   fpdart: ^0.5.0
   image_picker: ^0.8.7+3
   dotted_border: ^2.0.0+3
+  flutter_map: ^3.1.0
+  latlong2: ^0.8.1
+  flutter_map_dragmarker: ^4.1.2
 
 dev_dependencies:
   flutter_test:

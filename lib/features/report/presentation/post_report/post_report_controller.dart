@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../models/image_pick_input.dart';
 import '../models/information_text_input.dart';
 import '../models/label_text_input.dart';
-import '../../domain/latlng.dart';
+import '../../domain/position.dart';
 import '../models/additional_info_input_wrapper.dart';
 import '../models/category_option_input.dart';
 import '../models/location_pick_input.dart';
@@ -47,8 +48,18 @@ class PostReportController extends StateNotifier<PostReportState> {
   void onCategoryChange(Category? value) => state =
       state.copyWith(categoryInput: CategoryOptionInput.dirty(value: value));
 
-  void onLocationChange(LatLng? value) => state =
-      state.copyWith(locationInput: LocationPickInput.dirty(value: value));
+  void onLocationChange(LatLng? value) {
+    if (value == null) return;
+
+    state = state.copyWith(
+      locationInput: LocationPickInput.dirty(
+        value: Position(
+          latitude: value.latitude,
+          longitude: value.longitude,
+        ),
+      ),
+    );
+  }
 
   void addAdditionalInfo() {
     if (state.additionalInfoInputs.length >= kMaxAdditionalInfo) return;
@@ -129,9 +140,7 @@ class PostReportController extends StateNotifier<PostReportState> {
                     value: e.informationInput.value)),
           )
           .toList(),
-      imageInput: ImagePickInput.dirty(
-        value: state.imageInput.value
-      ),
+      imageInput: ImagePickInput.dirty(value: state.imageInput.value),
     );
 
     Formz.validate([

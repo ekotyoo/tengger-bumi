@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:school_watch_semeru/features/home/report_detail_screen.dart';
+
+import '../../features/home/report_detail_screen.dart';
+import '../../features/report/presentation/post_report/widgets/location_picker.dart';
 import '../../features/home/map_screen.dart';
 import '../../features/report/presentation/post_report/post_report_screen.dart';
 import '../../features/home/profile_screen.dart';
@@ -92,6 +94,17 @@ final routerProvider = Provider.autoDispose<GoRouter>(
           key: state.pageKey,
           child: const PostReportScreen(),
         ),
+        routes: [
+          GoRoute(
+            path: 'locationpicker',
+            name: Routes.locationPicker,
+            parentNavigatorKey: _rootNavigatorKey,
+            pageBuilder: (context, state) => MaterialPage(
+              key: state.pageKey,
+              child: const LocationPicker(),
+            ),
+          ),
+        ],
       ),
       GoRoute(
         path: '/report',

@@ -3,8 +3,11 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:latlong2/latlong.dart';
 
+import '../../../../../common/routing/routes.dart';
 import '../../../../../common/widgets/sw_dropdown.dart';
 import '../../models/additional_info_input_wrapper.dart';
 import '../../models/location_pick_input.dart';
@@ -75,7 +78,13 @@ class ReportInfoForm extends ConsumerWidget {
             .toList(),
       ),
       const SizedBox(height: SWSizes.s16),
-      _PickLocationButton(locationInput: state.locationInput),
+      _PickLocationButton(
+        locationInput: state.locationInput,
+        onTap: () async {
+          final position = await context.pushNamed(Routes.locationPicker) as LatLng?;
+          ref.read(postReportControllerProvider.notifier).onLocationChange(position);
+        },
+      ),
       const Divider(height: SWSizes.s16),
       for (var i = 0; i < state.additionalInfoInputs.length; i++) ...[
         _AdditionalInfoTextField(
@@ -365,10 +374,11 @@ class _AdditionalInfoTextFieldState extends State<_AdditionalInfoTextField> {
 }
 
 class _PickLocationButton extends StatelessWidget {
-  const _PickLocationButton({Key? key, required this.locationInput})
+  const _PickLocationButton({Key? key, required this.locationInput, this.onTap})
       : super(key: key);
 
   final LocationPickInput locationInput;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -376,7 +386,7 @@ class _PickLocationButton extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ElevatedButton(
-          onPressed: () {},
+          onPressed: onTap,
           style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all(kColorNeutral100),
               backgroundColor: MaterialStateProperty.all(kColorPrimary50)),
