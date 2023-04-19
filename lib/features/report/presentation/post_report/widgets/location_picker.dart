@@ -12,7 +12,9 @@ import '../../../../../common/constants/constant.dart';
 import '../extensions/latlng_extenstion.dart';
 
 class LocationPicker extends StatefulWidget {
-  const LocationPicker({Key? key}) : super(key: key);
+  const LocationPicker({Key? key, this.selectedPosition}) : super(key: key);
+
+  final LatLng? selectedPosition;
 
   @override
   State<LocationPicker> createState() => _LocationPickerState();
@@ -42,7 +44,11 @@ class _LocationPickerState extends State<LocationPicker> {
     _currentPosition = null;
     _followOnLocationUpdate = FollowOnLocationUpdate.never;
     _followCurrentLocationStreamController = StreamController();
-    _marker = null;
+    if (widget.selectedPosition != null) {
+      _setNewDragMarker(widget.selectedPosition!);
+    } else {
+      _marker = null;
+    }
   }
 
   @override

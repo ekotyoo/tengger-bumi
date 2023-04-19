@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:school_watch_semeru/features/report/presentation/post_report/extensions/latlng_extenstion.dart';
 
 import '../../../../../common/routing/routes.dart';
 import '../../../../../common/widgets/sw_dropdown.dart';
@@ -81,7 +82,8 @@ class ReportInfoForm extends ConsumerWidget {
       _PickLocationButton(
         locationInput: state.locationInput,
         onTap: () async {
-          final position = await context.pushNamed(Routes.locationPicker) as LatLng?;
+          final selectedLocation = state.locationInput.value?.toLatLng();
+          final position = await context.pushNamed(Routes.locationPicker, extra: selectedLocation) as LatLng?;
           ref.read(postReportControllerProvider.notifier).onLocationChange(position);
         },
       ),
@@ -264,6 +266,7 @@ class ImageCard extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(SWSizes.s8),
             child: Image.file(
+              key: ValueKey(path),
               File(path),
               fit: BoxFit.cover,
             ),

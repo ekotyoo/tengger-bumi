@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../../features/home/report_detail_screen.dart';
 import '../../features/report/presentation/post_report/widgets/location_picker.dart';
@@ -16,7 +17,6 @@ import 'app_scaffold.dart';
 import 'routes.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
-final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final routerProvider = Provider.autoDispose<GoRouter>(
   (ref) => GoRouter(
@@ -99,10 +99,13 @@ final routerProvider = Provider.autoDispose<GoRouter>(
             path: 'locationpicker',
             name: Routes.locationPicker,
             parentNavigatorKey: _rootNavigatorKey,
-            pageBuilder: (context, state) => MaterialPage(
-              key: state.pageKey,
-              child: const LocationPicker(),
-            ),
+            pageBuilder: (context, state) {
+              final selectedPosition = state.extra as LatLng?;
+              return MaterialPage(
+                key: state.pageKey,
+                child: LocationPicker(selectedPosition: selectedPosition),
+              );
+            },
           ),
         ],
       ),
