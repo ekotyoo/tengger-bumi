@@ -52,6 +52,7 @@ class SWStrings {
   static const descNoImagePicked = 'Belum ada foto terpilih';
   static const descImageCannotBeEmpty = 'Foto tidak boleh kosong';
   static const labelPickLocation = 'Pilih Lokasi';
+  static const descOutsideAreaMarker = 'Tanda tidak boleh berada diluar area sekolah';
 
   // School
   static const labelSchoolList = 'Daftar Sekolah';

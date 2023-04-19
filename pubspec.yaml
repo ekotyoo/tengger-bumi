@@ -45,6 +45,8 @@ dependencies:
   flutter_map: ^3.1.0
   latlong2: ^0.8.1
   flutter_map_dragmarker: ^4.1.2
+  maps_toolkit: ^2.0.1
+  flutter_map_location_marker: ^5.3.0
 
 dev_dependencies:
   flutter_test:
