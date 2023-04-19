@@ -57,5 +57,12 @@ class SWStrings {
   // School
   static const labelSchoolList = 'Daftar Sekolah';
   static const labelSearchSchool = 'Cari Sekolah';
-
+  static const labelAddSchool = 'Buat Sekolah';
+  static const labelSchoolData = 'Data Sekolah';
+  static const labelSchoolFloorPlan = 'Denah Sekolah';
+  static const labelSchoolName = 'Nama Sekolah';
+  static const labelSchoolAddress = 'Alamat Sekolah';
+  static const labelCreateFloorPlan = 'Buat Denah';
+  static const descSchoolNameCannotBeEmpty = 'Nama sekolah tidak boleh kosong';
+  static const descSchoolAddressCannotBeEmpty = 'Alamat sekolah sekolah tidak boleh kosong';
 }

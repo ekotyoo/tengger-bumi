@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:school_watch_semeru/common/constants/constant.dart';
-import 'package:school_watch_semeru/common/constants/sw_durations.dart';
-import 'package:school_watch_semeru/common/widgets/school_card.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../common/constants/constant.dart';
+import '../../../common/routing/routes.dart';
+import '../../../common/widgets/school_card.dart';
 
 class SchoolScreen extends StatelessWidget {
   const SchoolScreen({super.key});
+
+  final isAdmin = true;
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +18,14 @@ class SchoolScreen extends StatelessWidget {
           title: const Text(SWStrings.labelSchoolList),
           centerTitle: true,
           actions: [
-            GestureDetector(
-              onTap: () {},
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: SWSizes.s16),
-                child: Icon(Icons.add),
-              ),
-            )
+            if (isAdmin)
+              GestureDetector(
+                onTap: () => context.pushNamed(Routes.addSchool),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: SWSizes.s16),
+                  child: Icon(Icons.add),
+                ),
+              )
           ],
         ),
         body: Padding(

@@ -11,4 +11,6 @@ class Routes {
 
   static const reportDetail = 'reportdetail';
   static const locationPicker = 'locationpicker';
+
+  static const addSchool = 'addschool';
 }

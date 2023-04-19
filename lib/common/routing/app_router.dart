@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:school_watch_semeru/features/school/presentation/add_school/add_school_screen.dart';
 
 import '../../features/home/report_detail_screen.dart';
 import '../../features/report/presentation/post_report/widgets/location_picker.dart';
 import '../../features/home/map_screen.dart';
 import '../../features/report/presentation/post_report/post_report_screen.dart';
 import '../../features/home/profile_screen.dart';
-import '../../features/home/school_screen.dart';
+import '../../features/school/presentation/school_screen.dart';
 import '../../features/auth/presentation/login/login_screen.dart';
 import '../../features/auth/presentation/register/register_screen.dart';
 import '../../features/auth/presentation/welcome/welcome_screen.dart';
@@ -115,6 +116,14 @@ final routerProvider = Provider.autoDispose<GoRouter>(
         parentNavigatorKey: _rootNavigatorKey,
         pageBuilder: (context, state) => const MaterialPage(
           child: ReportDetailSreen(),
+        ),
+      ),
+      GoRoute(
+        path: '/addschool',
+        name: Routes.addSchool,
+        parentNavigatorKey: _rootNavigatorKey,
+        pageBuilder: (context, state) => const MaterialPage(
+          child: AddSchoolScreen(),
         ),
       ),
     ],

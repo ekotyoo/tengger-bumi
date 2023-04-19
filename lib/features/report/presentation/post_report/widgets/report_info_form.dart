@@ -6,8 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:school_watch_semeru/features/report/presentation/post_report/extensions/latlng_extenstion.dart';
 
+import '../extensions/latlng_extenstion.dart';
 import '../../../../../common/routing/routes.dart';
 import '../../../../../common/widgets/sw_dropdown.dart';
 import '../../models/additional_info_input_wrapper.dart';
