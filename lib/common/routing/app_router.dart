@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:school_watch_semeru/features/school/presentation/add_school/add_school_screen.dart';
-import 'package:school_watch_semeru/features/school/presentation/add_school/widgets/floor_plan_maker.dart';
-import 'package:school_watch_semeru/features/school/presentation/models/floor_plan_nav_arg.dart';
 
+import '../../features/school/presentation/add_school/add_school_screen.dart';
+import '../../features/school/presentation/add_school/widgets/floor_plan_maker.dart';
+import '../../features/school/presentation/models/floor_plan_nav_arg.dart';
 import '../../features/home/report_detail_screen.dart';
 import '../../features/report/presentation/post_report/widgets/location_picker.dart';
 import '../../features/home/map_screen.dart';

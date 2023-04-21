@@ -49,6 +49,7 @@ class _FloorPlanMakerState extends State<FloorPlanMaker> {
     labelStyle: const TextStyle(color: kColorNeutral900),
     rotateLabel: true,
   );
+  String? _labelError;
 
   @override
   void dispose() {
@@ -124,13 +125,29 @@ class _FloorPlanMakerState extends State<FloorPlanMaker> {
         ),
         actions: [
           GestureDetector(
-            onTap: () => context.pop(
-              Room(
-                label: _polygons.first.label ?? '',
-                polygon: _polygons.first,
-                color: _polygons.first.color,
-              ),
-            ),
+            onTap: () {
+              if (_polyEditor.points.length < 2) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(SWStrings.descRoomFloorPlanInvalid),
+                  ),
+                );
+                return;
+              }
+              if (_labelController.text.isEmpty) {
+                setState(() {
+                  _labelError = SWStrings.descRoomNameCannotBeEmpty;
+                });
+                return;
+              }
+              context.pop(
+                Room(
+                  label: _polygons.first.label ?? '',
+                  polygon: _polygons.first,
+                  color: _polygons.first.color,
+                ),
+              );
+            },
             child: const Padding(
               padding: EdgeInsets.symmetric(horizontal: SWSizes.s16),
               child: Icon(Icons.check_rounded),
@@ -228,24 +245,40 @@ class _FloorPlanMakerState extends State<FloorPlanMaker> {
                       child: SWTextField(
                         controller: _labelController,
                         hint: SWStrings.labelRoomName,
-                        onChanged: (value) => _updatePolygon(label: value),
+                        onChanged: (value) {
+                          if (value.isEmpty) {
+                            setState(() {
+                              _labelError = SWStrings.descRoomNameCannotBeEmpty;
+                            });
+                            return;
+                          } else {
+                            setState(() {
+                              _labelError = null;
+                            });
+                          }
+                          return _updatePolygon(label: value);
+                        },
+                        errorText: _labelError,
                       ),
                     ),
-                    const SizedBox(width: SWSizes.s16),
-                    Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(SWSizes.s4),
-                          decoration: BoxDecoration(
-                            color: kColorPrimary50,
-                            borderRadius: BorderRadius.circular(SWSizes.s8),
-                          ),
-                          child: const Center(child: Icon(Icons.restart_alt)),
-                        ),
-                        const SizedBox(height: SWSizes.s4),
-                        const Text(SWStrings.labelReset),
-                      ],
-                    ),
+                    // const SizedBox(width: SWSizes.s16),
+                    // GestureDetector(
+                    //   onTap: _resetPolyEditor,
+                    //   child: Column(
+                    //     children: [
+                    //       Container(
+                    //         padding: const EdgeInsets.all(SWSizes.s4),
+                    //         decoration: BoxDecoration(
+                    //           color: kColorPrimary50,
+                    //           borderRadius: BorderRadius.circular(SWSizes.s8),
+                    //         ),
+                    //         child: const Center(child: Icon(Icons.restart_alt)),
+                    //       ),
+                    //       const SizedBox(height: SWSizes.s4),
+                    //       const Text(SWStrings.labelReset),
+                    //     ],
+                    //   ),
+                    // ),
                   ],
                 ),
               ],

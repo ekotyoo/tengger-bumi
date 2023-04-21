@@ -174,8 +174,8 @@ class _FloorPlanViewerState extends State<FloorPlanViewer> {
             itemBuilder: (context, index) => ListTile(
               title: Text(rooms[index].label),
               onTap: () {
-                if (widget.onRoomClick == null) return;
-                widget.onRoomClick!(index);
+                // if (widget.onRoomClick == null) return;
+                // widget.onRoomClick!(index);
               },
               trailing: GestureDetector(
                 onTap: () {

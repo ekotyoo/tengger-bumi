@@ -134,10 +134,12 @@ class _AddSchoolScreenState extends ConsumerState<AddSchoolScreen> {
   ) {
     var disabled = false;
 
-    if (state.schoolNameInput.isNotValid ||
+    if ((state.schoolNameInput.isNotValid ||
         state.schoolNameInput.isPure ||
         state.schoolAddressInput.isNotValid ||
-        state.schoolAddressInput.isPure) {
+        state.schoolAddressInput.isPure) && state.currentPage == 0) {
+      disabled = true;
+    } else if ((state.floorPlan?.rooms.isEmpty ?? false ) && state.currentPage == 1) {
       disabled = true;
     }
 
