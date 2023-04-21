@@ -47,6 +47,7 @@ dependencies:
   flutter_map_dragmarker: ^4.1.2
   maps_toolkit: ^2.0.1
   flutter_map_location_marker: ^5.3.0
+  flutter_map_line_editor: ^4.0.2
 
 dev_dependencies:
   flutter_test:

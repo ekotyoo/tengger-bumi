@@ -13,4 +13,5 @@ class Routes {
   static const locationPicker = 'locationpicker';
 
   static const addSchool = 'addschool';
+  static const floorPlanMaker = 'floorplanmaker';
 }

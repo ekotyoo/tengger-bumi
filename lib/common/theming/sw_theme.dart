@@ -104,5 +104,15 @@ class SWTheme {
           color: kColorPrimary500,
           linearTrackColor: kColorPrimary50,
         ),
+        listTileTheme: ListTileThemeData(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(SWSizes.s8),
+          ),
+          tileColor: kColorPrimary50,
+          textColor: kColorNeutral900,
+          iconColor: kColorNeutral900,
+          dense: true,
+          horizontalTitleGap: SWSizes.s16,
+        ),
       );
 }

@@ -118,6 +118,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.2"
+  flutter_map_line_editor:
+    dependency: "direct main"
+    description:
+      name: flutter_map_line_editor
+      sha256: f47b658b440349fce5b0f22c099556c3f3d643c8ef578e42bf59b9b4c89a5749
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.2"
   flutter_map_location_marker:
     dependency: "direct main"
     description:

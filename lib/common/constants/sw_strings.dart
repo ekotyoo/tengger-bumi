@@ -11,6 +11,7 @@ class SWStrings {
   static const labelNext = 'Selanjutnya';
   static const labelBack = 'Kembali';
   static const labelSave = 'Simpan';
+  static const labelCancel = 'Batal';
 
   // Auth
   static const labelLogin = 'Login';
@@ -63,6 +64,13 @@ class SWStrings {
   static const labelSchoolName = 'Nama Sekolah';
   static const labelSchoolAddress = 'Alamat Sekolah';
   static const labelCreateFloorPlan = 'Buat Denah';
+  static const labelCreateRoom = 'Buat Ruangan';
   static const descSchoolNameCannotBeEmpty = 'Nama sekolah tidak boleh kosong';
   static const descSchoolAddressCannotBeEmpty = 'Alamat sekolah sekolah tidak boleh kosong';
+  static const labelAddRoom = 'Tambah Ruangan';
+  static const labelEmptyFloorPlan = 'Belum Ada Data Denah';
+  static const labelRoomName = 'Nama Ruang';
+  static const labelReset = 'Reset';
+  static const labelPickColor = 'Pilih warna:';
+
 }
