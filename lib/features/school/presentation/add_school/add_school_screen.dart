@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:school_watch_semeru/features/school/presentation/add_school/add_school_controller.dart';
-import 'package:school_watch_semeru/features/school/presentation/add_school/widgets/school_data_form.dart';
-import 'package:school_watch_semeru/features/school/presentation/add_school/widgets/school_floor_plan_form.dart';
 
+import 'add_school_controller.dart';
+import 'widgets/school_data_form.dart';
+import 'widgets/school_floor_plan_form.dart';
 import '../../../../common/constants/constant.dart';
 import 'add_school_state.dart';
 
@@ -149,7 +149,7 @@ class _AddSchoolScreenState extends ConsumerState<AddSchoolScreen> {
         if (currentPage < forms.length - 1) {
           _animateToPage(currentPage + 1);
         } else {
-          // do submission
+          context.pop();
         }
       },
       child: Text(
