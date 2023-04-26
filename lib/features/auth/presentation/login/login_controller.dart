@@ -1,32 +1,46 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../../data/auth_repository.dart';
 import '../models/email_text_input.dart';
 import '../models/password_login_text_input.dart';
 import './login_state.dart';
 
-class LoginController extends StateNotifier<LoginState> {
-  LoginController() : super(const LoginState());
+part 'login_controller.g.dart';
+
+@riverpod
+class LoginController extends _$LoginController {
+  @override
+  LoginState build() => LoginState(
+    successOrFailure: none(),
+  );
 
   void onEmailChange(value) {
     final email = EmailTextInput.dirty(value: value);
-    state = state.copyWith(emailTextInput: email);
+    state = state.copyWith(
+      emailTextInput: email,
+      validated: Formz.validate([email, state.passwordTextInput]),
+    );
   }
 
   void onPasswordChange(value) {
     final password = PasswordLoginTextInput.dirty(value: value);
-    state = state.copyWith(passwordTextInput: password);
-  }
-
-  void onSubmit() {
     state = state.copyWith(
-      emailTextInput: EmailTextInput.dirty(value: state.emailTextInput.value),
-      passwordTextInput: PasswordLoginTextInput.dirty(value: state.passwordTextInput.value),
-      status: Formz.validate([state.emailTextInput, state.passwordTextInput]),
+      passwordTextInput: password,
+      validated: Formz.validate([password, state.emailTextInput]),
     );
   }
-}
 
-final loginControllerProvider =
-    StateNotifierProvider.autoDispose<LoginController, LoginState>(
-  (ref) => LoginController(),
-);
+  Future<void> onSubmit() async {
+    state = state.copyWith(isSubmitting: true);
+    final repository = ref.read(authRepositoryProvider);
+
+    final result = await repository.login(
+      email: state.emailTextInput.value,
+      password: state.passwordTextInput.value,
+    );
+
+    state = state.copyWith(successOrFailure: optionOf(result), isSubmitting: false);
+  }
+}

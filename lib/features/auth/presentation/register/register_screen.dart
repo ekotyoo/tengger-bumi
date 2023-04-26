@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../common/widgets/sw_button.dart';
+import '../../../../utils/snackbar_utils.dart';
 import '../../../../common/widgets/sw_text_field.dart';
 import 'register_controller.dart';
 import '../../../../common/routing/routes.dart';
@@ -11,14 +13,24 @@ import '../../../../common/constants/constant.dart';
 class RegisterScreen extends ConsumerWidget {
   const RegisterScreen({super.key});
 
-  void _navigateBack(BuildContext context) => context.pop();
-
   void _navigateToLogin(BuildContext context) => context.goNamed(Routes.login);
-
-  void _navigateToHome(BuildContext context) => context.goNamed(Routes.home);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(registerControllerProvider, (previous, next) {
+      next.successOrFailure.fold(
+        () {},
+        (either) => either.fold(
+          (l) => showSnackbar(context,
+              message: l.message, type: SnackbarType.error),
+          (r) {
+            showSnackbar(context, message: SWStrings.messageRegisterSuccess);
+            _navigateToLogin(context);
+          },
+        ),
+      );
+    });
+
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -65,7 +77,8 @@ class RegisterScreen extends ConsumerWidget {
       SWTextField(
         action: TextInputAction.next,
         hint: SWStrings.labelName,
-        onChanged: (value) => ref.read(registerControllerProvider.notifier).onNameChange(value),
+        onChanged: (value) =>
+            ref.read(registerControllerProvider.notifier).onNameChange(value),
         errorText: state.nameTextInput.isPure
             ? null
             : state.nameTextInput.error?.getErrorMessage(),
@@ -74,7 +87,8 @@ class RegisterScreen extends ConsumerWidget {
       SWTextField(
         action: TextInputAction.next,
         hint: SWStrings.labelEmail,
-        onChanged: (value) => ref.read(registerControllerProvider.notifier).onEmailChange(value),
+        onChanged: (value) =>
+            ref.read(registerControllerProvider.notifier).onEmailChange(value),
         type: SWTextFieldType.email,
         errorText: state.emailTextInput.isPure
             ? null
@@ -84,7 +98,9 @@ class RegisterScreen extends ConsumerWidget {
       SWTextField(
         action: TextInputAction.done,
         hint: SWStrings.labelPassword,
-        onChanged: (value) => ref.read(registerControllerProvider.notifier).onPasswordChange(value),
+        onChanged: (value) => ref
+            .read(registerControllerProvider.notifier)
+            .onPasswordChange(value),
         type: SWTextFieldType.password,
         errorText: state.passwordTextInput.isPure
             ? null
@@ -94,22 +110,21 @@ class RegisterScreen extends ConsumerWidget {
   }
 
   _buildRegisterActions(BuildContext context, WidgetRef ref) {
-    ref.listen(registerControllerProvider, (previous, next) {
-      if (next.status == true) {
-        _navigateToHome(context);
-      }
-    });
+    final state = ref.watch(registerControllerProvider);
 
     return [
-        ElevatedButton(
-          onPressed: () => ref.read(registerControllerProvider.notifier).onSubmit(),
-          child: const Text(SWStrings.labelRegister),
-        ),
-        const SizedBox(height: SWSizes.s16),
-        OutlinedButton(
-          onPressed: () => _navigateToLogin(context),
-          child: const Text(SWStrings.descAlreadyHaveAccount),
-        ),
-      ];
+      SWButton(
+        label: SWStrings.labelRegister,
+        loading: state.isSubmitting,
+        disabled: !state.validated,
+        onPressed: () =>
+            ref.read(registerControllerProvider.notifier).onSubmit(),
+      ),
+      const SizedBox(height: SWSizes.s16),
+      OutlinedButton(
+        onPressed: () => _navigateToLogin(context),
+        child: const Text(SWStrings.descAlreadyHaveAccount),
+      ),
+    ];
   }
 }

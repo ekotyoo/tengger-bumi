@@ -28,6 +28,8 @@ class SWStrings {
   static const descPasswordTooShort = 'Password minimal terdiri dari 8 karakter';
   static const descNameCannotBeEmpty = 'Nama tidak boleh kosong';
   static const descNameInvalid = 'Nama tidak valid';
+  static const messageLoginSuccess = 'Login berhasil!';
+  static const messageRegisterSuccess = 'Registrasi berhasil, silahkan cek email untuk memverifikasi akun';
 
   // Home
   static const labelReportTimeline = 'Feed Laporan';
