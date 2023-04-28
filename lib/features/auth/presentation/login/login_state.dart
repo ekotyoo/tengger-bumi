@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:fpdart/fpdart.dart';
 import '../../../../common/error/failure.dart';
+import '../../domain/auth_user.dart';
 import '../models/email_text_input.dart';
 import '../models/password_login_text_input.dart';
 
@@ -17,14 +18,14 @@ class LoginState extends Equatable {
   final PasswordLoginTextInput passwordTextInput;
   final bool validated;
   final bool isSubmitting;
-  final Option<Either<Failure, Unit>> successOrFailure;
+  final Option<Either<Failure, AuthUser>> successOrFailure;
 
   LoginState copyWith({
     EmailTextInput? emailTextInput,
     PasswordLoginTextInput? passwordTextInput,
     bool? validated,
     bool? isSubmitting,
-    Option<Either<Failure, Unit>>? successOrFailure,
+    Option<Either<Failure, AuthUser>>? successOrFailure,
   }) {
     return LoginState(
       emailTextInput: emailTextInput ?? this.emailTextInput,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:school_watch_semeru/features/auth/auth_controller.dart';
 
 import '../../../../common/widgets/sw_button.dart';
 import '../../../../utils/snackbar_utils.dart';
@@ -27,8 +28,8 @@ class LoginScreen extends ConsumerWidget {
           (l) => showSnackbar(context,
               message: l.message, type: SnackbarType.error),
           (r) {
+            ref.read(authControllerProvider.notifier).setAuthUser(r);
             showSnackbar(context, message: SWStrings.messageLoginSuccess);
-            _navigateToHome(context);
           },
         ),
       );

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:school_watch_semeru/common/constants/constant.dart';
-import 'package:school_watch_semeru/common/routing/routes.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProfileScreen extends StatelessWidget {
+import '../../../../common/constants/constant.dart';
+import 'profile_controller.dart';
+
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -18,7 +19,8 @@ class ProfileScreen extends StatelessWidget {
               const Text('Profile Screen'),
               const SizedBox(height: SWSizes.s16),
               ElevatedButton(
-                onPressed: () => context.goNamed(Routes.auth),
+                onPressed: () =>
+                    ref.read(profileControllerProvider.notifier).logout(),
                 child: const Text('Logout'),
               )
             ],
