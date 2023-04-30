@@ -53,7 +53,7 @@ class ReportList extends ConsumerWidget {
       data: (reports) => RefreshIndicator(
         key: _refreshIndicatorKey,
         onRefresh: () {
-          ref.refresh(getReportsProvider(query: reportQuery));
+          ref.invalidate(getReportsProvider);
           return ref.read(getReportsProvider(query: reportQuery).future);
         },
         child: ListView.separated(
