@@ -2,6 +2,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'auth_user.freezed.dart';
 
+part 'auth_user.g.dart';
+
 @freezed
 class AuthUser with _$AuthUser {
   const factory AuthUser.signedIn({
@@ -11,8 +13,10 @@ class AuthUser with _$AuthUser {
     required String accessToken,
     required String refreshToken,
     String? avatar,
-    bool? isAdmin,
+    @Default(false) bool isAdmin,
   }) = SignedIn;
 
   const factory AuthUser.signedOut() = SignedOut;
+
+  factory AuthUser.fromJson(Map<String, dynamic> json) => _$AuthUserFromJson(json);
 }

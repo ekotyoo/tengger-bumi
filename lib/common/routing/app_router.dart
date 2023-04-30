@@ -16,7 +16,7 @@ import '../../features/school/presentation/school_screen.dart';
 import '../../features/auth/presentation/login/login_screen.dart';
 import '../../features/auth/presentation/register/register_screen.dart';
 import '../../features/auth/presentation/welcome/welcome_screen.dart';
-import '../../features/home/home_screen.dart';
+import '../../features/report/presentation/post_feed/report_feed_screen.dart';
 import '../widgets/splash_overlay.dart';
 import 'app_scaffold.dart';
 import 'routes.dart';
@@ -82,7 +82,7 @@ class AppRouter extends _$AppRouter implements Listenable {
               name: Routes.home,
               pageBuilder: (context, state) => NoTransitionPage(
                 key: state.pageKey,
-                child: const HomeScreen(),
+                child: const ReportFeedScreen(),
               ),
             ),
             GoRoute(

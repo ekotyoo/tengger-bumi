@@ -85,7 +85,6 @@ class AuthInterceptor extends QueuedInterceptor {
         return handler.reject(err);
       }
     } else {
-      onReject?.call();
       return handler.reject(err);
     }
   }

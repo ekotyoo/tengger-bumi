@@ -56,6 +56,9 @@ class SWStrings {
   static const descImageCannotBeEmpty = 'Foto tidak boleh kosong';
   static const labelPickLocation = 'Pilih Lokasi';
   static const descOutsideAreaMarker = 'Tanda tidak boleh berada diluar area sekolah';
+  static const labelReportType = 'Jenis Laporan';
+  static const labelReportStatus = 'Status Laporan';
+  static const labelReportPostTime = 'Waktu Posting';
 
   // School
   static const labelSchoolList = 'Daftar Sekolah';

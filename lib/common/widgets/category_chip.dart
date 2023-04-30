@@ -30,17 +30,26 @@ class CategoryChip extends StatelessWidget {
 }
 
 class SelectChip extends StatelessWidget {
-  const SelectChip({super.key, required this.label, this.selected = false});
+  const SelectChip({
+    super.key,
+    required this.label,
+    this.selected = false,
+    this.onTap,
+  });
 
   final String label;
   final bool selected;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return CategoryChip(
-      label: label,
-      foregroundColor: selected ? kColorNeutral0 : kColorPrimary500,
-      backgroundColor: selected ? kColorPrimary500 : kColorPrimary50,
+    return InkWell(
+      onTap: onTap,
+      child: CategoryChip(
+        label: label,
+        foregroundColor: selected ? kColorNeutral0 : kColorPrimary500,
+        backgroundColor: selected ? kColorPrimary500 : kColorPrimary50,
+      ),
     );
   }
 }

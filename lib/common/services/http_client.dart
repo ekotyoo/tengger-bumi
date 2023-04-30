@@ -9,7 +9,7 @@ import '../../features/auth/auth_controller.dart';
 
 part 'http_client.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 Dio dio(DioRef ref) {
   return Dio();
 }
@@ -19,7 +19,7 @@ const _defaultConnectTimeout =
 const _defaultReceiveTimeout =
     Duration(milliseconds: Duration.millisecondsPerMinute);
 
-@riverpod
+@Riverpod(keepAlive: true)
 HttpClient httpClient(HttpClientRef ref) {
   final dio = ref.watch(dioProvider);
   return HttpClient(

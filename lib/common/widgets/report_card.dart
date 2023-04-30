@@ -1,38 +1,42 @@
 import 'package:flutter/material.dart';
 
+import '../../features/report/domain/report.dart';
 import '../constants/constant.dart';
 import 'category_chip.dart';
 import 'loading_image.dart';
 
-class PostCard extends StatelessWidget {
-  PostCard({super.key, required this.onTap});
+class ReportCard extends StatelessWidget {
+  ReportCard({super.key, required this.report});
 
-  final VoidCallback onTap;
+  final Report report;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {},
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildHeader(context),
+          _buildHeader(context, report),
           const SizedBox(height: SWSizes.s8),
-          _buildImage(context),
+          _buildImage(context, report),
           const SizedBox(height: SWSizes.s8),
-          _buildCategoryList(context),
+          _buildCategoryList(context, report),
           const SizedBox(height: SWSizes.s8),
-          _buildCaption(context),
+          _buildCaption(context, report.description),
           const SizedBox(height: SWSizes.s8),
-          _buildInteractionBar(context),
+          _buildInteractionBar(context, report),
         ],
       ),
     );
   }
 
-  _buildHeader(BuildContext context) {
+  _buildHeader(BuildContext context, Report report) {
+    final author = report.author;
+
     return Row(
       children: [
-        const CircleAvatar(),
+        CircleAvatar(backgroundImage: NetworkImage(author.avatar)),
         const SizedBox(width: SWSizes.s8),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,7 +45,7 @@ class PostCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'Eko Prasetyo',
+                  author.name,
                   style: Theme.of(context)
                       .textTheme
                       .bodyMedium
@@ -58,7 +62,7 @@ class PostCard extends StatelessWidget {
                 ),
                 const SizedBox(width: SWSizes.s8),
                 Text(
-                  '12 Jan 2023, 14:00',
+                  report.createdAt.toString(),
                   style: Theme.of(context)
                       .textTheme
                       .bodySmall
@@ -67,7 +71,7 @@ class PostCard extends StatelessWidget {
               ],
             ),
             Text(
-              'SD Negeri 2 Sidomulyo',
+              report.school,
               style: Theme.of(context)
                   .textTheme
                   .bodySmall
@@ -81,7 +85,7 @@ class PostCard extends StatelessWidget {
 
   final _pageController = PageController(viewportFraction: 1.1);
 
-  _buildImage(BuildContext context) {
+  _buildImage(BuildContext context, Report report) {
     return SizedBox(
       height: 1.5 * SWSizes.s160,
       width: double.infinity,
@@ -91,32 +95,34 @@ class PostCard extends StatelessWidget {
           widthFactor: 1 / _pageController.viewportFraction,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(SWSizes.s8),
-            child: const LoadingImage(
-              url: 'https://picsum.photos/200/300',
+            child: LoadingImage(
+              url: report.images[index],
               fit: BoxFit.cover,
             ),
           ),
         ),
-        itemCount: 3,
+        itemCount: report.images.length,
       ),
     );
   }
 
-  _buildCategoryList(BuildContext context) {
+  _buildCategoryList(BuildContext context, Report report) {
+    final categories = [report.reportCategory, report.reportType];
+
     return SizedBox(
       height: SWSizes.s32,
       child: ListView.separated(
-        itemBuilder: (context, index) => CategoryChip(label: 'Category-$index'),
+        itemBuilder: (context, index) => CategoryChip(label: categories[index]),
         separatorBuilder: (context, index) => const SizedBox(width: SWSizes.s8),
-        itemCount: 3,
+        itemCount: categories.length,
         scrollDirection: Axis.horizontal,
       ),
     );
   }
 
-  _buildCaption(BuildContext context) {
+  _buildCaption(BuildContext context, String text) {
     return Text(
-      SWStrings.dummyLongText,
+      text,
       textAlign: TextAlign.justify,
       style: Theme.of(context)
           .textTheme
@@ -143,17 +149,29 @@ class PostCard extends StatelessWidget {
     );
   }
 
-  _buildInteractionBar(BuildContext context) {
+  _buildInteractionBar(BuildContext context, Report report) {
     return Row(
       children: [
-        _buildInteractionButton(context,
-            icon: Icons.thumb_up_rounded, count: 20, color: kColorNeutral200),
+        _buildInteractionButton(
+          context,
+          icon: Icons.thumb_up_rounded,
+          count: report.likesCount,
+          color: kColorNeutral200,
+        ),
         const SizedBox(width: SWSizes.s16),
-        _buildInteractionButton(context,
-            icon: Icons.thumb_down_rounded, count: 20, color: kColorNeutral200),
+        _buildInteractionButton(
+          context,
+          icon: Icons.thumb_down_rounded,
+          count: report.dislikesCount,
+          color: kColorNeutral200,
+        ),
         const SizedBox(width: SWSizes.s16),
-        _buildInteractionButton(context,
-            icon: Icons.comment_rounded, count: 20, color: kColorNeutral200),
+        _buildInteractionButton(
+          context,
+          icon: Icons.comment_rounded,
+          count: report.commentsCount,
+          color: kColorNeutral200,
+        ),
       ],
     );
   }
