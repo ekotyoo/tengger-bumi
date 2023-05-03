@@ -105,6 +105,8 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
                           isActive: state.report.isActive),
                       const SizedBox(height: SWSizes.s8),
                       _buildCaption(context, state.report.description),
+                      const SizedBox(height: SWSizes.s8),
+                      _buildInteractionBar(context, state.report),
                       const SizedBox(height: SWSizes.s16),
                       _buildInfoSection(context, state.report),
                       const SizedBox(height: SWSizes.s8),
@@ -136,6 +138,61 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  _buildInteractionButton(
+    BuildContext context, {
+    required IconData icon,
+    required int count,
+    Color? color,
+    VoidCallback? onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Row(
+        children: [
+          Icon(icon, size: SWSizes.s16, color: color),
+          const SizedBox(width: SWSizes.s8),
+          Text(
+            '$count',
+            style:
+                Theme.of(context).textTheme.bodySmall?.copyWith(color: color),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _buildInteractionBar(BuildContext context, ReportDetail report) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        _buildInteractionButton(
+          context,
+          icon: Icons.thumb_up_rounded,
+          count: report.likesCount,
+          color: report.liked ? Theme.of(context).primaryColor : kColorNeutral200,
+          onTap: () {
+            ref
+                .read(reportDetailControllerProvider(widget.reportId).notifier)
+                .toggleLike();
+          },
+        ),
+        const SizedBox(width: SWSizes.s16),
+        _buildInteractionButton(
+          context,
+          icon: Icons.thumb_down_rounded,
+          count: report.dislikesCount,
+          color: report.disliked ? Theme.of(context).primaryColor : kColorNeutral200,
+          onTap: () {
+            ref
+                .read(reportDetailControllerProvider(widget.reportId).notifier)
+                .toggleDislike();
+          },
+        ),
+      ],
     );
   }
 

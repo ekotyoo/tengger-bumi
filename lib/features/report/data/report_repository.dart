@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:school_watch_semeru/common/error/failure.dart';
 
+import '../../../common/error/failure.dart';
 import '../../../common/error/network_exceptions.dart';
 import '../domain/comment.dart';
 import '../domain/report_detail.dart';
@@ -17,8 +17,6 @@ part 'report_repository.g.dart';
 
 @riverpod
 IReportRepository reportRepository(ReportRepositoryRef ref) {
-  final client = ref.watch(httpClientProvider);
-
   return FakeReportRepository();
 }
 
@@ -79,7 +77,7 @@ class FakeReportRepository implements IReportRepository {
       images: [
         'https://picsum.photos/100/100',
         'https://picsum.photos/100/100',
-        'https://picsum.photos/100/100'
+        'https://picsum.photos/100/100',
       ],
       additionalInfo: {'Tanggal Kadaluwarsa': '12 Januari 2023'},
       comments: List.generate(
@@ -98,7 +96,7 @@ class FakeReportRepository implements IReportRepository {
   }
 
   @override
-  Future<Either<Failure, Comment>> postComment({required String reportId, required String comment, CancelToken? cancelToken}) async {
+  Future<Either<Failure, Comment>> addComment({required String reportId, required String comment, CancelToken? cancelToken}) async {
     try {
       await Future.delayed(kDurationLong);
       final newComment = Comment(
@@ -107,6 +105,51 @@ class FakeReportRepository implements IReportRepository {
         createdAt: DateTime.now(),
       );
       return right(newComment);
+    } catch(e) {
+      final exception = NetworkExceptions.getDioException(e);
+      return left(Failure(exception.getErrorMessage()));
+    }
+  }
+
+
+  @override
+  Future<Either<Failure, Unit>> addLike({required String reportId, CancelToken? cancelToken}) async {
+    try {
+      await Future.delayed(kDurationLong);
+      return right(unit);
+    } catch(e) {
+      final exception = NetworkExceptions.getDioException(e);
+      return left(Failure(exception.getErrorMessage()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> removeLike({required String reportId, CancelToken? cancelToken}) async {
+    try {
+      await Future.delayed(kDurationLong);
+      return right(unit);
+    } catch(e) {
+      final exception = NetworkExceptions.getDioException(e);
+      return left(Failure(exception.getErrorMessage()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> removeDislike({required String reportId, CancelToken? cancelToken}) async {
+    try {
+      await Future.delayed(kDurationLong);
+      return right(unit);
+    } catch(e) {
+      final exception = NetworkExceptions.getDioException(e);
+      return left(Failure(exception.getErrorMessage()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> addDislike({required String reportId, CancelToken? cancelToken}) async {
+    try {
+      await Future.delayed(kDurationLong);
+      return right(unit);
     } catch(e) {
       final exception = NetworkExceptions.getDioException(e);
       return left(Failure(exception.getErrorMessage()));
@@ -148,8 +191,32 @@ class ReportRepository implements IReportRepository {
   }
 
   @override
-  Future<Either<Failure, Comment>> postComment({required String reportId, required String comment, CancelToken? cancelToken}) {
+  Future<Either<Failure, Comment>> addComment({required String reportId, required String comment, CancelToken? cancelToken}) {
     // TODO: implement postComment
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, Unit>> addDislike({required String reportId, CancelToken? cancelToken}) {
+    // TODO: implement addDislike
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, Unit>> addLike({required String reportId, CancelToken? cancelToken}) {
+    // TODO: implement addLike
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, Unit>> removeDislike({required String reportId, CancelToken? cancelToken}) {
+    // TODO: implement removeDislike
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, Unit>> removeLike({required String reportId, CancelToken? cancelToken}) {
+    // TODO: implement removeLike
     throw UnimplementedError();
   }
 }

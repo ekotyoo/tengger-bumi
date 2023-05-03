@@ -18,9 +18,29 @@ abstract class IReportRepository {
     CancelToken? cancelToken,
   });
 
-  Future<Either<Failure, Comment>> postComment({
+  Future<Either<Failure, Comment>> addComment({
     required String reportId,
     required String comment,
+    CancelToken? cancelToken,
+  });
+
+  Future<Either<Failure, Unit>> addLike({
+    required String reportId,
+    CancelToken? cancelToken,
+  });
+
+  Future<Either<Failure, Unit>> removeLike({
+    required String reportId,
+    CancelToken? cancelToken,
+  });
+
+  Future<Either<Failure, Unit>> addDislike({
+    required String reportId,
+    CancelToken? cancelToken,
+  });
+
+  Future<Either<Failure, Unit>> removeDislike({
+    required String reportId,
     CancelToken? cancelToken,
   });
 }
