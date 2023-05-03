@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:school_watch_semeru/common/routing/routes.dart';
 import 'package:school_watch_semeru/features/report/domain/report_time.dart';
 
-import '../../../../common/widgets/report_card.dart';
+import '../widgets/report_card.dart';
 import '../../domain/report_status.dart';
 import '../../domain/report_type.dart';
 import 'reports_provider.dart';
@@ -62,7 +64,15 @@ class ReportList extends ConsumerWidget {
           separatorBuilder: (context, index) {
             return const SizedBox(height: SWSizes.s16);
           },
-          itemBuilder: (context, index) => ReportCard(report: reports[index]),
+          itemBuilder: (context, index) => ReportCard(
+            report: reports[index],
+            onTap: () {
+              context.pushNamed(
+                Routes.reportDetail,
+                params: {'reportId': reports[index].id},
+              );
+            },
+          ),
         ),
       ),
     );

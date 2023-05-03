@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
 
-import '../../features/report/domain/report.dart';
-import '../constants/constant.dart';
-import 'category_chip.dart';
-import 'loading_image.dart';
+import '../../domain/report.dart';
+import '../../../../common/constants/constant.dart';
+import '../../../../common/widgets/category_chip.dart';
+import '../../../../common/widgets/loading_image.dart';
 
 class ReportCard extends StatelessWidget {
-  ReportCard({super.key, required this.report});
+  ReportCard({
+    super.key,
+    required this.report,
+    this.onTap,
+  });
 
   final Report report;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: onTap,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

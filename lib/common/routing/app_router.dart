@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:school_watch_semeru/features/report/presentation/report_detail/report_detail_screen.dart';
 
 import '../../features/auth/auth_controller.dart';
 import '../../features/school/presentation/add_school/add_school_screen.dart';
 import '../../features/school/presentation/add_school/widgets/floor_plan_maker.dart';
 import '../../features/school/presentation/models/floor_plan_nav_arg.dart';
-import '../../features/home/report_detail_screen.dart';
 import '../../features/report/presentation/post_report/widgets/location_picker.dart';
 import '../../features/home/map_screen.dart';
 import '../../features/report/presentation/post_report/post_report_screen.dart';
@@ -161,12 +161,19 @@ class AppRouter extends _$AppRouter implements Listenable {
           ],
         ),
         GoRoute(
-          path: '/report',
+          path: '/report/:reportId',
           name: Routes.reportDetail,
           parentNavigatorKey: navigatorKey,
-          pageBuilder: (context, state) => const MaterialPage(
-            child: ReportDetailSreen(),
-          ),
+          pageBuilder: (context, state) {
+            final reportId = state.params['reportId'];
+
+            if (reportId == null) throw Exception();
+            return MaterialPage(
+              child: ReportDetailScreen(
+                reportId: reportId,
+              ),
+            );
+          },
         ),
         GoRoute(
           path: '/addschool',

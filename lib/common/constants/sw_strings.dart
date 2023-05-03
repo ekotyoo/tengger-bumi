@@ -59,6 +59,7 @@ class SWStrings {
   static const labelReportType = 'Jenis Laporan';
   static const labelReportStatus = 'Status Laporan';
   static const labelReportPostTime = 'Waktu Posting';
+  static const labelWriteComment = 'Tulis Komentar';
 
   // School
   static const labelSchoolList = 'Daftar Sekolah';
@@ -79,6 +80,7 @@ class SWStrings {
   static const labelPickColor = 'Pilih warna:';
   static const descRoomNameCannotBeEmpty = 'Nama ruang tidak boleh kosong';
   static const descRoomFloorPlanInvalid = 'Denah ruang belum terbentuk';
+
 
 
 }

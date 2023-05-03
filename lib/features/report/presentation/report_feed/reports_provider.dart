@@ -1,9 +1,7 @@
 import 'dart:async';
-
-import 'package:flutter/cupertino.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:school_watch_semeru/features/report/domain/report_query.dart';
 
+import '../../domain/report_query.dart';
 import '../../domain/report.dart';
 import '../../data/report_repository.dart';
 
@@ -20,7 +18,6 @@ Future<List<Report>> getReports(
     query: query.copyWith(page: query.page + 1)
   );
 
-  debugPrint(result.toString());
 
   return result;
 }
