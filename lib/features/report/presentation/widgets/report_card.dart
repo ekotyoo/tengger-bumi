@@ -10,10 +10,14 @@ class ReportCard extends StatelessWidget {
     super.key,
     required this.report,
     this.onTap,
+    this.onLiked,
+    this.onDisliked,
   });
 
   final Report report;
   final VoidCallback? onTap;
+  final VoidCallback? onLiked;
+  final VoidCallback? onDisliked;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +34,12 @@ class ReportCard extends StatelessWidget {
           const SizedBox(height: SWSizes.s8),
           _buildCaption(context, report.description),
           const SizedBox(height: SWSizes.s8),
-          _buildInteractionBar(context, report),
+          _buildInteractionBar(
+            context,
+            report: report,
+            onLiked: onLiked,
+            onDisliked: onDisliked,
+          ),
         ],
       ),
     );
@@ -141,34 +150,46 @@ class ReportCard extends StatelessWidget {
     required IconData icon,
     required int count,
     Color? color,
+    VoidCallback? onTap,
   }) {
-    return Row(
-      children: [
-        Icon(icon, size: SWSizes.s16, color: color),
-        const SizedBox(width: SWSizes.s8),
-        Text(
-          '$count',
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: color),
-        ),
-      ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Row(
+        children: [
+          Icon(icon, size: SWSizes.s16, color: color),
+          const SizedBox(width: SWSizes.s8),
+          Text(
+            '$count',
+            style:
+                Theme.of(context).textTheme.bodySmall?.copyWith(color: color),
+          ),
+        ],
+      ),
     );
   }
 
-  _buildInteractionBar(BuildContext context, Report report) {
+  _buildInteractionBar(
+    BuildContext context, {
+    required Report report,
+    VoidCallback? onLiked,
+    VoidCallback? onDisliked,
+  }) {
     return Row(
       children: [
         _buildInteractionButton(
           context,
           icon: Icons.thumb_up_rounded,
           count: report.likesCount,
-          color: kColorNeutral200,
+          color: report.liked ? Theme.of(context).primaryColor : kColorNeutral200,
+          onTap: onLiked,
         ),
         const SizedBox(width: SWSizes.s16),
         _buildInteractionButton(
           context,
           icon: Icons.thumb_down_rounded,
           count: report.dislikesCount,
-          color: kColorNeutral200,
+          color: report.disliked ? Theme.of(context).primaryColor : kColorNeutral200,
+          onTap: onDisliked,
         ),
         const SizedBox(width: SWSizes.s16),
         _buildInteractionButton(

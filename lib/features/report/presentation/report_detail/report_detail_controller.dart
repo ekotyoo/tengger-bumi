@@ -52,10 +52,20 @@ class ReportDetailController extends _$ReportDetailController {
   }
 
   void toggleLike() async {
-    final liked = state.requireValue.report.liked;
-    _toggleLike(!liked);
+    final report = state.requireValue.report;
 
-    if (state.requireValue.report.disliked) _toggleDislike(false);
+    final liked = report.liked;
+    final likesCount = report.likesCount;
+    _setLike(liked: !liked, count: liked ? likesCount - 1 : likesCount + 1);
+
+    final disliked = report.disliked;
+    final dislikesCount = report.dislikesCount;
+    if (disliked) {
+      _setDislike(
+        disliked: !disliked,
+        count: disliked ? dislikesCount - 1 : dislikesCount + 1,
+      );
+    }
 
     final repo = ref.read(reportRepositoryProvider);
     final result = !liked
@@ -63,28 +73,44 @@ class ReportDetailController extends _$ReportDetailController {
         : await repo.removeDislike(reportId: reportId);
 
     result.mapLeft((e) {
+      _setLike(liked: liked, count: likesCount);
+      _setDislike(disliked: disliked, count: dislikesCount);
       setErrorMessage(e.message);
-      _toggleLike(liked);
-      _toggleDislike(true);
     });
   }
 
-  void _toggleLike(bool liked) {
+  void _setLike({required bool liked, required int count}) {
     final oldState = state.requireValue;
     final oldReport = oldState.report;
 
     state = AsyncValue.data(
       oldState.copyWith(
-        report: oldReport.copyWith(liked: liked),
+        report: oldReport.copyWith(
+          liked: liked,
+          likesCount: count,
+        ),
       ),
     );
   }
 
   void toggleDislike() async {
-    final disliked = state.requireValue.report.disliked;
-    _toggleDislike(!disliked);
+    final report = state.requireValue.report;
 
-    if (state.requireValue.report.liked) _toggleLike(false);
+    final disliked = report.disliked;
+    final dislikesCount = report.dislikesCount;
+    _setDislike(
+      disliked: !disliked,
+      count: disliked ? dislikesCount - 1 : dislikesCount + 1,
+    );
+
+    final liked = report.liked;
+    final likesCount = report.likesCount;
+    if (liked) {
+      _setLike(
+        liked: !liked,
+        count: liked ? likesCount - 1 : likesCount + 1,
+      );
+    }
 
     final repo = ref.read(reportRepositoryProvider);
     final result = !disliked
@@ -92,19 +118,22 @@ class ReportDetailController extends _$ReportDetailController {
         : await repo.removeDislike(reportId: reportId);
 
     result.mapLeft((e) {
+      _setDislike(disliked: disliked, count: dislikesCount);
+      _setLike(liked: liked, count: likesCount);
       setErrorMessage(e.message);
-      _toggleDislike(disliked);
-      _toggleLike(true);
     });
   }
 
-  void _toggleDislike(bool disliked) async {
+  void _setDislike({required bool disliked, required int count}) async {
     final oldState = state.requireValue;
     final oldReport = oldState.report;
 
     state = AsyncValue.data(
       oldState.copyWith(
-        report: oldReport.copyWith(disliked: disliked),
+        report: oldReport.copyWith(
+          disliked: disliked,
+          dislikesCount: count,
+        ),
       ),
     );
   }

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:school_watch_semeru/common/routing/routes.dart';
-import 'package:school_watch_semeru/features/report/domain/report_time.dart';
 
+import '../../../../common/routing/routes.dart';
+import '../../../../utils/snackbar_utils.dart';
+import '../../domain/report_time.dart';
+import 'report_feed_controller.dart';
 import '../widgets/report_card.dart';
 import '../../domain/report_status.dart';
 import '../../domain/report_type.dart';
-import 'reports_provider.dart';
 import '../../../../common/constants/constant.dart';
 import '../../../../common/widgets/app_logo.dart';
 import '../../../../common/widgets/category_chip.dart';
@@ -47,34 +48,82 @@ class ReportList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final reportQuery = ref.watch(reportFilterStateProvider);
-    final reports = ref.watch(getReportsProvider(query: reportQuery));
+    final reports = ref.watch(reportFeedControllerProvider(reportQuery));
+
+    ref.listen(
+      reportFeedControllerProvider(reportQuery).selectAsync(
+        (data) => data.errorMessage,
+      ),
+      (previous, next) async {
+        final errorMessage = await next;
+        if (errorMessage != null && context.mounted) {
+          showSnackbar(context,
+              message: errorMessage, type: SnackbarType.error);
+        }
+        await Future.delayed(kDurationLong);
+        ref
+            .read(reportFeedControllerProvider(reportQuery).notifier)
+            .setErrorMessage(null);
+      },
+    );
+
+    ref.listen(
+      reportFeedControllerProvider(reportQuery).selectAsync(
+        (data) => data.successMessage,
+      ),
+      (previous, next) async {
+        final successMessage = await next;
+        if (successMessage != null && context.mounted) {
+          showSnackbar(context,
+              message: successMessage, type: SnackbarType.success);
+        }
+        await Future.delayed(kDurationLong);
+        ref
+            .read(reportFeedControllerProvider(reportQuery).notifier)
+            .setErrorMessage(null);
+      },
+    );
 
     return reports.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stackTrace) => Text('$error'),
-      data: (reports) => RefreshIndicator(
-        key: _refreshIndicatorKey,
-        onRefresh: () {
-          ref.invalidate(getReportsProvider);
-          return ref.read(getReportsProvider(query: reportQuery).future);
-        },
-        child: ListView.separated(
-          padding: const EdgeInsets.symmetric(horizontal: SWSizes.s16),
-          itemCount: reports.length,
-          separatorBuilder: (context, index) {
-            return const SizedBox(height: SWSizes.s16);
+      data: (state) {
+        final reports = state.reports;
+        return RefreshIndicator(
+          key: _refreshIndicatorKey,
+          onRefresh: () {
+            ref.invalidate(reportFeedControllerProvider);
+            return ref.read(reportFeedControllerProvider(reportQuery).future);
           },
-          itemBuilder: (context, index) => ReportCard(
-            report: reports[index],
-            onTap: () {
-              context.pushNamed(
-                Routes.reportDetail,
-                params: {'reportId': reports[index].id},
-              );
+          child: ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: SWSizes.s16),
+            itemCount: reports.length,
+            separatorBuilder: (context, index) {
+              return const SizedBox(height: SWSizes.s16);
             },
+            itemBuilder: (context, index) => ReportCard(
+              key: ValueKey(reports[index].id),
+              report: reports[index],
+              onLiked: () {
+                ref
+                    .read(reportFeedControllerProvider(reportQuery).notifier)
+                    .toggleLike(index, reports[index].id);
+              },
+              onDisliked: () {
+                ref
+                    .read(reportFeedControllerProvider(reportQuery).notifier)
+                    .toggleDislike(index, reports[index].id);
+              },
+              onTap: () {
+                context.pushNamed(
+                  Routes.reportDetail,
+                  params: {'reportId': reports[index].id},
+                );
+              },
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

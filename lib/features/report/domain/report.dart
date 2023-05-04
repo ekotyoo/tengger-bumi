@@ -24,6 +24,8 @@ class Report with _$Report {
     required String description,
     required Author author,
     required String school,
+    @Default(false) bool liked,
+    @Default(false) bool disliked,
     @JsonKey(name: 'created_at') @TimestampSerializer() required DateTime createdAt,
     @JsonKey(name: 'likes_count', defaultValue: 0) required int likesCount,
     @JsonKey(name: 'dislikes_count', defaultValue: 0) required  int dislikesCount,
