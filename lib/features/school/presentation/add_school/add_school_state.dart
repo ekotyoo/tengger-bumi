@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../models/floor_plan.dart';
+import '../models/floor_plan_ui_model.dart';
 import '../models/school_name_text_input.dart';
 import '../models/school_address_text_input.dart';
 
@@ -15,13 +15,13 @@ class AddSchoolState extends Equatable {
   final int currentPage;
   final SchoolNameInput schoolNameInput;
   final SchoolAddressInput schoolAddressInput;
-  final FloorPlan? floorPlan;
+  final FloorPlanUiModel? floorPlan;
 
   AddSchoolState copyWith({
     int? currentPage,
     SchoolNameInput? schoolNameInput,
     SchoolAddressInput? schoolAddressInput,
-    FloorPlan? floorPlan,
+    FloorPlanUiModel? floorPlan,
   }) {
     return AddSchoolState(
       currentPage: currentPage ?? this.currentPage,
