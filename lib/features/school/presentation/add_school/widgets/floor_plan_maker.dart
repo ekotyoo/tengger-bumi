@@ -7,7 +7,7 @@ import 'package:latlong2/latlong.dart';
 
 import '../../../../../common/widgets/sw_text_field.dart';
 import '../../../../../common/constants/constant.dart';
-import '../../models/room.dart';
+import '../../models/room_ui_model.dart';
 
 class FloorPlanMaker extends StatefulWidget {
   const FloorPlanMaker({
@@ -16,7 +16,7 @@ class FloorPlanMaker extends StatefulWidget {
     this.roomEditIndex,
   }) : super(key: key);
 
-  final List<Room> rooms;
+  final List<RoomUiModel> rooms;
   final int? roomEditIndex;
 
   @override
@@ -141,7 +141,7 @@ class _FloorPlanMakerState extends State<FloorPlanMaker> {
                 return;
               }
               context.pop(
-                Room(
+                RoomUiModel(
                   label: _polygons.first.label ?? '',
                   polygon: _polygons.first,
                   color: _polygons.first.color,

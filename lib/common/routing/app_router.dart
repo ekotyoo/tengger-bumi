@@ -3,13 +3,16 @@ import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:school_watch_semeru/features/report/presentation/report_detail/report_detail_screen.dart';
+import 'package:school_watch_semeru/features/school/presentation/models/floor_plan_ui_model.dart';
+import 'package:school_watch_semeru/features/school/presentation/school_detail/school_detail_screen.dart';
+import 'package:school_watch_semeru/features/school/presentation/school_detail/school_floor_plan_screen.dart';
 
 import '../../features/auth/auth_controller.dart';
 import '../../features/school/presentation/add_school/add_school_screen.dart';
 import '../../features/school/presentation/add_school/widgets/floor_plan_maker.dart';
 import '../../features/school/presentation/models/floor_plan_nav_arg.dart';
 import '../../features/report/presentation/post_report/widgets/location_picker.dart';
-import '../../features/home/map_screen.dart';
+import '../../features/school/presentation/school_map/school_map_screen.dart';
 import '../../features/report/presentation/post_report/post_report_screen.dart';
 import '../../features/auth/presentation/profile/profile_screen.dart';
 import '../../features/school/presentation/school_list/school_list_screen.dart';
@@ -98,7 +101,7 @@ class AppRouter extends _$AppRouter implements Listenable {
               name: Routes.map,
               pageBuilder: (context, state) => NoTransitionPage(
                 key: state.pageKey,
-                child: const MapScreen(),
+                child: const SchoolMapScreen(),
               ),
             ),
             GoRoute(
@@ -193,6 +196,38 @@ class AppRouter extends _$AppRouter implements Listenable {
                   child: FloorPlanMaker(
                     rooms: arg.rooms ?? [],
                     roomEditIndex: arg.roomEditIndex,
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+        GoRoute(
+          path: '/school/:schoolId',
+          name: Routes.schoolDetail,
+          parentNavigatorKey: navigatorKey,
+          pageBuilder: (context, state) {
+            final schoolId = state.params['schoolId'];
+
+            if (schoolId == null) throw Exception();
+            return MaterialPage(
+              child: SchoolDetailScreen(
+                schoolId: schoolId,
+              ),
+            );
+          },
+          routes: [
+            GoRoute(
+              path: 'floorplan',
+              name: Routes.schoolFloorPlan,
+              parentNavigatorKey: navigatorKey,
+              pageBuilder: (context, state) {
+                final floorPlan = state.extra as FloorPlanUiModel?;
+
+                if (floorPlan == null) throw Exception();
+                return MaterialPage(
+                  child: SchoolFloorPlanScreen(
+                    floorPlan: floorPlan,
                   ),
                 );
               },

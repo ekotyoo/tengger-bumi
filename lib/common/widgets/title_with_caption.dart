@@ -6,11 +6,11 @@ class TitleWithCaption extends StatelessWidget {
   const TitleWithCaption({
     super.key,
     required this.title,
-    required this.caption,
+    this.caption,
   });
 
   final String title;
-  final String caption;
+  final String? caption;
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +24,14 @@ class TitleWithCaption extends StatelessWidget {
               .bodyLarge
               ?.copyWith(fontWeight: FontWeight.bold),
         ),
-        Text(
-          caption,
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(color: kColorNeutral200),
-        ),
+        if (caption != null)
+          Text(
+            caption!,
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                ?.copyWith(color: kColorNeutral200),
+          ),
       ],
     );
   }

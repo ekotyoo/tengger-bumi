@@ -1,6 +1,6 @@
 import 'package:latlong2/latlong.dart';
 import 'package:maps_toolkit/maps_toolkit.dart' as mp;
-import 'package:school_watch_semeru/features/report/domain/position.dart';
+import 'package:school_watch_semeru/common/models/position.dart';
 
 extension MapsToolkitExt on mp.LatLng {
   LatLng toLatLng2() => LatLng(latitude, longitude);

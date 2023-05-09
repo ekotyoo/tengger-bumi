@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:school_watch_semeru/features/school/presentation/models/floor_plan_nav_arg.dart';
 
-import '../../models/room.dart';
+import '../../models/room_ui_model.dart';
 import '../../../../../common/routing/routes.dart';
 import '../add_school_controller.dart';
 import '../../../../../common/constants/constant.dart';
@@ -59,7 +59,7 @@ class SchoolFloorPlanForm extends ConsumerWidget {
     );
 
     if (newRoom != null) {
-      ref.read(addSchoolControllerProvider.notifier).addRoom(newRoom as Room);
+      ref.read(addSchoolControllerProvider.notifier).addRoom(newRoom as RoomUiModel);
     }
   }
 
@@ -97,9 +97,9 @@ class FloorPlanViewer extends StatefulWidget {
     this.onRoomClick,
   }) : super(key: key);
 
-  final List<Room> rooms;
+  final List<RoomUiModel> rooms;
   final VoidCallback? onAddRoom;
-  final Function(Room)? onDeleteRoom;
+  final Function(RoomUiModel)? onDeleteRoom;
   final Function(int)? onRoomClick;
 
   @override

@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:school_watch_semeru/features/school/domain/school_analysis.dart';
+
+import '../../../common/models/position.dart';
+import 'school_analysis.dart';
 
 part 'school.freezed.dart';
 
@@ -11,6 +13,7 @@ class School with _$School {
     required String id,
     required String name,
     required SchoolAnalysis analysis,
+    @JsonKey(name: 'school_location') required Position schoolLocation,
     String? image,
   }) = _School;
 

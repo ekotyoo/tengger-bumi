@@ -2,7 +2,6 @@ class Routes {
   static const splash = 'splash';
 
   static const home = 'home';
-  static const schoolList = 'schoollist';
   static const postReport = 'postReport';
   static const map = 'map';
   static const profile = 'profile';
@@ -14,6 +13,9 @@ class Routes {
   static const reportDetail = 'reportdetail';
   static const locationPicker = 'locationpicker';
 
+  static const schoolList = 'schoollist';
   static const addSchool = 'addschool';
   static const floorPlanMaker = 'floorplanmaker';
+  static const schoolDetail = 'schooldetail';
+  static const schoolFloorPlan = 'schoolfloorplan';
 }

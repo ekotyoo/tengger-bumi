@@ -1,14 +1,15 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'post_report_state.dart';
 import '../models/image_pick_input.dart';
 import '../models/information_text_input.dart';
 import '../models/label_text_input.dart';
-import '../../domain/position.dart';
+import '../../../../common/models/position.dart';
 import '../models/additional_info_input_wrapper.dart';
 import '../models/category_option_input.dart';
 import '../models/location_pick_input.dart';
@@ -17,56 +18,54 @@ import '../models/description_text_input.dart';
 import 'widgets/pick_report_type_form.dart';
 import 'widgets/pick_school_form.dart';
 
-part './post_report_state.dart';
+part 'post_report_controller.g.dart';
 
 const kMaxAdditionalInfo = 3;
 
-class PostReportController extends StateNotifier<PostReportState> {
-  PostReportController()
-      : super(PostReportState(
-          categories: List.generate(
-            5,
-            (index) => Category(
-              id: index.toString(),
-              label: 'Kategori-${index + 1}',
-            ),
-          ),
-        ));
-
-  void onPageChange(int page) => state = state.copyWith(currentPage: page);
-
-  void onSchoolChange(SchoolOption school) =>
-      state = state.copyWith(selectedSchool: school);
-
-  void onReportTypeChange(ReportType type) {
-    state = state.copyWith(selectedReportType: type);
+@riverpod
+class PostReportController extends _$PostReportController {
+  @override
+  FutureOr<PostReportState> build() async {
+    return const PostReportState();
   }
 
-  void onDescriptionChange(String value) => state = state.copyWith(
-      descriptionInput: DescriptionTextInput.dirty(value: value));
+      void onPageChange(int page) => state = AsyncValue.data(state.requireValue.copyWith(currentPage: page));
 
-  void onCategoryChange(Category? value) => state =
-      state.copyWith(categoryInput: CategoryOptionInput.dirty(value: value));
+  void onSchoolChange(SchoolOption school) =>
+      state = AsyncValue.data(state.requireValue.copyWith(selectedSchool: school));
+
+  void onReportTypeChange(ReportType type) {
+    state = AsyncValue.data(state.requireValue.copyWith(selectedReportType: type));
+  }
+
+  void onDescriptionChange(String value) =>
+      state = AsyncValue.data(state.requireValue.copyWith(
+          descriptionInput: DescriptionTextInput.dirty(value: value)));
+
+  void onCategoryChange(Category? value) =>
+      state =
+          AsyncValue.data(state.requireValue.copyWith(
+              categoryInput: CategoryOptionInput.dirty(value: value)));
 
   void onLocationChange(LatLng? value) {
     if (value == null) return;
 
-    state = state.copyWith(
+    state = AsyncValue.data(state.requireValue.copyWith(
       locationInput: LocationPickInput.dirty(
         value: Position(
           latitude: value.latitude,
           longitude: value.longitude,
         ),
       ),
-    );
+    ));
   }
 
   void addAdditionalInfo() {
-    if (state.additionalInfoInputs.length >= kMaxAdditionalInfo) return;
+    if (state.requireValue.additionalInfoInputs.length >= kMaxAdditionalInfo) return;
 
-    final newList = state.additionalInfoInputs.isEmpty
+    final newList = state.requireValue.additionalInfoInputs.isEmpty
         ? <AdditionalInfoInputWrapper>[]
-        : state.additionalInfoInputs;
+        : state.requireValue.additionalInfoInputs;
 
     newList.add(AdditionalInfoInputWrapper(
       key: UniqueKey(),
@@ -74,87 +73,88 @@ class PostReportController extends StateNotifier<PostReportState> {
       informationInput: const InformationTextInput.pure(),
     ));
 
-    state = state.copyWith(additionalInfoInputs: newList);
+    state = AsyncValue.data(state.requireValue.copyWith(additionalInfoInputs: newList));
   }
 
   void removeAdditionalInfo(int index) {
     debugPrint('Removing item at index: $index');
-    final newList = state.additionalInfoInputs;
+    final newList = state.requireValue.additionalInfoInputs;
     newList.removeAt(index);
 
-    state = state.copyWith(additionalInfoInputs: newList);
+    state = AsyncValue.data(state.requireValue.copyWith(additionalInfoInputs: newList));
   }
 
   void onLabelChange(int index, String value) {
-    final newList = state.additionalInfoInputs;
-    final newItem = state.additionalInfoInputs[index].copyWith(
+    final newList = state.requireValue.additionalInfoInputs;
+    final newItem = state.requireValue.additionalInfoInputs[index].copyWith(
       labelInput: LabelTextInput.dirty(value: value),
     );
 
     newList[index] = newItem;
 
-    state = state.copyWith(additionalInfoInputs: newList);
+    state = AsyncValue.data(state.requireValue.copyWith(additionalInfoInputs: newList));
   }
 
   void onInformationChange(int index, String value) {
-    final newList = state.additionalInfoInputs;
-    final newItem = state.additionalInfoInputs[index].copyWith(
+    final newList = state.requireValue.additionalInfoInputs;
+    final newItem = state.requireValue.additionalInfoInputs[index].copyWith(
       informationInput: InformationTextInput.dirty(value: value),
     );
 
     newList[index] = newItem;
 
-    state = state.copyWith(additionalInfoInputs: newList);
+    state = AsyncValue.data(state.requireValue.copyWith(additionalInfoInputs: newList));
   }
 
   void onImagesSelected(List<XFile> images) {
-    state = state.copyWith(
-      imageInput: ImagePickInput.dirty(value: state.imageInput.value + images),
+    state = AsyncValue.data(state.requireValue.copyWith(
+      imageInput: ImagePickInput.dirty(value: state.requireValue.imageInput.value + images)),
     );
   }
 
   void onImageDeleted(XFile image) {
-    final newList = state.imageInput.value;
+    final newList = state.requireValue.imageInput.value;
     newList.remove(image);
 
-    state = state.copyWith(imageInput: ImagePickInput.dirty(value: newList));
+    state = AsyncValue.data(state.requireValue.copyWith(imageInput: ImagePickInput.dirty(value: newList)));
   }
 
   void onSubmit() {
-    state = state.copyWith(
+    state = AsyncValue.data(state.requireValue.copyWith(
       descriptionInput: DescriptionTextInput.dirty(
-        value: state.descriptionInput.value,
+        value: state.requireValue.descriptionInput.value,
       ),
       categoryInput: CategoryOptionInput.dirty(
-        value: state.categoryInput.value,
+        value: state.requireValue.categoryInput.value,
       ),
       locationInput: LocationPickInput.dirty(
-        value: state.locationInput.value,
+        value: state.requireValue.locationInput.value,
       ),
-      additionalInfoInputs: state.additionalInfoInputs
+      additionalInfoInputs: state.requireValue.additionalInfoInputs
           .map(
-            (e) => AdditionalInfoInputWrapper(
+            (e) =>
+            AdditionalInfoInputWrapper(
                 key: e.key,
                 labelInput: LabelTextInput.dirty(value: e.labelInput.value),
                 informationInput: InformationTextInput.dirty(
                     value: e.informationInput.value)),
-          )
+      )
           .toList(),
-      imageInput: ImagePickInput.dirty(value: state.imageInput.value),
-    );
+      imageInput: ImagePickInput.dirty(value: state.requireValue.imageInput.value),
+    ));
 
     Formz.validate([
-      state.descriptionInput,
-      state.categoryInput,
-      state.locationInput,
-      ...state.additionalInfoInputs.map((e) => e.labelInput).toList(),
-      ...state.additionalInfoInputs.map((e) => e.informationInput).toList(),
-      state.imageInput,
+      state.requireValue.descriptionInput,
+      state.requireValue.categoryInput,
+      state.requireValue.locationInput,
+      ...state.requireValue.additionalInfoInputs.map((e) => e.labelInput).toList(),
+      ...state.requireValue.additionalInfoInputs.map((e) => e.informationInput).toList(),
+      state.requireValue.imageInput,
     ]);
   }
 }
 
 final postReportControllerProvider =
-    StateNotifierProvider.autoDispose<PostReportController, PostReportState>(
-  (ref) => PostReportController(),
+StateNotifierProvider.autoDispose<PostReportController, PostReportState>(
+      (ref) => PostReportController(),
 );

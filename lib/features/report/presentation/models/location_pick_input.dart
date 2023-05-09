@@ -1,7 +1,7 @@
 import 'package:formz/formz.dart';
 
 import '../../../../common/constants/constant.dart';
-import '../../domain/position.dart';
+import '../../../../common/models/position.dart';
 
 enum LocationPickInputError {
   empty;

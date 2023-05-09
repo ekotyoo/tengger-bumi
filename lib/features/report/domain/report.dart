@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:school_watch_semeru/features/report/domain/author.dart';
+
+import 'author.dart';
 
 part 'report.freezed.dart';
 

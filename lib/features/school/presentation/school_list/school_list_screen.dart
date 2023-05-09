@@ -71,64 +71,69 @@ class SchoolCard extends StatelessWidget {
   const SchoolCard({
     Key? key,
     required this.school,
+    this.onTap,
   }) : super(key: key);
 
   final School school;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(SWSizes.s16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(SWSizes.s8),
-        color: kColorPrimary50,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(Icons.home_work_outlined),
-              const SizedBox(width: SWSizes.s8),
-              Text(
-                school.name,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-          const SizedBox(height: SWSizes.s16),
-          Text(
-            'Analisis Sekolah:',
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: SWSizes.s4),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildSchoolAnalysisInfo(
-                context,
-                label: 'Pencegahan',
-                value: 'Rendah',
-              ),
-              _buildSchoolAnalysisInfo(
-                context,
-                label: 'Tanggap Darurat',
-                value: 'Rendah',
-              ),
-              _buildSchoolAnalysisInfo(
-                context,
-                label: 'Pemulihan',
-                value: 'Rendah',
-              ),
-            ],
-          ),
-        ],
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(SWSizes.s16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(SWSizes.s8),
+          color: kColorPrimary50,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.home_work_outlined),
+                const SizedBox(width: SWSizes.s8),
+                Text(
+                  school.name,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            const SizedBox(height: SWSizes.s16),
+            Text(
+              'Analisis Sekolah:',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: SWSizes.s4),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildSchoolAnalysisInfo(
+                  context,
+                  label: 'Pencegahan',
+                  value: 'Rendah',
+                ),
+                _buildSchoolAnalysisInfo(
+                  context,
+                  label: 'Tanggap Darurat',
+                  value: 'Rendah',
+                ),
+                _buildSchoolAnalysisInfo(
+                  context,
+                  label: 'Pemulihan',
+                  value: 'Rendah',
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -179,7 +184,15 @@ class SchoolList extends ConsumerWidget {
           itemCount: schools.length,
           itemBuilder: (context, index) {
             final school = schools[index];
-            return SchoolCard(school: school);
+            return SchoolCard(
+              school: school,
+              onTap: () {
+                context.pushNamed(
+                  Routes.schoolDetail,
+                  params: {'schoolId' : school.id },
+                );
+              },
+            );
           },
           separatorBuilder: (context, index) =>
               const SizedBox(height: SWSizes.s8),

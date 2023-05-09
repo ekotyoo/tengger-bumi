@@ -80,7 +80,5 @@ class SWStrings {
   static const labelPickColor = 'Pilih warna:';
   static const descRoomNameCannotBeEmpty = 'Nama ruang tidak boleh kosong';
   static const descRoomFloorPlanInvalid = 'Denah ruang belum terbentuk';
-
-
-
+  static const labelSchoolDetail = 'Detail Sekolah';
 }
