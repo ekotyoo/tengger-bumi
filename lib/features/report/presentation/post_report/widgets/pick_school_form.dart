@@ -39,7 +39,7 @@ class PickSchoolForm extends StatelessWidget {
       child: Text(SWStrings.descSchoolNotAvailable),
     );
 
-    return isLoading ? loadingWidget : Column(
+    return Column(
       children: [
         const TitleWithCaption(
           title: SWStrings.labelChooseSchool,
@@ -47,7 +47,7 @@ class PickSchoolForm extends StatelessWidget {
         ),
         const SizedBox(height: SWSizes.s16),
         Expanded(
-          child: schools.isEmpty ? emptyWidget : ListView.separated(
+          child: isLoading ? loadingWidget : schools.isEmpty ? emptyWidget : ListView.separated(
             physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) {
               final school = schools[index];

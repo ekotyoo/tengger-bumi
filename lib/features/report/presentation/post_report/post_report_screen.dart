@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:school_watch_semeru/common/widgets/sw_button.dart';
+import 'package:school_watch_semeru/utils/snackbar_utils.dart';
 
+import 'post_report_state.dart';
 import '../../../../common/constants/constant.dart';
 import 'widgets/pick_report_type_form.dart';
 import 'widgets/pick_school_form.dart';
 import 'widgets/report_info_form.dart';
 import 'post_report_controller.dart';
-
-final dummySchools = List.generate(
-  10,
-      (index) => SchoolOption(
-    id: index.toString(),
-    name: 'SD Negeri ${index + 1} Sidomulyo',
-  ),
-);
 
 const reportTypes = [
   ReportType(
@@ -50,6 +45,8 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
     super.initState();
     _pageController = PageController(viewportFraction: 1.1, initialPage: 0);
     _descriptionController = TextEditingController();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) =>
+        ref.read(postReportControllerProvider.notifier).getSchools());
   }
 
   @override
@@ -62,7 +59,32 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(postReportControllerProvider);
-    final screenWidth = MediaQuery.of(context).size.width - (2 * SWSizes.s16);
+
+    ref.listen(
+      postReportControllerProvider.select((value) => value.errorMessage),
+          (previous, next) {
+        if (next != null && context.mounted) {
+          showSnackbar(context, message: next, type: SnackbarType.error);
+        }
+        ref.read(postReportControllerProvider.notifier).setErrorMessage(null);
+      },
+    );
+
+    ref.listen(
+      postReportControllerProvider.select((value) => value.successMessage),
+          (previous, next) {
+        if (next != null && context.mounted) {
+          showSnackbar(context, message: next);
+          context.pop();
+        }
+        ref.read(postReportControllerProvider.notifier).setSuccessMessage(null);
+      },
+    );
+
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width - (2 * SWSizes.s16);
 
     final canGoBack = state.currentPage > 0;
 
@@ -70,11 +92,13 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
       FractionallySizedBox(
         widthFactor: 1 / _pageController.viewportFraction,
         child: PickSchoolForm(
-          schools: dummySchools,
+          schools: state.schools,
+          isLoading: state.schoolLoading,
           selectedSchool: state.selectedSchool,
-          onSchoolSelected: (school) => ref
-              .read(postReportControllerProvider.notifier)
-              .onSchoolChange(school),
+          onSchoolSelected: (school) =>
+              ref
+                  .read(postReportControllerProvider.notifier)
+                  .onSchoolChange(school),
         ),
       ),
       FractionallySizedBox(
@@ -82,9 +106,10 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
         child: PickReportTypeForm(
           types: reportTypes,
           selectedType: state.selectedReportType,
-          onTypeSelected: (type) => ref
-              .read(postReportControllerProvider.notifier)
-              .onReportTypeChange(type),
+          onTypeSelected: (type) =>
+              ref
+                  .read(postReportControllerProvider.notifier)
+                  .onReportTypeChange(type),
         ),
       ),
       FractionallySizedBox(
@@ -135,7 +160,8 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
                     AnimatedContainer(
                       duration: kDurationShort,
                       color: kColorPrimary500,
-                      width: screenWidth * state.currentPage / (forms.length - 1),
+                      width:
+                      screenWidth * state.currentPage / (forms.length - 1),
                       height: SWSizes.s4,
                     ),
                   ],
@@ -145,9 +171,10 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
                   child: PageView(
                     scrollDirection: Axis.horizontal,
                     controller: _pageController,
-                    onPageChanged: (value) => ref
-                        .read(postReportControllerProvider.notifier)
-                        .onPageChange(value),
+                    onPageChanged: (value) =>
+                        ref
+                            .read(postReportControllerProvider.notifier)
+                            .onPageChange(value),
                     physics: const NeverScrollableScrollPhysics(),
                     children: forms,
                   ),
@@ -171,11 +198,9 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
     );
   }
 
-  _buildFormActions(
-      BuildContext context,
+  _buildFormActions(BuildContext context,
       PostReportState state,
-      List<Widget> forms,
-      ) {
+      List<Widget> forms,) {
     var disabled = false;
 
     if (state.currentPage == 0 && state.selectedSchool == null) {
@@ -184,10 +209,13 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
       disabled = true;
     }
 
-    return ElevatedButton(
-      onPressed: disabled
-          ? null
-          : () {
+    return SWButton(
+      loading: state.finalFormSubmitting,
+      disabled: disabled,
+      label: state.currentPage < forms.length - 1
+          ? SWStrings.labelNext
+          : SWStrings.labelSave,
+      onPressed: () {
         final currentPage = state.currentPage;
         if (currentPage < forms.length - 1) {
           _animateToPage(currentPage + 1);
@@ -195,11 +223,6 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
           ref.read(postReportControllerProvider.notifier).onSubmit();
         }
       },
-      child: Text(
-        state.currentPage < forms.length - 1
-            ? SWStrings.labelNext
-            : SWStrings.labelSave,
-      ),
     );
   }
 }

@@ -28,5 +28,5 @@ class AdditionalInfoInputWrapper extends Equatable {
   }
 
   @override
-  List<Object> get props => [labelInput, informationInput];
+  List<Object> get props => [labelInput, informationInput, key];
 }

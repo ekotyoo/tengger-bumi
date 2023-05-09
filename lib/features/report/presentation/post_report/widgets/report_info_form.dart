@@ -16,14 +16,30 @@ import '../post_report_controller.dart';
 import '../../../../../common/widgets/sw_text_field.dart';
 import '../../../../../common/constants/constant.dart';
 import '../../../../../common/widgets/title_with_caption.dart';
+import '../post_report_state.dart';
 
-class ReportInfoForm extends ConsumerWidget {
+class ReportInfoForm extends ConsumerStatefulWidget {
   const ReportInfoForm({super.key, this.descriptionController});
 
   final TextEditingController? descriptionController;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _ReportInfoFormState();
+}
+
+class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) =>
+        ref.read(postReportControllerProvider.notifier).initReportInfoForm());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(postReportControllerProvider);
+    const loadingWidget = Center(child: CircularProgressIndicator());
+
     return Column(
       children: [
         const TitleWithCaption(
@@ -32,10 +48,10 @@ class ReportInfoForm extends ConsumerWidget {
         ),
         const SizedBox(height: SWSizes.s16),
         Expanded(
-          child: ListView(
+          child: state.infoFormLoading ? loadingWidget : ListView(
             physics: const BouncingScrollPhysics(),
             children: [
-              ..._buildFormInputFields(context, ref),
+              ..._buildFormInputFields(context, state),
               const Divider(),
               ImagePickerInput(),
             ],
@@ -45,12 +61,10 @@ class ReportInfoForm extends ConsumerWidget {
     );
   }
 
-  _buildFormInputFields(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(postReportControllerProvider);
-
+  _buildFormInputFields(BuildContext context, PostReportState state) {
     return [
       SWTextField(
-        controller: descriptionController,
+        controller: widget.descriptionController,
         hint: SWStrings.labelDescription,
         maxLines: 5,
         errorText: state.descriptionInput.isPure
@@ -73,9 +87,9 @@ class ReportInfoForm extends ConsumerWidget {
         value: state.categoryInput.value,
         items: state.categories
             .map((e) => DropdownMenuItem(
-          value: e,
-          child: Text(e.label),
-        ))
+                  value: e,
+                  child: Text(e.label),
+                ))
             .toList(),
       ),
       const SizedBox(height: SWSizes.s16),
@@ -83,8 +97,11 @@ class ReportInfoForm extends ConsumerWidget {
         locationInput: state.locationInput,
         onTap: () async {
           final selectedLocation = state.locationInput.value?.toLatLng();
-          final position = await context.pushNamed(Routes.locationPicker, extra: selectedLocation) as LatLng?;
-          ref.read(postReportControllerProvider.notifier).onLocationChange(position);
+          final position = await context.pushNamed(Routes.locationPicker,
+              extra: selectedLocation) as LatLng?;
+          ref
+              .read(postReportControllerProvider.notifier)
+              .onLocationChange(position);
         },
       ),
       const Divider(height: SWSizes.s16),
@@ -320,18 +337,18 @@ class _AdditionalInfoTextFieldState extends State<_AdditionalInfoTextField> {
 
   @override
   void initState() {
+    super.initState();
     _labelController =
         TextEditingController(text: widget.input.labelInput.value);
     _informationController =
         TextEditingController(text: widget.input.informationInput.value);
-    super.initState();
   }
 
   @override
   void dispose() {
+    super.dispose();
     _labelController.dispose();
     _informationController.dispose();
-    super.dispose();
   }
 
   @override
@@ -397,7 +414,7 @@ class _PickLocationButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                locationInput.value?.toString() ?? SWStrings.labelLocation,
+                locationInput.value == null ? SWStrings.labelLocation : '${locationInput.value?.latitude}, ${locationInput.value?.longitude}',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const Icon(Icons.pin_drop_outlined),

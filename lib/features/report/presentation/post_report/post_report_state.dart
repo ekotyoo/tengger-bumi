@@ -1,62 +1,34 @@
-part of './post_report_controller.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class PostReportState extends Equatable {
-  const PostReportState({
-    this.currentPage = 0,
-    this.selectedSchool,
-    this.selectedReportType,
-    this.categories = const [],
-    this.descriptionInput = const DescriptionTextInput.pure(),
-    this.categoryInput = const CategoryOptionInput.pure(),
-    this.locationInput = const LocationPickInput.pure(),
-    this.additionalInfoInputs = const [],
-    this.imageInput = const ImagePickInput.pure(),
-  });
+import 'widgets/pick_report_type_form.dart';
+import 'widgets/pick_school_form.dart';
+import '../../domain/category.dart';
+import '../models/additional_info_input_wrapper.dart';
+import '../models/category_option_input.dart';
+import '../models/description_text_input.dart';
+import '../models/image_pick_input.dart';
+import '../models/location_pick_input.dart';
 
-  final int currentPage;
-  final SchoolOption? selectedSchool;
-  final ReportType? selectedReportType;
-  final List<Category> categories;
-  final DescriptionTextInput descriptionInput;
-  final CategoryOptionInput categoryInput;
-  final LocationPickInput locationInput;
-  final List<AdditionalInfoInputWrapper> additionalInfoInputs;
-  final ImagePickInput imageInput;
+part 'post_report_state.freezed.dart';
 
-  PostReportState copyWith({
-    int? currentPage,
+@freezed
+class PostReportState with _$PostReportState {
+  const factory PostReportState({
+    @Default(0) int currentPage,
     SchoolOption? selectedSchool,
+    @Default([]) List<SchoolOption> schools,
+    @Default(true) bool schoolLoading,
+    @Default(true) bool infoFormLoading,
+    @Default(false) bool finalFormSubmitting,
     ReportType? selectedReportType,
-    List<Category>? categories,
-    DescriptionTextInput? descriptionInput,
-    CategoryOptionInput? categoryInput,
-    LocationPickInput? locationInput,
-    List<AdditionalInfoInputWrapper>? additionalInfoInputs,
-    ImagePickInput? imageInput,
-  }) {
-    return PostReportState(
-      currentPage: currentPage ?? this.currentPage,
-      selectedSchool: selectedSchool ?? this.selectedSchool,
-      selectedReportType: selectedReportType ?? this.selectedReportType,
-      categories: categories ?? this.categories,
-      descriptionInput: descriptionInput ?? this.descriptionInput,
-      categoryInput: categoryInput ?? this.categoryInput,
-      locationInput: locationInput ?? this.locationInput,
-      additionalInfoInputs: additionalInfoInputs ?? this.additionalInfoInputs,
-      imageInput: imageInput ?? this.imageInput,
-    );
-  }
-
-  @override
-  List<Object?> get props => [
-        currentPage,
-        selectedSchool,
-        selectedReportType,
-        categories,
-        descriptionInput,
-        categoryInput,
-        locationInput,
-        additionalInfoInputs,
-        imageInput,
-      ];
+    @Default([]) List<Category> categories,
+    @Default(DescriptionTextInput.pure()) DescriptionTextInput descriptionInput,
+    @Default(CategoryOptionInput.pure()) CategoryOptionInput categoryInput,
+    @Default(LocationPickInput.pure()) LocationPickInput locationInput,
+    @Default(ImagePickInput.pure()) ImagePickInput imageInput,
+    @Default([]) List<AdditionalInfoInputWrapper> additionalInfoInputs,
+    @Default(false) bool validated,
+    String? successMessage,
+    String? errorMessage,
+  }) = _PostReportState;
 }

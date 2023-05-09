@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:school_watch_semeru/features/report/domain/report_request.dart';
 
 import '../../../common/error/failure.dart';
 import '../../../common/error/network_exceptions.dart';
@@ -155,6 +158,17 @@ class FakeReportRepository implements IReportRepository {
       return left(Failure(exception.getErrorMessage()));
     }
   }
+
+  @override
+  Future<Either<Failure, Unit>> postReport(ReportRequest report, List<File> images) async {
+    try {
+      await Future.delayed(kDurationLong);
+      return right(unit);
+    } catch(e) {
+      final exception = NetworkExceptions.getDioException(e);
+      return left(Failure(exception.getErrorMessage()));
+    }
+  }
 }
 
 class ReportRepository implements IReportRepository {
@@ -217,6 +231,12 @@ class ReportRepository implements IReportRepository {
   @override
   Future<Either<Failure, Unit>> removeLike({required String reportId, CancelToken? cancelToken}) {
     // TODO: implement removeLike
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, Unit>> postReport(ReportRequest report, List<File> images) {
+    // TODO: implement postReport
     throw UnimplementedError();
   }
 }

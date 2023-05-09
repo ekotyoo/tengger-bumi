@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:school_watch_semeru/features/report/domain/report_request.dart';
 
 import '../../../common/error/failure.dart';
 import '../domain/comment.dart';
@@ -17,6 +20,8 @@ abstract class IReportRepository {
     required String reportId,
     CancelToken? cancelToken,
   });
+
+  Future<Either<Failure, Unit>> postReport(ReportRequest report, List<File> images);
 
   Future<Either<Failure, Comment>> addComment({
     required String reportId,
