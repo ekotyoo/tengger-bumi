@@ -1,14 +1,4 @@
-
-import 'package:equatable/equatable.dart';
-
-import '../../domain/category.dart';
-import '../models/additional_info_input_wrapper.dart';
-import '../models/category_option_input.dart';
-import '../models/description_text_input.dart';
-import '../models/image_pick_input.dart';
-import '../models/location_pick_input.dart';
-import 'widgets/pick_report_type_form.dart';
-import 'widgets/pick_school_form.dart';
+part of './post_report_controller.dart';
 
 class PostReportState extends Equatable {
   const PostReportState({

@@ -73,9 +73,9 @@ class ReportInfoForm extends ConsumerWidget {
         value: state.categoryInput.value,
         items: state.categories
             .map((e) => DropdownMenuItem(
-                  value: e,
-                  child: Text(e.label),
-                ))
+          value: e,
+          child: Text(e.label),
+        ))
             .toList(),
       ),
       const SizedBox(height: SWSizes.s16),

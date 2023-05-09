@@ -10,7 +10,7 @@ import 'post_report_controller.dart';
 
 final dummySchools = List.generate(
   10,
-  (index) => SchoolOption(
+      (index) => SchoolOption(
     id: index.toString(),
     name: 'SD Negeri ${index + 1} Sidomulyo',
   ),
@@ -172,10 +172,10 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
   }
 
   _buildFormActions(
-    BuildContext context,
-    PostReportState state,
-    List<Widget> forms,
-  ) {
+      BuildContext context,
+      PostReportState state,
+      List<Widget> forms,
+      ) {
     var disabled = false;
 
     if (state.currentPage == 0 && state.selectedSchool == null) {
@@ -188,13 +188,13 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
       onPressed: disabled
           ? null
           : () {
-              final currentPage = state.currentPage;
-              if (currentPage < forms.length - 1) {
-                _animateToPage(currentPage + 1);
-              } else {
-                ref.read(postReportControllerProvider.notifier).onSubmit();
-              }
-            },
+        final currentPage = state.currentPage;
+        if (currentPage < forms.length - 1) {
+          _animateToPage(currentPage + 1);
+        } else {
+          ref.read(postReportControllerProvider.notifier).onSubmit();
+        }
+      },
       child: Text(
         state.currentPage < forms.length - 1
             ? SWStrings.labelNext
