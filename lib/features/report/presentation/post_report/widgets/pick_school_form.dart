@@ -21,15 +21,25 @@ class PickSchoolForm extends StatelessWidget {
     required this.schools,
     this.selectedSchool,
     required this.onSchoolSelected,
+    this.isLoading = false,
   });
 
   final List<SchoolOption> schools;
   final SchoolOption? selectedSchool;
   final Function(SchoolOption) onSchoolSelected;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    const loadingWidget = Center(
+      child: CircularProgressIndicator(),
+    );
+
+    const emptyWidget = Center(
+      child: Text(SWStrings.descSchoolNotAvailable),
+    );
+
+    return isLoading ? loadingWidget : Column(
       children: [
         const TitleWithCaption(
           title: SWStrings.labelChooseSchool,
@@ -37,7 +47,7 @@ class PickSchoolForm extends StatelessWidget {
         ),
         const SizedBox(height: SWSizes.s16),
         Expanded(
-          child: ListView.separated(
+          child: schools.isEmpty ? emptyWidget : ListView.separated(
             physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) {
               final school = schools[index];
