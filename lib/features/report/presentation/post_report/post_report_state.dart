@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:school_watch_semeru/features/school/domain/school_detail.dart';
 
 import 'widgets/pick_report_type_form.dart';
 import 'widgets/pick_school_form.dart';
@@ -16,6 +17,7 @@ class PostReportState with _$PostReportState {
   const factory PostReportState({
     @Default(0) int currentPage,
     SchoolOption? selectedSchool,
+    SchoolDetail? selectedSchoolData,
     @Default([]) List<SchoolOption> schools,
     @Default(true) bool schoolLoading,
     @Default(true) bool infoFormLoading,

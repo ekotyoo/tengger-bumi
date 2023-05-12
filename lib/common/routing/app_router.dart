@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:school_watch_semeru/features/report/presentation/report_detail/report_detail_screen.dart';
-import 'package:school_watch_semeru/features/school/presentation/models/floor_plan_ui_model.dart';
-import 'package:school_watch_semeru/features/school/presentation/school_detail/school_detail_screen.dart';
-import 'package:school_watch_semeru/features/school/presentation/school_detail/school_floor_plan_screen.dart';
 
+import '../../features/report/presentation/models/location_pick_nav_arg.dart';
+import '../../features/report/presentation/report_detail/report_detail_screen.dart';
+import '../../features/school/presentation/models/school_detail_floor_plan_nav_arg.dart';
+import '../../features/school/presentation/school_detail/school_detail_screen.dart';
+import '../../features/school/presentation/school_detail/school_floor_plan_screen.dart';
 import '../../features/auth/auth_controller.dart';
 import '../../features/school/presentation/add_school/add_school_screen.dart';
 import '../../features/school/presentation/add_school/widgets/floor_plan_maker.dart';
@@ -154,10 +154,16 @@ class AppRouter extends _$AppRouter implements Listenable {
               name: Routes.locationPicker,
               parentNavigatorKey: navigatorKey,
               pageBuilder: (context, state) {
-                final selectedPosition = state.extra as LatLng?;
+                final arg = state.extra as LocationPickNavArg?;
+
+                if (arg == null) throw Exception();
+
                 return MaterialPage(
                   key: state.pageKey,
-                  child: LocationPicker(selectedPosition: selectedPosition),
+                  child: LocationPicker(
+                    selectedPosition: arg.selectedPosition,
+                    floorPlan: arg.floorPlan,
+                  ),
                 );
               },
             ),
@@ -222,12 +228,12 @@ class AppRouter extends _$AppRouter implements Listenable {
               name: Routes.schoolFloorPlan,
               parentNavigatorKey: navigatorKey,
               pageBuilder: (context, state) {
-                final floorPlan = state.extra as FloorPlanUiModel?;
+                final arg = state.extra as SchoolDetailFloorPlanNavArg?;
 
-                if (floorPlan == null) throw Exception();
+                if (arg == null) throw Exception();
                 return MaterialPage(
                   child: SchoolFloorPlanScreen(
-                    floorPlan: floorPlan,
+                    arg: arg,
                   ),
                 );
               },

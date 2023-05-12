@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:school_watch_semeru/common/models/position.dart';
 
 import '../../domain/room.dart';
 
@@ -19,9 +20,23 @@ class RoomUiModel extends Equatable {
   factory RoomUiModel.fromDomain(Room room) => RoomUiModel(
         label: room.label,
         polygon: Polygon(
-          points:
-              room.polygon.map((e) => LatLng(e.latitude, e.longitude)).toList(),
+          points: room.polygon
+              .map(
+                (e) => LatLng(e.latitude, e.longitude),
+              )
+              .toList(),
         ),
+      );
+
+  Room toDomain() => Room(
+        label: label,
+        polygon: polygon.points
+            .map((e) => Position(
+                  latitude: e.latitude,
+                  longitude: e.longitude,
+                ))
+            .toList(),
+        color: color.toString(),
       );
 
   @override

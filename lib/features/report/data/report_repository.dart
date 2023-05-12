@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:school_watch_semeru/common/models/position.dart';
 import 'package:school_watch_semeru/features/report/domain/report_request.dart';
 
 import '../../../common/error/failure.dart';
@@ -39,6 +40,7 @@ class FakeReportRepository implements IReportRepository {
         reportCategory: 'reportCategory-$index',
         description: 'description-$index',
         school: 'SDN $index Sidomulyo',
+        position: const Position(latitude: .0, longitude: .0),
         author: Author(
           id: '$index',
           name: 'john-$index',

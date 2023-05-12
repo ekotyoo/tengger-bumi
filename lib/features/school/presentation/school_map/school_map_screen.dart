@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:school_watch_semeru/common/widgets/open_street_map_attribution.dart';
 
 import '../../../../common/routing/routes.dart';
 import '../school_list/school_list_screen.dart';
@@ -58,15 +59,8 @@ class _SchoolMapScreenState extends ConsumerState<SchoolMapScreen> {
                 absorbPanEventsOnScrollables: false,
                 onTap: (_, point) {},
               ),
-              nonRotatedChildren: [
-                AttributionWidget(
-                  attributionBuilder: (context) {
-                    return const Padding(
-                      padding: EdgeInsets.all(SWSizes.s8),
-                      child: Text('©OpenStreetMap'),
-                    );
-                  },
-                ),
+              nonRotatedChildren: const [
+                OpenStreetMapAttribution(),
               ],
               children: [
                 TileLayer(

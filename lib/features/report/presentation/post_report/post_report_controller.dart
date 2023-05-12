@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:school_watch_semeru/features/school/data/i_school_repository.dart';
+import 'package:school_watch_semeru/features/school/data/school_repository.dart';
 
 import '../../../../common/constants/constant.dart';
 import '../../data/i_report_repository.dart';
@@ -26,9 +28,11 @@ import 'widgets/pick_school_form.dart';
 const kMaxAdditionalInfo = 3;
 
 class PostReportController extends StateNotifier<PostReportState> {
-  PostReportController(this._repository) : super(const PostReportState());
+  PostReportController(this._reportRepository, this._schoolRepository)
+      : super(const PostReportState());
 
-  final IReportRepository _repository;
+  final IReportRepository _reportRepository;
+  final ISchoolRepository _schoolRepository;
 
   void onPageChange(int page) => state = state.copyWith(currentPage: page);
 
@@ -161,20 +165,22 @@ class PostReportController extends StateNotifier<PostReportState> {
   }
 
   void initReportInfoForm() async {
-    if (state.selectedSchool == null || state.selectedReportType == null) {
-      return;
-    }
+    if (state.selectedSchool == null || state.selectedReportType == null) return;
 
     state = state.copyWith(infoFormLoading: true);
 
-    await _getSchoolFloorPlan(state.selectedSchool!.id);
+    await _getSchoolDetail(state.selectedSchool!.id);
     await _getCategories(state.selectedReportType!.name);
 
     state = state.copyWith(infoFormLoading: false);
   }
 
-  Future<void> _getSchoolFloorPlan(String schoolId) async {
-    return Future.delayed(kDurationLong);
+  Future<void> _getSchoolDetail(String schoolId) async {
+    final result = await _schoolRepository.getSchool(schoolId: schoolId);
+    result.fold(
+      (l) => setErrorMessage(l.message),
+      (r) => state = state.copyWith(selectedSchoolData: r),
+    );
   }
 
   Future<void> _getCategories(String reportType) async {
@@ -211,7 +217,7 @@ class PostReportController extends StateNotifier<PostReportState> {
       position: state.locationInput.value!,
     );
     final images = state.imageInput.value.map((e) => File(e.path)).toList();
-    final result = await _repository.postReport(report, images);
+    final result = await _reportRepository.postReport(report, images);
 
     result.fold(
       (l) {
@@ -229,7 +235,8 @@ class PostReportController extends StateNotifier<PostReportState> {
 final postReportControllerProvider =
     StateNotifierProvider.autoDispose<PostReportController, PostReportState>(
   (ref) {
-    final repo = ref.watch(reportRepositoryProvider);
-    return PostReportController(repo);
+    final reportRepository = ref.watch(reportRepositoryProvider);
+    final schoolRepository = ref.watch(schoolRepositoryProvider);
+    return PostReportController(reportRepository, schoolRepository);
   },
 );

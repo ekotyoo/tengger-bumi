@@ -12,12 +12,14 @@ class ReportCard extends StatelessWidget {
     this.onTap,
     this.onLiked,
     this.onDisliked,
+    this.showInteractionBar = true,
   });
 
   final Report report;
   final VoidCallback? onTap;
   final VoidCallback? onLiked;
   final VoidCallback? onDisliked;
+  final bool showInteractionBar;
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +36,13 @@ class ReportCard extends StatelessWidget {
           const SizedBox(height: SWSizes.s8),
           _buildCaption(context, report.description),
           const SizedBox(height: SWSizes.s8),
-          _buildInteractionBar(
-            context,
-            report: report,
-            onLiked: onLiked,
-            onDisliked: onDisliked,
-          ),
+          if (showInteractionBar)
+            _buildInteractionBar(
+              context,
+              report: report,
+              onLiked: onLiked,
+              onDisliked: onDisliked,
+            ),
         ],
       ),
     );
@@ -180,7 +183,8 @@ class ReportCard extends StatelessWidget {
           context,
           icon: Icons.thumb_up_rounded,
           count: report.likesCount,
-          color: report.liked ? Theme.of(context).primaryColor : kColorNeutral200,
+          color:
+              report.liked ? Theme.of(context).primaryColor : kColorNeutral200,
           onTap: onLiked,
         ),
         const SizedBox(width: SWSizes.s16),
@@ -188,7 +192,9 @@ class ReportCard extends StatelessWidget {
           context,
           icon: Icons.thumb_down_rounded,
           count: report.dislikesCount,
-          color: report.disliked ? Theme.of(context).primaryColor : kColorNeutral200,
+          color: report.disliked
+              ? Theme.of(context).primaryColor
+              : kColorNeutral200,
           onTap: onDisliked,
         ),
         const SizedBox(width: SWSizes.s16),

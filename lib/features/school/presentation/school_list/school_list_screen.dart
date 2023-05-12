@@ -118,17 +118,17 @@ class SchoolCard extends StatelessWidget {
                 _buildSchoolAnalysisInfo(
                   context,
                   label: 'Pencegahan',
-                  value: 'Rendah',
+                  value: 'Baik',
                 ),
                 _buildSchoolAnalysisInfo(
                   context,
                   label: 'Tanggap Darurat',
-                  value: 'Rendah',
+                  value: 'Baik',
                 ),
                 _buildSchoolAnalysisInfo(
                   context,
                   label: 'Pemulihan',
-                  value: 'Rendah',
+                  value: 'Baik',
                 ),
               ],
             ),

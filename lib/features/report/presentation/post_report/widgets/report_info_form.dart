@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:school_watch_semeru/features/report/presentation/models/location_pick_nav_arg.dart';
+import 'package:school_watch_semeru/features/school/presentation/models/floor_plan_ui_model.dart';
 
 import '../extensions/latlng_extenstion.dart';
 import '../../../../../common/routing/routes.dart';
@@ -97,8 +99,10 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
         locationInput: state.locationInput,
         onTap: () async {
           final selectedLocation = state.locationInput.value?.toLatLng();
+          final floorPlan = FloorPlanUiModel.fromDomain(state.selectedSchoolData!.floorPlan);
+
           final position = await context.pushNamed(Routes.locationPicker,
-              extra: selectedLocation) as LatLng?;
+              extra: LocationPickNavArg(selectedPosition: selectedLocation, floorPlan: floorPlan)) as LatLng?;
           ref
               .read(postReportControllerProvider.notifier)
               .onLocationChange(position);

@@ -1,14 +1,19 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
-import 'package:school_watch_semeru/features/school/presentation/models/floor_plan_ui_model.dart';
+import 'package:school_watch_semeru/features/school/domain/school_request.dart';
 
+import '../../data/school_repository.dart';
+import '../../data/i_school_repository.dart';
+import '../models/floor_plan_ui_model.dart';
 import '../models/room_ui_model.dart';
 import '../models/school_address_text_input.dart';
 import '../models/school_name_text_input.dart';
 import 'add_school_state.dart';
 
 class AddSchoolController extends StateNotifier<AddSchoolState> {
-  AddSchoolController() : super(const AddSchoolState());
+  AddSchoolController(this._repository) : super(const AddSchoolState());
+
+  final ISchoolRepository _repository;
 
   void onPageChange(int page) => state = state.copyWith(currentPage: page);
 
@@ -36,19 +41,47 @@ class AddSchoolController extends StateNotifier<AddSchoolState> {
     state = state.copyWith(floorPlan: floorPlan);
   }
 
-  void onSubmit() {
+  void setSuccessMessage(String? message) => state = state.copyWith(successMessage: message);
+
+  void setErrorMessage(String? message) => state = state.copyWith(errorMessage: message);
+
+  void onSubmit() async {
+    _validateForm();
+    if (!state.validated) return;
+
+    state = state.copyWith(finalFormSubmitting: true);
+
+    final school = SchoolRequest(
+      schoolName: state.schoolNameInput.value,
+      schoolAddress: state.schoolAddressInput.value,
+      floorPlan: state.floorPlan!.toDomain(),
+    );
+    final result = await _repository.postSchool(school: school);
+
+    state = state.copyWith(finalFormSubmitting: false);
+    result.fold(
+      (l) => setErrorMessage(l.message),
+      (r) => setSuccessMessage('Berhasil menambahkan sekolah'),
+    );
+  }
+
+  void _validateForm() {
     state = state.copyWith(
       schoolNameInput:
           SchoolNameInput.dirty(value: state.schoolNameInput.value),
       schoolAddressInput:
           SchoolAddressInput.dirty(value: state.schoolAddressInput.value),
+      validated:
+          Formz.validate([state.schoolNameInput, state.schoolAddressInput]) &&
+              state.floorPlan != null,
     );
-
-    Formz.validate([state.schoolNameInput, state.schoolAddressInput]);
   }
 }
 
 final addSchoolControllerProvider =
     StateNotifierProvider.autoDispose<AddSchoolController, AddSchoolState>(
-  (ref) => AddSchoolController(),
+  (ref) {
+    final repo = ref.watch(schoolRepositoryProvider);
+    return AddSchoolController(repo);
+  },
 );

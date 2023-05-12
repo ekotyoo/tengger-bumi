@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart' as fp;
 import 'package:go_router/go_router.dart';
 import 'package:school_watch_semeru/features/school/presentation/models/floor_plan_ui_model.dart';
+import 'package:school_watch_semeru/features/school/presentation/models/school_detail_floor_plan_nav_arg.dart';
 
+import '../../../../common/models/position.dart';
 import 'school_detail_controller.dart';
 import '../../../../common/routing/routes.dart';
 import '../../../../common/widgets/title_with_caption.dart';
@@ -34,14 +36,21 @@ class SchoolDetailScreen extends ConsumerWidget {
           centerTitle: true,
           actions: [
             reportDetailAsync.when(
-              data: (reportDetail) => IconButton(
+              data: (reportDetail) {
+                if (reportDetail == null) return Container();
+
+                return IconButton(
                 icon: const Icon(Icons.location_on_rounded),
                 onPressed: () => context.pushNamed(
                   Routes.schoolFloorPlan,
                   params: {'schoolId': schoolId},
-                  extra: FloorPlanUiModel.fromDomain(reportDetail.floorPlan),
+                  extra: SchoolDetailFloorPlanNavArg(
+                    floorPlan: FloorPlanUiModel.fromDomain(reportDetail.floorPlan),
+                    reports: reportDetail.reports,
+                  ),
                 ),
-              ),
+              );
+              },
               error: (error, stackTrace) => Container(),
               loading: () => Container(),
             ),
@@ -160,17 +169,17 @@ class SchoolDetailScreen extends ConsumerWidget {
               _buildSchoolAnalysisInfo(
                 context,
                 label: 'Pencegahan',
-                value: 'Rendah',
+                value: 'Baik',
               ),
               _buildSchoolAnalysisInfo(
                 context,
                 label: 'Tanggap Darurat',
-                value: 'Rendah',
+                value: 'Baik',
               ),
               _buildSchoolAnalysisInfo(
                 context,
                 label: 'Pemulihan',
-                value: 'Rendah',
+                value: 'Baik',
               ),
             ],
           ),
@@ -296,6 +305,7 @@ class _SchoolReportsListState extends State<SchoolReportsList>
               name: 'John Doe - $index',
               avatar: 'https://picsum.photos/200/100'),
           school: 'SDN 2 Sidomulyo',
+          position: const Position(latitude: .0, longitude: .0),
           createdAt: DateTime.now(),
           likesCount: 10,
           dislikesCount: 10,

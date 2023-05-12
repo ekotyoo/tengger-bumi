@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../common/widgets/sw_button.dart';
+import '../../../../utils/snackbar_utils.dart';
 import 'add_school_controller.dart';
 import 'widgets/school_data_form.dart';
 import 'widgets/school_floor_plan_form.dart';
@@ -44,6 +46,27 @@ class _AddSchoolScreenState extends ConsumerState<AddSchoolScreen> {
     final screenWidth = MediaQuery.of(context).size.width - (2 * SWSizes.s16);
 
     final canGoBack = state.currentPage > 0;
+
+    ref.listen(
+      addSchoolControllerProvider.select((value) => value.errorMessage),
+          (previous, next) {
+        if (next != null && context.mounted) {
+          showSnackbar(context, message: next, type: SnackbarType.error);
+        }
+        ref.read(addSchoolControllerProvider.notifier).setErrorMessage(null);
+      },
+    );
+
+    ref.listen(
+      addSchoolControllerProvider.select((value) => value.successMessage),
+          (previous, next) {
+        if (next != null && context.mounted) {
+          showSnackbar(context, message: next);
+          context.pop();
+        }
+        ref.read(addSchoolControllerProvider.notifier).setSuccessMessage(null);
+      },
+    );
 
     final forms = [
       FractionallySizedBox(
@@ -134,29 +157,29 @@ class _AddSchoolScreenState extends ConsumerState<AddSchoolScreen> {
   ) {
     var disabled = false;
 
-    if ((state.schoolNameInput.isNotValid ||
-        state.schoolNameInput.isPure ||
-        state.schoolAddressInput.isNotValid ||
-        state.schoolAddressInput.isPure) && state.currentPage == 0) {
+    if ((state.schoolNameInput.isNotValid || state.schoolAddressInput.isNotValid) &&
+        state.currentPage == 0) {
       disabled = true;
-    } else if ((state.floorPlan?.rooms.isEmpty ?? false ) && state.currentPage == 1) {
+    } else if ((state.floorPlan?.rooms.isEmpty ?? false) &&
+        state.currentPage == 1) {
       disabled = true;
     }
 
-    return ElevatedButton(
-      onPressed: disabled ? null :() {
+    return SWButton(
+      loading: state.finalFormSubmitting,
+      label: state.currentPage < forms.length - 1
+          ? SWStrings.labelNext
+          : SWStrings.labelSave,
+      onPressed: disabled
+          ? null
+          : () {
         final currentPage = state.currentPage;
         if (currentPage < forms.length - 1) {
           _animateToPage(currentPage + 1);
         } else {
-          context.pop();
+          ref.read(addSchoolControllerProvider.notifier).onSubmit();
         }
       },
-      child: Text(
-        state.currentPage < forms.length - 1
-            ? SWStrings.labelNext
-            : SWStrings.labelSave,
-      ),
     );
   }
 }

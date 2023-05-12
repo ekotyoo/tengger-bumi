@@ -5,6 +5,7 @@ import 'package:flutter_map_line_editor/polyeditor.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../../../../common/widgets/open_street_map_attribution.dart';
 import '../../../../../common/widgets/sw_text_field.dart';
 import '../../../../../common/constants/constant.dart';
 import '../../models/room_ui_model.dart';
@@ -169,12 +170,7 @@ class _FloorPlanMakerState extends State<FloorPlanMaker> {
                   _polyEditor.add(_polygon.points, point);
                 },
               ),
-              nonRotatedChildren: [
-                AttributionWidget.defaultWidget(
-                  source: 'OpenStreetMap contributors',
-                  onSourceTapped: null,
-                ),
-              ],
+              nonRotatedChildren: const [OpenStreetMapAttribution()],
               children: [
                 TileLayer(
                   urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',

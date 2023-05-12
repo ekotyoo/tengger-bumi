@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:school_watch_semeru/features/school/presentation/models/floor_plan_nav_arg.dart';
 
+import '../../../../../common/widgets/open_street_map_attribution.dart';
 import '../../models/room_ui_model.dart';
 import '../../../../../common/routing/routes.dart';
 import '../add_school_controller.dart';
@@ -35,7 +36,8 @@ class SchoolFloorPlanForm extends ConsumerWidget {
                       .read(addSchoolControllerProvider.notifier)
                       .deleteRoom(room),
                   onRoomClick: (index) {
-                    _navigateToFloorPlanMaker(context, ref, roomEditIndex: index);
+                    _navigateToFloorPlanMaker(context, ref,
+                        roomEditIndex: index);
                   },
                 ),
         ),
@@ -59,7 +61,9 @@ class SchoolFloorPlanForm extends ConsumerWidget {
     );
 
     if (newRoom != null) {
-      ref.read(addSchoolControllerProvider.notifier).addRoom(newRoom as RoomUiModel);
+      ref
+          .read(addSchoolControllerProvider.notifier)
+          .addRoom(newRoom as RoomUiModel);
     }
   }
 
@@ -73,11 +77,11 @@ class SchoolFloorPlanForm extends ConsumerWidget {
         strokeWidth: 1.5,
         strokeCap: StrokeCap.round,
         color: kColorNeutral200,
-        child: SizedBox(
+        child: const SizedBox(
           width: double.infinity,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               Icon(Icons.add_location_alt_outlined),
               Text(SWStrings.labelEmptyFloorPlan),
             ],
@@ -135,6 +139,7 @@ class _FloorPlanViewerState extends State<FloorPlanViewer> {
               center: rooms.first.polygon.points.first,
               zoom: 20,
             ),
+            nonRotatedChildren: const [OpenStreetMapAttribution()],
             children: [
               TileLayer(
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -191,9 +196,9 @@ class _FloorPlanViewerState extends State<FloorPlanViewer> {
         const SizedBox(height: SWSizes.s8),
         TextButton(
           onPressed: widget.onAddRoom,
-          child: Row(
+          child: const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
+            children: [
               Text(SWStrings.labelAddRoom),
               Icon(Icons.add),
             ],

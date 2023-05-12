@@ -17,6 +17,8 @@ class FloorPlanUiModel extends Equatable {
   factory FloorPlanUiModel.fromDomain(FloorPlan floorPlan) => FloorPlanUiModel(
       rooms: floorPlan.rooms.map((e) => RoomUiModel.fromDomain(e)).toList());
 
+  FloorPlan toDomain() => FloorPlan(rooms: rooms.map((e) => e.toDomain()).toList());
+
   @override
   List<Object?> get props => [rooms];
 }

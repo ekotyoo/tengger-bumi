@@ -1,9 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../../../../common/models/position.dart';
-import '../../domain/floor_plan.dart';
-import '../../../../common/constants/constant.dart';
-import '../../domain/school_analysis.dart';
+import 'package:school_watch_semeru/features/school/data/school_repository.dart';
 
 import '../../domain/school_detail.dart';
 
@@ -12,20 +8,13 @@ part 'school_detail_controller.g.dart';
 @riverpod
 class SchoolDetailController extends _$SchoolDetailController {
   @override
-  FutureOr<SchoolDetail> build(String schoolId) async {
-    await Future.delayed(kDurationLong);
+  FutureOr<SchoolDetail?> build(String schoolId) async {
+    final repo = ref.watch(schoolRepositoryProvider);
+    final result = await repo.getSchool(schoolId: schoolId);
 
-    return const SchoolDetail(
-      id: '',
-      name: '',
-      schoolLocation: Position(latitude: .0, longitude: .0),
-      reports: [],
-      floorPlan: FloorPlan(rooms: []),
-      analysis: SchoolAnalysis(
-        recoveryLevel: '',
-        emergencyResponseLevel: '',
-        preventionLevel: '',
-      ),
+    return result.fold(
+      (l) => null,
+      (r) => r,
     );
   }
 }

@@ -24,7 +24,7 @@ HttpClient httpClient(HttpClientRef ref) {
   final dio = ref.watch(dioProvider);
   return HttpClient(
     dio: dio,
-    baseUrl: 'http://10.0.2.2:3000',
+    baseUrl: 'http://192.168.100.21:3000',
     interceptors: [
       AuthInterceptor(
         dio: dio,

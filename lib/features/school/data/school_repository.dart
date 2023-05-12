@@ -1,7 +1,18 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:school_watch_semeru/common/error/failure.dart';
+import 'package:school_watch_semeru/common/error/network_exceptions.dart';
+import 'package:school_watch_semeru/features/school/domain/school_detail.dart';
+import 'package:school_watch_semeru/features/school/domain/school_request.dart';
 
 import '../../../common/models/position.dart';
+import '../../report/domain/author.dart';
+import '../../report/domain/report.dart';
+import '../domain/floor_plan.dart';
+import '../domain/room.dart';
 import '../domain/school_analysis.dart';
 import '../../../common/constants/sw_durations.dart';
 import 'i_school_repository.dart';
@@ -47,12 +58,99 @@ class FakeSchoolRepository implements ISchoolRepository {
       ),
     );
   }
+
+  @override
+  Future<Either<Failure, SchoolDetail>> getSchool({required String schoolId, CancelToken? cancelToken}) async {
+    const reportLocations = [
+      Position(latitude: -7.943129, longitude: 112.603383),
+      Position(latitude: -7.943162, longitude: 112.603411),
+      Position(latitude: -7.943082, longitude: 112.603386),
+      Position(latitude: -7.943095, longitude: 112.603420),
+    ];
+
+    return right(SchoolDetail(
+      id: '1',
+      name: 'SDN 1 Merjosari',
+      schoolLocation: const Position(latitude: -7.943151, longitude: 112.603341),
+      reports: List.generate(
+        4,
+            (index) => Report(
+          id: '$index',
+          reportType: 'reportType-$index',
+          reportCategory: 'reportCategory-$index',
+          position: reportLocations[index],
+          description: 'description-$index',
+          author: Author(
+              id: '$index',
+              name: 'name-$index',
+              avatar: ''
+          ),
+          school: 'school-$index',
+          createdAt: DateTime.now(),
+          likesCount: 10,
+          dislikesCount: 10,
+          commentsCount: 10,
+          isActive: true,
+        ),
+      ),
+      floorPlan: const FloorPlan(rooms: [
+        Room(
+          color: '',
+          polygon: [
+            Position(latitude: -7.943151, longitude: 112.603341),
+            Position(latitude: -7.943177, longitude: 112.603413),
+            Position(latitude: -7.943123, longitude: 112.603433),
+            Position(latitude: -7.943097, longitude: 112.603359),
+          ],
+          label: 'Kelas 1',
+        ),
+        Room(
+          color: '',
+          polygon: [
+            Position(latitude: -7.943097, longitude: 112.603359),
+            Position(latitude: -7.943123, longitude: 112.603433),
+            Position(latitude: -7.943074, longitude: 112.603447),
+            Position(latitude: -7.943049, longitude: 112.603374),
+          ],
+          label: 'Kelas 2',
+        ),
+      ]),
+      analysis: const SchoolAnalysis(
+        recoveryLevel: 'Baik',
+        emergencyResponseLevel: 'Baik',
+        preventionLevel: 'Baik',
+      ),
+    ));
+  }
+
+  @override
+  Future<Either<Failure, Unit>> postSchool({required SchoolRequest school, File? coverImage}) async {
+    try {
+      await Future.delayed(kDurationLong);
+      return right(unit);
+    } catch(e) {
+      final exceptions = NetworkExceptions.getDioException(e);
+      return left(Failure(exceptions.getErrorMessage()));
+    }
+  }
 }
 
 class SchoolRepository implements ISchoolRepository {
   @override
   Future<List<School>> getSchools({String? query, CancelToken? cancelToken}) {
     // TODO: implement getSchools
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, SchoolDetail>> getSchool({required String schoolId, CancelToken? cancelToken}) {
+    // TODO: implement getSchool
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, Unit>> postSchool({required SchoolRequest school, File? coverImage}) {
+    // TODO: implement postSchool
     throw UnimplementedError();
   }
 }

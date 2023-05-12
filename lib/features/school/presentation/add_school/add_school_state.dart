@@ -1,36 +1,21 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../models/floor_plan_ui_model.dart';
 import '../models/school_name_text_input.dart';
 import '../models/school_address_text_input.dart';
 
-class AddSchoolState extends Equatable {
-  const AddSchoolState({
-    this.currentPage = 0,
-    this.schoolNameInput = const SchoolNameInput.pure(),
-    this.schoolAddressInput = const SchoolAddressInput.pure(),
-    this.floorPlan,
-  });
+part 'add_school_state.freezed.dart';
 
-  final int currentPage;
-  final SchoolNameInput schoolNameInput;
-  final SchoolAddressInput schoolAddressInput;
-  final FloorPlanUiModel? floorPlan;
-
-  AddSchoolState copyWith({
-    int? currentPage,
-    SchoolNameInput? schoolNameInput,
-    SchoolAddressInput? schoolAddressInput,
+@freezed
+class AddSchoolState with _$AddSchoolState {
+  const factory AddSchoolState({
+    @Default(0) int currentPage,
+    @Default(SchoolNameInput.pure()) SchoolNameInput schoolNameInput,
+    @Default(SchoolAddressInput.pure()) SchoolAddressInput schoolAddressInput,
     FloorPlanUiModel? floorPlan,
-  }) {
-    return AddSchoolState(
-      currentPage: currentPage ?? this.currentPage,
-      schoolNameInput: schoolNameInput ?? this.schoolNameInput,
-      schoolAddressInput: schoolAddressInput ?? this.schoolAddressInput,
-      floorPlan: floorPlan ?? this.floorPlan,
-    );
-  }
-
-  @override
-  List<Object?> get props => [currentPage, schoolNameInput, schoolAddressInput];
+    @Default(false) bool finalFormSubmitting,
+    @Default(false) bool validated,
+    String? successMessage,
+    String? errorMessage,
+  }) = _AddSchoolState;
 }
