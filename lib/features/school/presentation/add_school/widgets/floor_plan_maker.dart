@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_line_editor/dragmarker.dart';
 import 'package:flutter_map_line_editor/polyeditor.dart';
+import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -28,6 +31,8 @@ class _FloorPlanMakerState extends State<FloorPlanMaker> {
   late MapController _mapController;
   late PolyEditor _polyEditor;
   late TextEditingController _labelController;
+  late FollowOnLocationUpdate _followOnLocationUpdate;
+  late StreamController<double?> _followCurrentLocationStreamController;
 
   final colors = const [
     Color(0xFFFF0000),
@@ -57,6 +62,7 @@ class _FloorPlanMakerState extends State<FloorPlanMaker> {
     super.dispose();
     _mapController.dispose();
     _labelController.dispose();
+    _followCurrentLocationStreamController.close();
   }
 
   @override
@@ -64,6 +70,8 @@ class _FloorPlanMakerState extends State<FloorPlanMaker> {
     super.initState();
     _mapController = MapController();
     _labelController = TextEditingController();
+    _followOnLocationUpdate = FollowOnLocationUpdate.never;
+    _followCurrentLocationStreamController = StreamController();
     _resetPolyEditor();
     _addPolygon(_polygon);
   }
@@ -113,6 +121,67 @@ class _FloorPlanMakerState extends State<FloorPlanMaker> {
     });
   }
 
+  _buildMapControl() {
+    return [
+      Align(
+        alignment: Alignment.topRight,
+        child: IconButton(
+          iconSize: SWSizes.s32 + SWSizes.s8,
+          onPressed: () => _mapController.rotate(0),
+          icon: const CircleAvatar(
+            child: Icon(Icons.navigation_rounded),
+          ),
+        ),
+      ),
+      Align(
+        alignment: Alignment.centerRight,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              iconSize: SWSizes.s32 + SWSizes.s8,
+              onPressed: () {
+                setState(() =>
+                _followOnLocationUpdate = FollowOnLocationUpdate.never);
+                final currentZoom = _mapController.zoom;
+                _mapController.move(
+                  _mapController.center,
+                  currentZoom + 1,
+                );
+              },
+              icon: const CircleAvatar(
+                child: Icon(Icons.add),
+              ),
+            ),
+            IconButton(
+              iconSize: SWSizes.s32 + SWSizes.s8,
+              onPressed: () {
+                setState(() =>
+                _followOnLocationUpdate = FollowOnLocationUpdate.never);
+                final currentZoom = _mapController.zoom;
+                _mapController.move(
+                  _mapController.center,
+                  currentZoom - 1,
+                );
+              },
+              icon: const CircleAvatar(
+                child: Icon(Icons.remove),
+              ),
+            ),
+            IconButton(
+              iconSize: SWSizes.s32 + SWSizes.s8,
+              onPressed: () => setState(() =>
+              _followOnLocationUpdate = FollowOnLocationUpdate.always),
+              icon: const CircleAvatar(
+                child: Icon(Icons.my_location),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -159,43 +228,76 @@ class _FloorPlanMakerState extends State<FloorPlanMaker> {
       body: Column(
         children: [
           Expanded(
-            child: FlutterMap(
-              mapController: _mapController,
-              options: MapOptions(
-                center: LatLng(-8.069379, 111.705143),
-                zoom: 20,
-                minZoom: 10,
-                absorbPanEventsOnScrollables: false,
-                onTap: (_, point) {
-                  _polyEditor.add(_polygon.points, point);
-                },
-              ),
-              nonRotatedChildren: const [OpenStreetMapAttribution()],
+            child: Stack(
               children: [
-                TileLayer(
-                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  subdomains: const ['a', 'b', 'c'],
-                  userAgentPackageName: 'com.ekotyoo.school_watch_semeru',
-                  maxNativeZoom: 19,
-                  maxZoom: 35,
-                ),
-                PolygonLayer(
-                  polygons: widget.rooms
-                      .map(
-                        (e) => Polygon(
-                          points: e.polygon.points,
-                          label: e.label,
-                          color: e.color,
-                          isFilled: true,
-                          borderStrokeWidth: 1,
-                          borderColor: kColorNeutral900,
-                          labelStyle: const TextStyle(color: kColorNeutral900),
+                FlutterMap(
+                  mapController: _mapController,
+                  options: MapOptions(
+                    center: LatLng(-8.069379, 111.705143),
+                    zoom: 10,
+                    minZoom: 1,
+                    absorbPanEventsOnScrollables: false,
+                    onTap: (_, point) {
+                      _polyEditor.add(_polygon.points, point);
+                    },
+                    onPositionChanged: (MapPosition position, bool hasGesture) {
+                      if (hasGesture &&
+                          _followOnLocationUpdate != FollowOnLocationUpdate.never) {
+                        setState(
+                              () => _followOnLocationUpdate =
+                              FollowOnLocationUpdate.never,
+                        );
+                      }
+                    },
+                  ),
+                  nonRotatedChildren: const [OpenStreetMapAttribution()],
+                  children: [
+                    TileLayer(
+                      urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                      subdomains: const ['a', 'b', 'c'],
+                      userAgentPackageName: 'com.ekotyoo.school_watch_semeru',
+                      maxNativeZoom: 19,
+                      maxZoom: 35,
+                    ),
+                    PolygonLayer(
+                      polygons: widget.rooms
+                          .map(
+                            (e) => Polygon(
+                              points: e.polygon.points,
+                              label: e.label,
+                              color: e.color,
+                              isFilled: true,
+                              borderStrokeWidth: 1,
+                              borderColor: kColorNeutral900,
+                              labelStyle: const TextStyle(color: kColorNeutral900),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                    PolygonLayer(polygons: _polygons),
+                    CurrentLocationLayer(
+                      followOnLocationUpdate: _followOnLocationUpdate,
+                      followCurrentLocationStream:
+                      _followCurrentLocationStreamController.stream,
+                      style: LocationMarkerStyle(
+                        marker: const DefaultLocationMarker(
+                          color: kColorSuccess500,
+                          child: Icon(
+                            Icons.person,
+                            color: Colors.white,
+                            size: SWSizes.s16 + SWSizes.s2,
+                          ),
                         ),
-                      )
-                      .toList(),
+                        markerSize: const Size.square(SWSizes.s32),
+                        accuracyCircleColor: kColorSuccess500.withOpacity(0.1),
+                        headingSectorColor: kColorSuccess500.withOpacity(0.5),
+                        headingSectorRadius: 60,
+                      ),
+                    ),
+                    DragMarkers(markers: _polyEditor.edit()),
+                  ],
                 ),
-                PolygonLayer(polygons: _polygons),
-                DragMarkers(markers: _polyEditor.edit()),
+                ..._buildMapControl(),
               ],
             ),
           ),
