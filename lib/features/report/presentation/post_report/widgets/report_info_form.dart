@@ -135,9 +135,9 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
           onPressed: () => ref
               .read(postReportControllerProvider.notifier)
               .addAdditionalInfo(),
-          child: Row(
+          child: const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
+            children: [
               Text(SWStrings.labelAddAdditionalInfo),
               Icon(Icons.add),
             ],

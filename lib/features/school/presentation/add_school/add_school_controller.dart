@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:school_watch_semeru/features/school/domain/school_request.dart';
 
 import '../../data/school_repository.dart';
@@ -22,6 +25,8 @@ class AddSchoolController extends StateNotifier<AddSchoolState> {
 
   void onSchoolAddressChange(String value) => state = state.copyWith(
       schoolAddressInput: SchoolAddressInput.dirty(value: value));
+
+  void onCoverImageChanged(XFile? image) => state =  state.copyWith(coverImage: image);
 
   void addRoom(RoomUiModel room) {
     final newRooms = state.floorPlan?.rooms ?? [];
@@ -56,7 +61,7 @@ class AddSchoolController extends StateNotifier<AddSchoolState> {
       schoolAddress: state.schoolAddressInput.value,
       floorPlan: state.floorPlan!.toDomain(),
     );
-    final result = await _repository.postSchool(school: school);
+    final result = await _repository.postSchool(school: school, coverImage: File(state.coverImage!.path));
 
     state = state.copyWith(finalFormSubmitting: false);
     result.fold(
