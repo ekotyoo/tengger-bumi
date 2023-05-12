@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
@@ -21,6 +24,8 @@ class SchoolMapScreen extends ConsumerStatefulWidget {
 class _SchoolMapScreenState extends ConsumerState<SchoolMapScreen> {
   late MapController _mapController;
   late PageController _pageController;
+  late FollowOnLocationUpdate _followOnLocationUpdate;
+  late StreamController<double?> _followCurrentLocationStreamController;
 
   int? _selectedSchool;
 
@@ -29,6 +34,8 @@ class _SchoolMapScreenState extends ConsumerState<SchoolMapScreen> {
     super.initState();
     _mapController = MapController();
     _pageController = PageController(viewportFraction: 1.1);
+    _followOnLocationUpdate = FollowOnLocationUpdate.never;
+    _followCurrentLocationStreamController = StreamController();
   }
 
   @override
@@ -36,6 +43,68 @@ class _SchoolMapScreenState extends ConsumerState<SchoolMapScreen> {
     super.dispose();
     _mapController.dispose();
     _pageController.dispose();
+    _followCurrentLocationStreamController.close();
+  }
+
+  _buildMapControl() {
+    return [
+      Align(
+        alignment: Alignment.topRight,
+        child: IconButton(
+          iconSize: SWSizes.s32 + SWSizes.s8,
+          onPressed: () => _mapController.rotate(0),
+          icon: const CircleAvatar(
+            child: Icon(Icons.navigation_rounded),
+          ),
+        ),
+      ),
+      Align(
+        alignment: Alignment.centerRight,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              iconSize: SWSizes.s32 + SWSizes.s8,
+              onPressed: () {
+                setState(() =>
+                _followOnLocationUpdate = FollowOnLocationUpdate.never);
+                final currentZoom = _mapController.zoom;
+                _mapController.move(
+                  _mapController.center,
+                  currentZoom + 1,
+                );
+              },
+              icon: const CircleAvatar(
+                child: Icon(Icons.add),
+              ),
+            ),
+            IconButton(
+              iconSize: SWSizes.s32 + SWSizes.s8,
+              onPressed: () {
+                setState(() =>
+                _followOnLocationUpdate = FollowOnLocationUpdate.never);
+                final currentZoom = _mapController.zoom;
+                _mapController.move(
+                  _mapController.center,
+                  currentZoom - 1,
+                );
+              },
+              icon: const CircleAvatar(
+                child: Icon(Icons.remove),
+              ),
+            ),
+            IconButton(
+              iconSize: SWSizes.s32 + SWSizes.s8,
+              onPressed: () => setState(() =>
+              _followOnLocationUpdate = FollowOnLocationUpdate.always),
+              icon: const CircleAvatar(
+                child: Icon(Icons.my_location),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ];
   }
 
   @override
@@ -118,6 +187,25 @@ class _SchoolMapScreenState extends ConsumerState<SchoolMapScreen> {
                   error: (error, stackTrace) => Container(),
                   loading: () => Container(),
                 ),
+                CurrentLocationLayer(
+                  followOnLocationUpdate: _followOnLocationUpdate,
+                  followCurrentLocationStream:
+                  _followCurrentLocationStreamController.stream,
+                  style: LocationMarkerStyle(
+                    marker: const DefaultLocationMarker(
+                      color: kColorSuccess500,
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.white,
+                        size: SWSizes.s16 + SWSizes.s2,
+                      ),
+                    ),
+                    markerSize: const Size.square(SWSizes.s32),
+                    accuracyCircleColor: kColorSuccess500.withOpacity(0.1),
+                    headingSectorColor: kColorSuccess500.withOpacity(0.5),
+                    headingSectorRadius: 60,
+                  ),
+                ),
               ],
             ),
             reportsAsync.when(
@@ -162,6 +250,7 @@ class _SchoolMapScreenState extends ConsumerState<SchoolMapScreen> {
                 ),
               ),
             ),
+            ..._buildMapControl(),
           ],
         ),
       ),
