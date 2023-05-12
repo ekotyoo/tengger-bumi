@@ -92,6 +92,7 @@ class _AddSchoolScreenState extends ConsumerState<AddSchoolScreen> {
           return true;
         },
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: const Text(SWStrings.labelAddSchool),
             centerTitle: true,

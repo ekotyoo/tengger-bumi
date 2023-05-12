@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:school_watch_semeru/features/auth/presentation/edit_profile/edit_profile_screen.dart';
 
 import '../../features/report/presentation/models/location_pick_nav_arg.dart';
 import '../../features/report/presentation/report_detail/report_detail_screen.dart';
@@ -239,6 +240,16 @@ class AppRouter extends _$AppRouter implements Listenable {
               },
             ),
           ],
+        ),
+        GoRoute(
+          path: '/editprofile',
+          name: Routes.editProfile,
+          parentNavigatorKey: navigatorKey,
+          pageBuilder: (context, state) {
+            return const MaterialPage(
+              child: EditProfileScreen(),
+            );
+          },
         ),
       ];
 

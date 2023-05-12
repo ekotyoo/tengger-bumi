@@ -69,7 +69,7 @@ class SchoolDetailScreen extends ConsumerWidget {
                 const SizedBox(height: SWSizes.s8),
                 const Divider(),
                 const SizedBox(height: SWSizes.s8),
-                const SchoolReportsList(),
+                const ReportListWithFilter(),
                 const SizedBox(height: SWSizes.s8),
               ],
             ),
@@ -212,14 +212,14 @@ class SchoolDetailScreen extends ConsumerWidget {
   }
 }
 
-class SchoolReportsList extends StatefulWidget {
-  const SchoolReportsList({Key? key}) : super(key: key);
+class ReportListWithFilter extends StatefulWidget {
+  const ReportListWithFilter({Key? key}) : super(key: key);
 
   @override
-  State<SchoolReportsList> createState() => _SchoolReportsListState();
+  State<ReportListWithFilter> createState() => _ReportListWithFilterState();
 }
 
-class _SchoolReportsListState extends State<SchoolReportsList>
+class _ReportListWithFilterState extends State<ReportListWithFilter>
     with SingleTickerProviderStateMixin {
   int _selectedTab = 0;
   late List<ReportType> reportTypes;

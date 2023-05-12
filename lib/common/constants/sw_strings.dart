@@ -17,6 +17,8 @@ class SWStrings {
   // Auth
   static const labelLogin = 'Login';
   static const labelRegister = 'Register';
+  static const labelLogout = 'Logout';
+  static const labelEditProfile = 'Edit Profil';
   static const descDidNotHaveAccount = 'Tidak punya akun? Register';
   static const descAlreadyHaveAccount = 'Sudah punya akun? Login';
   static const labelName = 'Nama';
@@ -31,6 +33,7 @@ class SWStrings {
   static const descNameInvalid = 'Nama tidak valid';
   static const messageLoginSuccess = 'Login berhasil!';
   static const messageRegisterSuccess = 'Registrasi berhasil, silahkan cek email untuk memverifikasi akun';
+  static const labelProfile = 'Profil';
 
   // Home
   static const labelReportTimeline = 'Feed Laporan';
