@@ -139,11 +139,31 @@ class _SchoolMapScreenState extends ConsumerState<SchoolMapScreen> {
                   maxNativeZoom: 19,
                   maxZoom: 35,
                 ),
+                CurrentLocationLayer(
+                  followOnLocationUpdate: _followOnLocationUpdate,
+                  followCurrentLocationStream:
+                  _followCurrentLocationStreamController.stream,
+                  style: LocationMarkerStyle(
+                    marker: const DefaultLocationMarker(
+                      color: kColorSuccess500,
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.white,
+                        size: SWSizes.s16 + SWSizes.s2,
+                      ),
+                    ),
+                    markerSize: const Size.square(SWSizes.s32),
+                    accuracyCircleColor: kColorSuccess500.withOpacity(0.1),
+                    headingSectorColor: kColorSuccess500.withOpacity(0.5),
+                    headingSectorRadius: 60,
+                  ),
+                ),
                 reportsAsync.when(
                   data: (reports) => MarkerLayer(
                     markers: reports
                         .mapWithIndex(
                           (report, index) => Marker(
+                            key: ValueKey(report.id),
                             width: SWSizes.s40,
                             height: SWSizes.s40,
                             point: LatLng(
@@ -186,25 +206,6 @@ class _SchoolMapScreenState extends ConsumerState<SchoolMapScreen> {
                   ),
                   error: (error, stackTrace) => Container(),
                   loading: () => Container(),
-                ),
-                CurrentLocationLayer(
-                  followOnLocationUpdate: _followOnLocationUpdate,
-                  followCurrentLocationStream:
-                  _followCurrentLocationStreamController.stream,
-                  style: LocationMarkerStyle(
-                    marker: const DefaultLocationMarker(
-                      color: kColorSuccess500,
-                      child: Icon(
-                        Icons.person,
-                        color: Colors.white,
-                        size: SWSizes.s16 + SWSizes.s2,
-                      ),
-                    ),
-                    markerSize: const Size.square(SWSizes.s32),
-                    accuracyCircleColor: kColorSuccess500.withOpacity(0.1),
-                    headingSectorColor: kColorSuccess500.withOpacity(0.5),
-                    headingSectorRadius: 60,
-                  ),
                 ),
               ],
             ),

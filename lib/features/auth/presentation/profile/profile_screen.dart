@@ -37,15 +37,13 @@ class ProfileScreen extends ConsumerWidget {
             ),
           ],
         ),
-        body: Padding(
+        body: ListView(
           padding: const EdgeInsets.all(SWSizes.s16),
-          child: ListView(
-            children: [
-              _buildProfileHeader(context),
-              const SizedBox(height: SWSizes.s32),
-              const ReportListWithFilter(),
-            ],
-          ),
+          children: [
+            _buildProfileHeader(context),
+            const SizedBox(height: SWSizes.s32),
+            const ReportListWithFilter(),
+          ],
         ),
       ),
     );
