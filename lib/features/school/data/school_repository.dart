@@ -146,7 +146,7 @@ class FakeSchoolRepository implements ISchoolRepository {
             await MultipartFile.fromFile(
               path,
               filename: fileName,
-              contentType: MediaType('image', extension),
+              contentType: MediaType('image', extension == 'jpg' ? 'jpeg' : extension),
             ),
           ),
         );
