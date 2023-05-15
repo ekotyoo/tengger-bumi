@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart' as fp;
 import 'package:go_router/go_router.dart';
-import 'package:school_watch_semeru/features/school/presentation/models/floor_plan_ui_model.dart';
-import 'package:school_watch_semeru/features/school/presentation/models/school_detail_floor_plan_nav_arg.dart';
+import '../models/floor_plan_ui_model.dart';
+import '../models/school_detail_floor_plan_nav_arg.dart';
 
 import '../../../../common/models/position.dart';
 import 'school_detail_controller.dart';

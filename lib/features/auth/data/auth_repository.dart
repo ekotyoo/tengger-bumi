@@ -1,17 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:school_watch_semeru/features/auth/domain/auth_user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../domain/auth_user.dart';
 import '../../../common/error/network_exceptions.dart';
+import '../../../common/services/auth_interceptor.dart';
 import '../../../common/services/http_client.dart';
 import '../../../common/constants/constant.dart';
 import '../../../common/error/failure.dart';
 import 'i_auth_repository.dart';
 
 part 'auth_repository.g.dart';
-
-enum AuthState { authenticated, unauthenticated }
 
 final authStateProvider =
     StateProvider<AuthUser>((ref) => const AuthUser.signedOut());
@@ -34,23 +34,52 @@ class AuthRepository implements IAuthRepository {
     required String password,
   }) async {
     try {
-      final result = await _client.post('/auth/login');
+      final result = await _client.post('/auth/signin', data: {
+        'email': email,
+        'password': password,
+      });
+      final response = AuthUserWrapper.fromJson(result['data']);
+      final user = AuthUser.signedIn(
+        id: response.id,
+        name: response.name,
+        email: response.email,
+        avatar: '${response.avatar}'.replaceAll('public', kBaseUrl),
+        accessToken: response.accessToken,
+      ) as SignedIn;
 
-      // TODO: Save token to prefs
+      final prefs = await SharedPreferences.getInstance();
 
-      return right(
-        const AuthUser.signedIn(
-          name: "Eko",
-          email: "",
-          id: "",
-          isAdmin: false,
-          accessToken: "",
-          refreshToken: "",
-        ),
-      );
+      prefs.setString(kAccessToken, user.accessToken ?? '');
+
+      ref.read(authStateProvider.notifier).state = user;
+      return right(user);
     } catch (e) {
       final exception = NetworkExceptions.getDioException(e);
       return left(Failure(exception.getErrorMessage()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AuthUser>> loginWithToken() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString(kAccessToken);
+
+      final result = await _client.post('/auth/signin/token');
+      final response = AuthUserWrapper.fromJson(result['data']);
+      final user = AuthUser.signedIn(
+        id: response.id,
+        name: response.name,
+        email: response.email,
+        avatar: '${response.avatar}'.replaceAll('public', kBaseUrl),
+        accessToken: token,
+      ) as SignedIn;
+
+      ref.read(authStateProvider.notifier).state = user;
+      return right(user);
+    } catch (e) {
+      final exception = NetworkExceptions.getDioException(e);
+      return left(Failure(exception.getErrorMessage(), cause: exception));
     }
   }
 
@@ -91,7 +120,6 @@ class AuthRepository implements IAuthRepository {
         name: "name",
         email: "email",
         accessToken: "accessToken",
-        refreshToken: "refreshToken",
       );
 
       return right(dummyUser);

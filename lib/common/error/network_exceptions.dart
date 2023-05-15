@@ -43,6 +43,7 @@ abstract class NetworkExceptions with _$NetworkExceptions {
 
   static NetworkExceptions getDioException(error) {
     if (error is Exception) {
+      debugPrint(error.toString());
       try {
         NetworkExceptions networkExceptions;
         if (error is DioError) {

@@ -1,8 +1,10 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../common/error/network_exceptions.dart';
 import '../../common/services/auth_interceptor.dart';
 import 'data/auth_repository.dart';
 import 'domain/auth_user.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 part 'auth_controller.g.dart';
 
@@ -22,15 +24,18 @@ class AuthController extends _$AuthController {
   Future<AuthUser> _recoverLogin() async {
     final accessToken = prefs.getString(kAccessToken);
 
-    if (accessToken == null) {
+    if (accessToken == null || accessToken.isEmpty) {
       return const AuthUser.signedOut();
     }
 
-    final result = await ref.read(authRepositoryProvider).getAuthUser();
+    final result = await ref.read(authRepositoryProvider).loginWithToken();
 
     return result.fold(
-      (l) => throw Exception('Token null'),
-      (r) => r,
+      (l) {
+        if (l.cause is UnauthorisedRequest) return const AuthUser.signedOut();
+        throw Exception('Something went wrong, try again later.');
+      },
+      (r) => r as SignedIn,
     );
   }
 
@@ -40,7 +45,6 @@ class AuthController extends _$AuthController {
       (l) {},
       (r) {
         prefs.remove(kAccessToken);
-        prefs.remove(kRefreshToken);
         return state = const AsyncValue<AuthUser>.data(AuthUser.signedOut());
       },
     );
@@ -52,14 +56,21 @@ class AuthController extends _$AuthController {
     ref.listenSelf((previous, next) {
       if (next.isLoading) return;
       if (next.hasError) {
+        ref.read(authStateProvider.notifier).state = const AuthUser.signedOut();
         prefs.remove(kAccessToken);
         return;
       }
 
       final val = next.requireValue;
       val.map(
-        signedIn: (user) => prefs.setString(kAccessToken, user.accessToken),
-        signedOut: (_) => prefs.remove(kAccessToken),
+        signedIn: (user) {
+          ref.read(authStateProvider.notifier).state = user;
+          return prefs.setString(kAccessToken, user.accessToken ?? '');
+        },
+        signedOut: (user) {
+          ref.read(authStateProvider.notifier).state = user;
+          return prefs.remove(kAccessToken);
+        },
       );
     });
   }
