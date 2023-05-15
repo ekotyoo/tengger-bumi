@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:school_watch_semeru/common/error/failure.dart';
 import 'package:school_watch_semeru/common/error/network_exceptions.dart';
+import 'package:school_watch_semeru/common/services/http_client.dart';
 import 'package:school_watch_semeru/features/school/domain/school_detail.dart';
 import 'package:school_watch_semeru/features/school/domain/school_request.dart';
 
@@ -22,10 +24,15 @@ part 'school_repository.g.dart';
 
 @riverpod
 ISchoolRepository schoolRepository(SchoolRepositoryRef ref) {
-  return FakeSchoolRepository();
+  final client = ref.watch(httpClientProvider);
+  return FakeSchoolRepository(client);
 }
 
 class FakeSchoolRepository implements ISchoolRepository {
+  FakeSchoolRepository(this._client);
+
+  final HttpClient _client;
+
   final locations = const [
     Position(latitude: -7.991096, longitude: 112.506890),
     Position(latitude: -7.980968, longitude: 112.619544),
@@ -60,7 +67,8 @@ class FakeSchoolRepository implements ISchoolRepository {
   }
 
   @override
-  Future<Either<Failure, SchoolDetail>> getSchool({required String schoolId, CancelToken? cancelToken}) async {
+  Future<Either<Failure, SchoolDetail>> getSchool(
+      {required String schoolId, CancelToken? cancelToken}) async {
     const reportLocations = [
       Position(latitude: -7.943129, longitude: 112.603383),
       Position(latitude: -7.943162, longitude: 112.603411),
@@ -71,20 +79,17 @@ class FakeSchoolRepository implements ISchoolRepository {
     return right(SchoolDetail(
       id: '1',
       name: 'SDN 1 Merjosari',
-      schoolLocation: const Position(latitude: -7.943151, longitude: 112.603341),
+      schoolLocation:
+          const Position(latitude: -7.943151, longitude: 112.603341),
       reports: List.generate(
         4,
-            (index) => Report(
+        (index) => Report(
           id: '$index',
           reportType: 'reportType-$index',
           reportCategory: 'reportCategory-$index',
           position: reportLocations[index],
           description: 'description-$index',
-          author: Author(
-              id: '$index',
-              name: 'name-$index',
-              avatar: ''
-          ),
+          author: Author(id: '$index', name: 'name-$index', avatar: ''),
           school: 'school-$index',
           createdAt: DateTime.now(),
           likesCount: 10,
@@ -124,11 +129,40 @@ class FakeSchoolRepository implements ISchoolRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> postSchool({required SchoolRequest school, File? coverImage}) async {
+  Future<Either<Failure, Unit>> postSchool(
+      {required SchoolRequest school, File? coverImage}) async {
     try {
-      await Future.delayed(kDurationLong);
-      return right(unit);
-    } catch(e) {
+      final schoolMap = school.toJson();
+      final formData = FormData.fromMap(schoolMap);
+
+      if (coverImage != null) {
+        final path = coverImage.path;
+        final fileName = path.split('/').last;
+        final extension = fileName.split('.').last;
+
+        formData.files.add(
+          MapEntry(
+            'image',
+            await MultipartFile.fromFile(
+              path,
+              filename: fileName,
+              contentType: MediaType('image', extension),
+            ),
+          ),
+        );
+      }
+
+      final response = await _client.post(
+        '/school',
+        data: formData,
+      );
+
+      if (response['status'] == 'success') {
+        return right(unit);
+      }
+
+      return left(const Failure('Terjadi kesalahan, coba lagi nanti.'));
+    } catch (e) {
       final exceptions = NetworkExceptions.getDioException(e);
       return left(Failure(exceptions.getErrorMessage()));
     }
@@ -143,13 +177,15 @@ class SchoolRepository implements ISchoolRepository {
   }
 
   @override
-  Future<Either<Failure, SchoolDetail>> getSchool({required String schoolId, CancelToken? cancelToken}) {
+  Future<Either<Failure, SchoolDetail>> getSchool(
+      {required String schoolId, CancelToken? cancelToken}) {
     // TODO: implement getSchool
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, Unit>> postSchool({required SchoolRequest school, File? coverImage}) {
+  Future<Either<Failure, Unit>> postSchool(
+      {required SchoolRequest school, File? coverImage}) {
     // TODO: implement postSchool
     throw UnimplementedError();
   }

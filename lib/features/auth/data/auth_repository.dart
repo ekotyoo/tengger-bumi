@@ -86,8 +86,10 @@ class AuthRepository implements IAuthRepository {
   @override
   Future<Either<Failure, Unit>> logout() async {
     try {
-      await Future.delayed(kDurationLong);
       ref.read(authStateProvider.notifier).state = const AuthUser.signedOut();
+      final prefs = await SharedPreferences.getInstance();
+      prefs.remove(kAccessToken);
+      
       return right(unit);
     } catch (e) {
       final exception = NetworkExceptions.getDioException(e);

@@ -19,7 +19,7 @@ const _defaultConnectTimeout =
 const _defaultReceiveTimeout =
     Duration(milliseconds: Duration.millisecondsPerMinute);
 
-const kBaseUrl = 'http://204.238.101.35:3000';
+const kBaseUrl = 'http://192.168.100.21:3000';
 
 @Riverpod(keepAlive: true)
 HttpClient httpClient(HttpClientRef ref) {

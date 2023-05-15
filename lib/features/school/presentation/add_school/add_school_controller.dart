@@ -61,7 +61,10 @@ class AddSchoolController extends StateNotifier<AddSchoolState> {
       schoolAddress: state.schoolAddressInput.value,
       floorPlan: state.floorPlan!.toDomain(),
     );
-    final result = await _repository.postSchool(school: school, coverImage: File(state.coverImage!.path));
+
+    final image = state.coverImage != null ? File(state.coverImage!.path) : null;
+
+    final result = await _repository.postSchool(school: school, coverImage: image);
 
     state = state.copyWith(finalFormSubmitting: false);
     result.fold(

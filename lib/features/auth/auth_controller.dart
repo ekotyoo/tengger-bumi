@@ -45,6 +45,7 @@ class AuthController extends _$AuthController {
       (l) {},
       (r) {
         prefs.remove(kAccessToken);
+        ref.read(authStateProvider.notifier).state = const AuthUser.signedOut();
         return state = const AsyncValue<AuthUser>.data(AuthUser.signedOut());
       },
     );

@@ -1,9 +1,9 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:school_watch_semeru/features/auth/domain/auth_user.dart';
-import 'package:school_watch_semeru/features/report/data/report_repository.dart';
-import 'package:school_watch_semeru/features/report/domain/report.dart';
-import 'package:school_watch_semeru/features/report/domain/report_query.dart';
 
+import '../../domain/auth_user.dart';
+import '../../../report/data/report_repository.dart';
+import '../../../report/domain/report.dart';
+import '../../../report/domain/report_query.dart';
 import '../../data/auth_repository.dart';
 import '../../auth_controller.dart';
 import 'profile_state.dart';
