@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -54,7 +55,8 @@ class FakeSchoolRepository implements ISchoolRepository {
           .toList();
 
       return right(schools);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      debugPrintStack(stackTrace: stackTrace);
       final exceptions = NetworkExceptions.getDioException(e);
       return left(Failure(exceptions.getErrorMessage()));
     }
@@ -67,8 +69,10 @@ class FakeSchoolRepository implements ISchoolRepository {
       final response = await _client.get('/school/$schoolId');
       var school = SchoolDetail.fromJson(response['data']);
       school = school.copyWith(image: '${school.image}'.replaceAll('public', kBaseUrl));
+
       return right(school);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      debugPrintStack(stackTrace: stackTrace);
       final exceptions = NetworkExceptions.getDioException(e);
       return left(Failure(exceptions.getErrorMessage()));
     }

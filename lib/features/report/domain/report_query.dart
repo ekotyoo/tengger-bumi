@@ -15,6 +15,7 @@ class ReportQuery with _$ReportQuery {
     @Default(ReportTime.all) ReportTime reportTime,
     String? reportCategory,
     String? authorId,
+    String? schoolId,
     @Default(true) bool isActive,
   }) = _ReportQuery;
 }

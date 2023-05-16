@@ -45,6 +45,7 @@ class FakeReportRepository implements IReportRepository {
         data: {
           'type': query.reportType.name.toLowerCase(),
           'is_active': query.isActive,
+          'school_id': query.schoolId,
         },
       );
 
