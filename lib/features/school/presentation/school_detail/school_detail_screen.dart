@@ -239,7 +239,7 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
   void initState() {
     reportTypes = ReportType.values.filter((t) => t != ReportType.all).toList();
     _reports = widget.reports
-        .filter((t) => t.reportType == reportTypes[_selectedTab].name)
+        .filter((t) => t.category.type == reportTypes[_selectedTab].name)
         .toList();
     super.initState();
   }
@@ -269,7 +269,7 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
                 _selectedTab = i;
                 _reports = widget.reports
                     .filter(
-                        (t) => t.reportType == reportTypes[_selectedTab].name)
+                        (t) => t.category.type == reportTypes[_selectedTab].name)
                     .toList();
               },
             ),

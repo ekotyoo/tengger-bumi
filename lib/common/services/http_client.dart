@@ -73,6 +73,7 @@ class HttpClient {
 
   Future<dynamic> get(
     String uri, {
+    data,
     Map<String, dynamic>? queryParameters,
     Options? options,
     CancelToken? cancelToken,
@@ -81,6 +82,7 @@ class HttpClient {
     try {
       var response = await _dio.get(
         uri,
+        data: data,
         queryParameters: queryParameters,
         options: options,
         cancelToken: cancelToken,

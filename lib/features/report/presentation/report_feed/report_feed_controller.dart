@@ -21,9 +21,12 @@ class ReportFeedController extends _$ReportFeedController {
   @override
   FutureOr<ReportFeedState> build(ReportQuery query) async {
     final reportRepo = ref.read(reportRepositoryProvider);
-    final reports = await reportRepo.getReports(query: query);
+    final result = await reportRepo.getReports(query: query);
 
-    return ReportFeedState(reports: reports);
+    return result.fold(
+      (l) => ReportFeedState(errorMessage: l.message),
+      (r) => ReportFeedState(reports: r),
+    );
   }
 
   void setSuccessMessage(String? message) {

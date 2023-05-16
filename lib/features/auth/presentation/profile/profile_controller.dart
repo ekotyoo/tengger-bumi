@@ -26,7 +26,10 @@ class ProfileController extends _$ProfileController {
   Future<List<Report>> getUserReports(String userId) async {
     final repo = ref.watch(reportRepositoryProvider);
     final result = await repo.getReports(query: ReportQuery(authorId: userId));
-    return result;
+    return result.fold(
+      (l) => const [],
+      (r) => r,
+    );
   }
 
   void logout() async {

@@ -12,7 +12,7 @@ import '../domain/report_detail.dart';
 import '../domain/report_query.dart';
 
 abstract class IReportRepository {
-  Future<List<Report>> getReports({
+  Future<Either<Failure, List<Report>>> getReports({
     required ReportQuery query,
     CancelToken? cancelToken,
   });

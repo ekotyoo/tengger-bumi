@@ -5,7 +5,6 @@ import 'package:fpdart/fpdart.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../common/models/position.dart';
 import '../domain/report_request.dart';
 import '../../../common/error/failure.dart';
 import '../../../common/error/network_exceptions.dart';
@@ -33,35 +32,41 @@ class FakeReportRepository implements IReportRepository {
   final HttpClient _client;
 
   @override
-  Future<List<Report>> getReports({
+  Future<Either<Failure, List<Report>>> getReports({
     required ReportQuery query,
     CancelToken? cancelToken,
   }) async {
-    await Future.delayed(kDurationLong);
+    try {
+      // TODO: Handle date time filter
 
-    final reports = List.generate(
-      query.take * query.page,
-      (index) => Report(
-        id: '${query.page} - $index',
-        reportType: 'reportType-$index',
-        reportCategory: 'reportCategory-$index',
-        description: 'description-$index',
-        school: 'SDN $index Sidomulyo',
-        position: const Position(latitude: .0, longitude: .0),
-        author: Author(
-          id: '$index',
-          name: 'john-$index',
-          avatar: 'https://picsum.photos/50/50',
-        ),
-        createdAt: DateTime.now(),
-        likesCount: 10,
-        dislikesCount: 10,
-        commentsCount: 10,
-        isActive: true,
-        images: List.generate(3, (index) => 'https://picsum.photos/200/300'),
-      ),
-    );
-    return reports;
+      final response = await _client.get(
+        '/report',
+        queryParameters: {'page': query.page, 'take': query.take},
+        data: {
+          'type': query.reportType.name.toLowerCase(),
+          'is_active': query.isActive,
+        },
+      );
+
+      final reports = (response['data'] as List<dynamic>).map(
+        (e) {
+          final r = Report.fromJson(e);
+          final report = r.copyWith(
+            images: r.images.map((e) => e.replaceAll('public', kBaseUrl)).toList(),
+            author: r.author.copyWith(
+              avatar: r.author.avatar.replaceAll('public', kBaseUrl),
+            ),
+          );
+
+          return report;
+        },
+      ).toList();
+
+      return right(reports);
+    } catch (e) {
+      final exception = NetworkExceptions.getDioException(e);
+      return left(Failure(exception.getErrorMessage()));
+    }
   }
 
   @override
@@ -220,8 +225,7 @@ class FakeReportRepository implements IReportRepository {
   }) async {
     try {
       final response = await _client.get('/category',
-          cancelToken: cancelToken,
-          queryParameters: {'type': type});
+          cancelToken: cancelToken, queryParameters: {'type': type});
 
       final categories = (response['data'] as List<dynamic>)
           .map((e) => Category.fromJson(e))

@@ -124,7 +124,7 @@ class ReportCard extends StatelessWidget {
   }
 
   _buildCategoryList(BuildContext context, Report report) {
-    final categories = [report.reportCategory, report.reportType];
+    final categories = [report.category.name, report.category.type];
 
     return SizedBox(
       height: SWSizes.s32,

@@ -1,7 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../common/models/position.dart';
+import 'category.dart';
 import 'author.dart';
+import 'report_position.dart';
 
 part 'report.freezed.dart';
 
@@ -21,12 +22,11 @@ class TimestampSerializer implements JsonConverter<DateTime, dynamic> {
 class Report with _$Report {
   const factory Report({
     required String id,
-    @JsonKey(name: 'report_type') required String reportType,
-    @JsonKey(name: 'report_category') required String reportCategory,
+    required Category category,
     required String description,
     required Author author,
     required String school,
-    required Position position,
+    required ReportPosition position,
     @Default(false) bool liked,
     @Default(false) bool disliked,
     @JsonKey(name: 'created_at') @TimestampSerializer() required DateTime createdAt,
