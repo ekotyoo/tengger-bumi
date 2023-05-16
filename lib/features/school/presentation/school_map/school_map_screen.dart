@@ -67,7 +67,7 @@ class _SchoolMapScreenState extends ConsumerState<SchoolMapScreen> {
               iconSize: SWSizes.s32 + SWSizes.s8,
               onPressed: () {
                 setState(() =>
-                _followOnLocationUpdate = FollowOnLocationUpdate.never);
+                    _followOnLocationUpdate = FollowOnLocationUpdate.never);
                 final currentZoom = _mapController.zoom;
                 _mapController.move(
                   _mapController.center,
@@ -82,7 +82,7 @@ class _SchoolMapScreenState extends ConsumerState<SchoolMapScreen> {
               iconSize: SWSizes.s32 + SWSizes.s8,
               onPressed: () {
                 setState(() =>
-                _followOnLocationUpdate = FollowOnLocationUpdate.never);
+                    _followOnLocationUpdate = FollowOnLocationUpdate.never);
                 final currentZoom = _mapController.zoom;
                 _mapController.move(
                   _mapController.center,
@@ -96,7 +96,7 @@ class _SchoolMapScreenState extends ConsumerState<SchoolMapScreen> {
             IconButton(
               iconSize: SWSizes.s32 + SWSizes.s8,
               onPressed: () => setState(() =>
-              _followOnLocationUpdate = FollowOnLocationUpdate.always),
+                  _followOnLocationUpdate = FollowOnLocationUpdate.always),
               icon: const CircleAvatar(
                 child: Icon(Icons.my_location),
               ),
@@ -109,7 +109,7 @@ class _SchoolMapScreenState extends ConsumerState<SchoolMapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final reportsAsync = ref.watch(getSchoolsProvider());
+    final reportsAsync = ref.watch(getSchoolsProvider);
 
     return SafeArea(
       child: Scaffold(
@@ -142,7 +142,7 @@ class _SchoolMapScreenState extends ConsumerState<SchoolMapScreen> {
                 CurrentLocationLayer(
                   followOnLocationUpdate: _followOnLocationUpdate,
                   followCurrentLocationStream:
-                  _followCurrentLocationStreamController.stream,
+                      _followCurrentLocationStreamController.stream,
                   style: LocationMarkerStyle(
                     marker: const DefaultLocationMarker(
                       color: kColorSuccess500,
@@ -166,10 +166,7 @@ class _SchoolMapScreenState extends ConsumerState<SchoolMapScreen> {
                             key: ValueKey(report.id),
                             width: SWSizes.s40,
                             height: SWSizes.s40,
-                            point: LatLng(
-                              report.schoolLocation.latitude,
-                              report.schoolLocation.longitude,
-                            ),
+                            point: LatLng(.0, .0),
                             rotate: true,
                             builder: (context) => GestureDetector(
                               onTap: () {

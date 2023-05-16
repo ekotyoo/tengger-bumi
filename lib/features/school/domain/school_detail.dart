@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../common/models/position.dart';
 import '../../report/domain/report.dart';
 import 'floor_plan.dart';
 import 'school_analysis.dart';
@@ -14,8 +13,8 @@ class SchoolDetail with _$SchoolDetail {
   const factory SchoolDetail({
     required String id,
     required String name,
+    required String address,
     required SchoolAnalysis analysis,
-    @JsonKey(name: 'school_location') required Position schoolLocation,
     @JsonKey(name: 'floor_plan') required FloorPlan floorPlan,
     @Default([]) List<Report> reports,
     String? image,

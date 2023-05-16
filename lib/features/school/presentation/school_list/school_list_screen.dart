@@ -16,6 +16,7 @@ class SchoolListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text(SWStrings.labelSchoolList),
           centerTitle: true,
@@ -118,17 +119,17 @@ class SchoolCard extends StatelessWidget {
                 _buildSchoolAnalysisInfo(
                   context,
                   label: 'Pencegahan',
-                  value: 'Baik',
+                  value: school.analysis.preventionLevel?.toString() ?? '-',
                 ),
                 _buildSchoolAnalysisInfo(
                   context,
                   label: 'Tanggap Darurat',
-                  value: 'Baik',
+                  value: school.analysis.emergencyResponseLevel?.toString() ?? '-',
                 ),
                 _buildSchoolAnalysisInfo(
                   context,
                   label: 'Pemulihan',
-                  value: 'Baik',
+                  value: school.analysis.recoveryLevel?.toString() ?? '-',
                 ),
               ],
             ),
@@ -171,15 +172,17 @@ class SchoolList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final searchQuery = ref.watch(schoolSearchQueryProvider);
-    final schools = ref.watch(getSchoolsProvider(query: searchQuery));
+    final schools = ref.watch(getSchoolsProvider);
 
     return schools.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stackTrace) => Text('$error'),
       data: (schools) => RefreshIndicator(
         key: refreshIndicatorKey,
-        onRefresh: () => Future.delayed(kDurationLong),
+        onRefresh: () {
+          ref.invalidate(getSchoolsProvider);
+          return ref.read(getSchoolsProvider.future);
+        },
         child: ListView.separated(
           itemCount: schools.length,
           itemBuilder: (context, index) {

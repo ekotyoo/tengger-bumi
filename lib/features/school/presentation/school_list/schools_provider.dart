@@ -1,4 +1,8 @@
+import 'dart:async';
+
+import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:school_watch_semeru/common/constants/constant.dart';
 
 import '../../data/school_repository.dart';
 import '../../domain/school.dart';
@@ -16,10 +20,32 @@ class SchoolSearchQuery extends _$SchoolSearchQuery {
 }
 
 @riverpod
-Future<List<School>> getSchools(GetSchoolsRef ref, {String? query}) async {
+Future<List<School>> getSchools(GetSchoolsRef ref) async {
   final schoolRepo = ref.watch(schoolRepositoryProvider);
+  final query = ref.watch(schoolSearchQueryProvider);
 
-  final result = await schoolRepo.getSchools(query: query);
+  final cancelToken = CancelToken();
 
-  return result;
+  final link = ref.keepAlive();
+  Timer? timer;
+
+  ref.onDispose(() {
+    cancelToken.cancel();
+    timer?.cancel();
+  });
+  
+  ref.onCancel(() { 
+    timer = Timer(const Duration(seconds: 30), () {
+      link.close();
+    });
+  });
+
+  await Future.delayed(kDurationLong);
+  if (cancelToken.isCancelled) throw Exception();
+
+  final result = await schoolRepo.getSchools(query: query, cancelToken: cancelToken);
+  return result.fold(
+    (l) => const [],
+    (r) => r,
+  );
 }

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart' as fp;
 import 'package:go_router/go_router.dart';
+import 'package:school_watch_semeru/features/school/domain/school_analysis.dart';
+import 'package:school_watch_semeru/features/school/domain/school_detail.dart';
 import '../models/floor_plan_ui_model.dart';
 import '../models/school_detail_floor_plan_nav_arg.dart';
 
-import '../../../../common/models/position.dart';
 import 'school_detail_controller.dart';
 import '../../../../common/routing/routes.dart';
 import '../../../../common/widgets/title_with_caption.dart';
-import '../../../report/domain/author.dart';
 import '../../../report/domain/report.dart';
 import '../../../report/domain/report_type.dart';
 import '../../../report/presentation/widgets/report_card.dart';
@@ -26,7 +26,7 @@ class SchoolDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final reportDetailAsync =
+    final schoolDetailAsync =
         ref.watch(schoolDetailControllerProvider(schoolId));
 
     return SafeArea(
@@ -35,57 +35,64 @@ class SchoolDetailScreen extends ConsumerWidget {
           title: const Text(SWStrings.labelSchoolDetail),
           centerTitle: true,
           actions: [
-            reportDetailAsync.when(
+            schoolDetailAsync.when(
               data: (reportDetail) {
                 if (reportDetail == null) return Container();
 
                 return IconButton(
-                icon: const Icon(Icons.location_on_rounded),
-                onPressed: () => context.pushNamed(
-                  Routes.schoolFloorPlan,
-                  params: {'schoolId': schoolId},
-                  extra: SchoolDetailFloorPlanNavArg(
-                    floorPlan: FloorPlanUiModel.fromDomain(reportDetail.floorPlan),
-                    reports: reportDetail.reports,
+                  icon: const Icon(Icons.location_on_rounded),
+                  onPressed: () => context.pushNamed(
+                    Routes.schoolFloorPlan,
+                    params: {'schoolId': schoolId},
+                    extra: SchoolDetailFloorPlanNavArg(
+                      floorPlan:
+                          FloorPlanUiModel.fromDomain(reportDetail.floorPlan),
+                      reports: reportDetail.reports,
+                    ),
                   ),
-                ),
-              );
+                );
               },
               error: (error, stackTrace) => Container(),
               loading: () => Container(),
             ),
           ],
         ),
-        body: reportDetailAsync.when(
+        body: schoolDetailAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (error, stackTrace) => Text('$error'),
-          data: (reportDetail) => Padding(
-            padding: const EdgeInsets.all(SWSizes.s16),
-            child: ListView(
-              children: [
-                _buildSchoolHeader(context),
-                const SizedBox(height: SWSizes.s16),
-                _buildSchoolAnalysis(context),
-                const SizedBox(height: SWSizes.s8),
-                const Divider(),
-                const SizedBox(height: SWSizes.s8),
-                const ReportListWithFilter(),
-                const SizedBox(height: SWSizes.s8),
-              ],
-            ),
-          ),
+          data: (reportDetail) {
+            if (reportDetail == null) {
+              return const Center(child: Text('Data sekolah tidak ditemukan'));
+            }
+
+            return Padding(
+              padding: const EdgeInsets.all(SWSizes.s16),
+              child: ListView(
+                children: [
+                  _buildSchoolHeader(context, reportDetail),
+                  const SizedBox(height: SWSizes.s16),
+                  _buildSchoolAnalysis(context, reportDetail.analysis),
+                  const SizedBox(height: SWSizes.s8),
+                  const Divider(),
+                  const SizedBox(height: SWSizes.s8),
+                  const ReportListWithFilter(),
+                  const SizedBox(height: SWSizes.s8),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );
   }
 
-  _buildSchoolHeader(BuildContext context) {
+  _buildSchoolHeader(BuildContext context, SchoolDetail reportDetail) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(SWSizes.s8),
       child: Stack(
         children: [
-          const LoadingImage(
-            url: 'https://picsum.photos/200/100',
+          LoadingImage(
+            url: reportDetail.image ?? '',
             height: 160,
             width: double.infinity,
             fit: BoxFit.cover,
@@ -114,14 +121,14 @@ class SchoolDetailScreen extends ConsumerWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'SDN 2 Sidomulyo',
+                        reportDetail.name,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: kColorNeutral0,
                             ),
                       ),
                       Text(
-                        'Asd asdfasdf asdfasd',
+                        reportDetail.address,
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall
@@ -138,7 +145,7 @@ class SchoolDetailScreen extends ConsumerWidget {
     );
   }
 
-  _buildSchoolAnalysis(context) {
+  _buildSchoolAnalysis(context, SchoolAnalysis analysis) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -169,17 +176,17 @@ class SchoolDetailScreen extends ConsumerWidget {
               _buildSchoolAnalysisInfo(
                 context,
                 label: 'Pencegahan',
-                value: 'Baik',
+                value: analysis.preventionLevel?.toString() ?? '-',
               ),
               _buildSchoolAnalysisInfo(
                 context,
                 label: 'Tanggap Darurat',
-                value: 'Baik',
+                value: analysis.emergencyResponseLevel?.toString() ?? '-',
               ),
               _buildSchoolAnalysisInfo(
                 context,
                 label: 'Pemulihan',
-                value: 'Baik',
+                value: analysis.recoveryLevel?.toString() ?? '-',
               ),
             ],
           ),
@@ -213,7 +220,10 @@ class SchoolDetailScreen extends ConsumerWidget {
 }
 
 class ReportListWithFilter extends StatefulWidget {
-  const ReportListWithFilter({Key? key}) : super(key: key);
+  const ReportListWithFilter({Key? key, this.reports = const []})
+      : super(key: key);
+
+  final List<Report> reports;
 
   @override
   State<ReportListWithFilter> createState() => _ReportListWithFilterState();
@@ -223,10 +233,14 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
     with SingleTickerProviderStateMixin {
   int _selectedTab = 0;
   late List<ReportType> reportTypes;
+  late List<Report> _reports;
 
   @override
   void initState() {
     reportTypes = ReportType.values.filter((t) => t != ReportType.all).toList();
+    _reports = widget.reports
+        .filter((t) => t.reportType == reportTypes[_selectedTab].name)
+        .toList();
     super.initState();
   }
 
@@ -236,7 +250,7 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
       children: [
         _buildTab(context),
         const SizedBox(height: SWSizes.s16),
-        _buildReportList(context),
+        _buildReportList(context, _reports),
       ],
     );
   }
@@ -250,7 +264,15 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
             context,
             label: reportTypes[i].name,
             selected: _selectedTab == i,
-            onTap: () => setState(() => _selectedTab = i),
+            onTap: () => setState(
+              () {
+                _selectedTab = i;
+                _reports = widget.reports
+                    .filter(
+                        (t) => t.reportType == reportTypes[_selectedTab].name)
+                    .toList();
+              },
+            ),
           ),
       ],
     );
@@ -285,35 +307,21 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
     );
   }
 
-  _buildReportList(BuildContext context) {
-    return ListView.separated(
-      itemCount: 10,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) => ReportCard(
-        report: Report(
-          id: '$index',
-          reportType: 'Pencegahan',
-          reportCategory: 'Category',
-          description: SWStrings.dummyText,
-          images: [
-            'https://picsum.photos/200/100',
-            'https://picsum.photos/200/100'
-          ],
-          author: Author(
-              id: '$index',
-              name: 'John Doe - $index',
-              avatar: 'https://picsum.photos/200/100'),
-          school: 'SDN 2 Sidomulyo',
-          position: const Position(latitude: .0, longitude: .0),
-          createdAt: DateTime.now(),
-          likesCount: 10,
-          dislikesCount: 10,
-          commentsCount: 10,
-          isActive: true,
-        ),
-      ),
-      separatorBuilder: (context, index) => const SizedBox(height: SWSizes.s8),
+  _buildReportList(BuildContext context, List<Report> reports) {
+    const emptyPlaceholder = Padding(
+      padding: EdgeInsets.only(top: SWSizes.s16),
+      child: Center(child: Text('Belum ada data laporan')),
     );
+
+    return reports.isEmpty
+        ? emptyPlaceholder
+        : ListView.separated(
+            itemCount: reports.length,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) => ReportCard(report: reports[index]),
+            separatorBuilder: (context, index) =>
+                const SizedBox(height: SWSizes.s8),
+          );
   }
 }

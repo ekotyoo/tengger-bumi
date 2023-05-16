@@ -8,7 +8,7 @@ import '../domain/school_detail.dart';
 import '../domain/school_request.dart';
 
 abstract class ISchoolRepository {
-  Future<List<School>> getSchools({
+  Future<Either<Failure, List<School>>> getSchools({
     String? query,
     CancelToken? cancelToken,
   });

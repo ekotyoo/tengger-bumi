@@ -8,16 +8,19 @@ import '../../domain/room.dart';
 
 class RoomUiModel extends Equatable {
   const RoomUiModel({
+    this.id,
     required this.label,
     required this.polygon,
     this.color = Colors.yellow,
   });
 
+  final String? id;
   final String label;
   final Polygon polygon;
   final Color color;
 
   factory RoomUiModel.fromDomain(Room room) => RoomUiModel(
+        id: room.id,
         label: room.label,
         polygon: Polygon(
           points: room.polygon
@@ -29,6 +32,7 @@ class RoomUiModel extends Equatable {
       );
 
   Room toDomain() => Room(
+        id: id,
         label: label,
         polygon: polygon.points
             .map((e) => Position(
