@@ -1,11 +1,16 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Category extends Equatable {
-  const Category({required this.id, required this.label});
+part 'category.freezed.dart';
 
-  final String id;
-  final String label;
+part 'category.g.dart';
 
-  @override
-  List<Object> get props => [id, label];
+@freezed
+class Category with _$Category {
+  const factory Category({
+    required String id,
+    required String name,
+    required String type
+}) = _Category;
+
+  factory Category.fromJson(Map<String, Object?> json) => _$CategoryFromJson(json);
 }

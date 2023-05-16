@@ -5,10 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:school_watch_semeru/features/report/presentation/models/location_pick_nav_arg.dart';
-import 'package:school_watch_semeru/features/school/presentation/models/floor_plan_ui_model.dart';
 
+import '../../models/location_pick_nav_arg.dart';
+import '../../../../school/presentation/models/floor_plan_ui_model.dart';
 import '../extensions/latlng_extenstion.dart';
 import '../../../../../common/routing/routes.dart';
 import '../../../../../common/widgets/sw_dropdown.dart';
@@ -50,14 +49,16 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
         ),
         const SizedBox(height: SWSizes.s16),
         Expanded(
-          child: state.infoFormLoading ? loadingWidget : ListView(
-            physics: const BouncingScrollPhysics(),
-            children: [
-              ..._buildFormInputFields(context, state),
-              const Divider(),
-              ImagePickerInput(),
-            ],
-          ),
+          child: state.infoFormLoading
+              ? loadingWidget
+              : ListView(
+                  physics: const BouncingScrollPhysics(),
+                  children: [
+                    ..._buildFormInputFields(context, state),
+                    const Divider(),
+                    ImagePickerInput(),
+                  ],
+                ),
         ),
       ],
     );
@@ -90,7 +91,7 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
         items: state.categories
             .map((e) => DropdownMenuItem(
                   value: e,
-                  child: Text(e.label),
+                  child: Text(e.name),
                 ))
             .toList(),
       ),
@@ -99,13 +100,19 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
         locationInput: state.locationInput,
         onTap: () async {
           final selectedLocation = state.locationInput.value?.toLatLng();
-          final floorPlan = FloorPlanUiModel.fromDomain(state.selectedSchoolData!.floorPlan);
+          final floorPlan =
+              FloorPlanUiModel.fromDomain(state.selectedSchoolData!.floorPlan);
 
-          final position = await context.pushNamed(Routes.locationPicker,
-              extra: LocationPickNavArg(selectedPosition: selectedLocation, floorPlan: floorPlan)) as LatLng?;
-          ref
-              .read(postReportControllerProvider.notifier)
-              .onLocationChange(position);
+          final result = await context.pushNamed(Routes.locationPicker,
+              extra: LocationPickNavArg(
+                  selectedPosition: selectedLocation,
+                  floorPlan: floorPlan)) as Map<String, dynamic>?;
+          final position = result?['position'];
+          final room = result?['room'];
+
+          ref.read(postReportControllerProvider.notifier)
+            ..onLocationChange(position)
+            ..onSelectedRoomChange(room);
         },
       ),
       const Divider(height: SWSizes.s16),
@@ -418,7 +425,9 @@ class _PickLocationButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                locationInput.value == null ? SWStrings.labelLocation : '${locationInput.value?.latitude}, ${locationInput.value?.longitude}',
+                locationInput.value == null
+                    ? SWStrings.labelLocation
+                    : '${locationInput.value?.latitude}, ${locationInput.value?.longitude}',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const Icon(Icons.pin_drop_outlined),

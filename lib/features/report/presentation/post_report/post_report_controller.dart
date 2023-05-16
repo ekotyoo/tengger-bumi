@@ -5,10 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:school_watch_semeru/features/school/data/i_school_repository.dart';
-import 'package:school_watch_semeru/features/school/data/school_repository.dart';
 
-import '../../../../common/constants/constant.dart';
+import '../../../school/presentation/models/room_ui_model.dart';
+import '../../../school/data/i_school_repository.dart';
+import '../../../school/data/school_repository.dart';
 import '../../data/i_report_repository.dart';
 import '../../data/report_repository.dart';
 import '../../domain/report_request.dart';
@@ -59,6 +59,11 @@ class PostReportController extends StateNotifier<PostReportState> {
         ),
       ),
     );
+  }
+
+  void onSelectedRoomChange(RoomUiModel? value) {
+    if (value == null) return;
+    state = state.copyWith(selectedRoom: value);
   }
 
   void addAdditionalInfo() {
@@ -121,56 +126,62 @@ class PostReportController extends StateNotifier<PostReportState> {
 
   void _validateForm() {
     state = state.copyWith(
-        descriptionInput: DescriptionTextInput.dirty(
-          value: state.descriptionInput.value,
-        ),
-        categoryInput: CategoryOptionInput.dirty(
-          value: state.categoryInput.value,
-        ),
-        locationInput: LocationPickInput.dirty(
-          value: state.locationInput.value,
-        ),
-        additionalInfoInputs: state.additionalInfoInputs
-            .map(
-              (e) => AdditionalInfoInputWrapper(
-                key: e.key,
-                labelInput: LabelTextInput.dirty(value: e.labelInput.value),
-                informationInput:
-                    InformationTextInput.dirty(value: e.informationInput.value),
-              ),
-            )
-            .toList(),
-        imageInput: ImagePickInput.dirty(value: state.imageInput.value),
-        validated: Formz.validate([
-          state.descriptionInput,
-          state.categoryInput,
-          state.locationInput,
-          ...state.additionalInfoInputs.map((e) => e.labelInput).toList(),
-          ...state.additionalInfoInputs.map((e) => e.informationInput).toList(),
-          state.imageInput,
-        ]));
+      descriptionInput: DescriptionTextInput.dirty(
+        value: state.descriptionInput.value,
+      ),
+      categoryInput: CategoryOptionInput.dirty(
+        value: state.categoryInput.value,
+      ),
+      locationInput: LocationPickInput.dirty(
+        value: state.locationInput.value,
+      ),
+      additionalInfoInputs: state.additionalInfoInputs
+          .map(
+            (e) => AdditionalInfoInputWrapper(
+              key: e.key,
+              labelInput: LabelTextInput.dirty(value: e.labelInput.value),
+              informationInput:
+                  InformationTextInput.dirty(value: e.informationInput.value),
+            ),
+          )
+          .toList(),
+      imageInput: ImagePickInput.dirty(value: state.imageInput.value),
+      validated: Formz.validate([
+            state.descriptionInput,
+            state.categoryInput,
+            state.locationInput,
+            ...state.additionalInfoInputs.map((e) => e.labelInput).toList(),
+            ...state.additionalInfoInputs
+                .map((e) => e.informationInput)
+                .toList(),
+            state.imageInput,
+          ]) ||
+          state.selectedRoom != null,
+    );
   }
 
   void getSchools() async {
     state = state.copyWith(schoolLoading: true);
-    await Future.delayed(kDurationLong);
-    final dummySchools = List.generate(
-      10,
-      (index) => SchoolOption(
-        id: index.toString(),
-        name: 'SD Negeri ${index + 1} Sidomulyo',
-      ),
+    final schools = await _schoolRepository.getSchools();
+    final schoolOptions = schools.fold(
+      (l) {
+        setErrorMessage(l.message);
+        return const <SchoolOption>[];
+      },
+      (r) => r.map((e) => SchoolOption(id: e.id, name: e.name)).toList(),
     );
-    state = state.copyWith(schoolLoading: false, schools: dummySchools);
+    state = state.copyWith(schoolLoading: false, schools: schoolOptions);
   }
 
   void initReportInfoForm() async {
-    if (state.selectedSchool == null || state.selectedReportType == null) return;
+    if (state.selectedSchool == null || state.selectedReportType == null) {
+      return;
+    }
 
     state = state.copyWith(infoFormLoading: true);
 
     await _getSchoolDetail(state.selectedSchool!.id);
-    await _getCategories(state.selectedReportType!.name);
+    await _getCategories(state.selectedReportType!.name.toLowerCase());
 
     state = state.copyWith(infoFormLoading: false);
   }
@@ -184,16 +195,12 @@ class PostReportController extends StateNotifier<PostReportState> {
   }
 
   Future<void> _getCategories(String reportType) async {
-    return Future.delayed(
-      kDurationLong,
-      () {
-        state = state.copyWith(
-          categories: List.generate(
-            5,
-            (index) => Category(id: '$index', label: 'Category-$index'),
-          ),
-        );
-      },
+    final result = await _reportRepository.getCategories(type: reportType);
+    result.fold(
+      (l) => setErrorMessage(l.message),
+      (r) => state = state.copyWith(
+        categories: r,
+      ),
     );
   }
 
@@ -209,12 +216,14 @@ class PostReportController extends StateNotifier<PostReportState> {
 
     state = state.copyWith(finalFormSubmitting: true);
 
+    final position = state.locationInput.value!;
     final report = ReportRequest(
       schoolId: state.selectedSchool!.id,
-      reportType: state.selectedReportType!.name,
       description: state.descriptionInput.value,
       categoryId: state.categoryInput.value!.id,
-      position: state.locationInput.value!,
+      latitude: position.latitude,
+      longitude: position.longitude,
+      roomId: state.selectedRoom!.id!,
     );
     final images = state.imageInput.value.map((e) => File(e.path)).toList();
     final result = await _reportRepository.postReport(report, images);

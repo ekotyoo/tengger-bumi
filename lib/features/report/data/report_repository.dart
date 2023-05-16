@@ -2,12 +2,14 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:school_watch_semeru/common/models/position.dart';
-import 'package:school_watch_semeru/features/report/domain/report_request.dart';
 
+import '../../../common/models/position.dart';
+import '../domain/report_request.dart';
 import '../../../common/error/failure.dart';
 import '../../../common/error/network_exceptions.dart';
+import '../domain/category.dart';
 import '../domain/comment.dart';
 import '../domain/report_detail.dart';
 import '../../../common/services/http_client.dart';
@@ -21,10 +23,15 @@ part 'report_repository.g.dart';
 
 @riverpod
 IReportRepository reportRepository(ReportRepositoryRef ref) {
-  return FakeReportRepository();
+  final client = ref.watch(httpClientProvider);
+  return FakeReportRepository(client);
 }
 
 class FakeReportRepository implements IReportRepository {
+  FakeReportRepository(this._client);
+
+  final HttpClient _client;
+
   @override
   Future<List<Report>> getReports({
     required ReportQuery query,
@@ -101,144 +108,129 @@ class FakeReportRepository implements IReportRepository {
   }
 
   @override
-  Future<Either<Failure, Comment>> addComment({required String reportId, required String comment, CancelToken? cancelToken}) async {
+  Future<Either<Failure, Comment>> addComment(
+      {required String reportId,
+      required String comment,
+      CancelToken? cancelToken}) async {
     try {
       await Future.delayed(kDurationLong);
       final newComment = Comment(
         comment: comment,
-        author: const Author(avatar: 'https://picsum.photos/100/100', name: 'John Doe', id: '1'),
+        author: const Author(
+            avatar: 'https://picsum.photos/100/100', name: 'John Doe', id: '1'),
         createdAt: DateTime.now(),
       );
       return right(newComment);
-    } catch(e) {
+    } catch (e) {
       final exception = NetworkExceptions.getDioException(e);
       return left(Failure(exception.getErrorMessage()));
     }
   }
 
-
   @override
-  Future<Either<Failure, Unit>> addLike({required String reportId, CancelToken? cancelToken}) async {
+  Future<Either<Failure, Unit>> addLike(
+      {required String reportId, CancelToken? cancelToken}) async {
     try {
       await Future.delayed(kDurationLong);
       return right(unit);
-    } catch(e) {
+    } catch (e) {
       final exception = NetworkExceptions.getDioException(e);
       return left(Failure(exception.getErrorMessage()));
     }
   }
 
   @override
-  Future<Either<Failure, Unit>> removeLike({required String reportId, CancelToken? cancelToken}) async {
+  Future<Either<Failure, Unit>> removeLike(
+      {required String reportId, CancelToken? cancelToken}) async {
     try {
       await Future.delayed(kDurationLong);
       return right(unit);
-    } catch(e) {
+    } catch (e) {
       final exception = NetworkExceptions.getDioException(e);
       return left(Failure(exception.getErrorMessage()));
     }
   }
 
   @override
-  Future<Either<Failure, Unit>> removeDislike({required String reportId, CancelToken? cancelToken}) async {
+  Future<Either<Failure, Unit>> removeDislike(
+      {required String reportId, CancelToken? cancelToken}) async {
     try {
       await Future.delayed(kDurationLong);
       return right(unit);
-    } catch(e) {
+    } catch (e) {
       final exception = NetworkExceptions.getDioException(e);
       return left(Failure(exception.getErrorMessage()));
     }
   }
 
   @override
-  Future<Either<Failure, Unit>> addDislike({required String reportId, CancelToken? cancelToken}) async {
+  Future<Either<Failure, Unit>> addDislike(
+      {required String reportId, CancelToken? cancelToken}) async {
     try {
       await Future.delayed(kDurationLong);
       return right(unit);
-    } catch(e) {
+    } catch (e) {
       final exception = NetworkExceptions.getDioException(e);
       return left(Failure(exception.getErrorMessage()));
     }
   }
 
   @override
-  Future<Either<Failure, Unit>> postReport(ReportRequest report, List<File> images) async {
+  Future<Either<Failure, Unit>> postReport(
+      ReportRequest report, List<File> images) async {
     try {
-      await Future.delayed(kDurationLong);
-      return right(unit);
-    } catch(e) {
+      final reportMap = report.toJson();
+      final formData = FormData.fromMap(reportMap);
+
+      final multipartFiles = <MapEntry<String, MultipartFile>>[];
+
+      for (var image in images) {
+        final path = image.path;
+        final fileName = path.split('/').last;
+        final extension = fileName.split('.').last;
+
+        multipartFiles.add(MapEntry(
+            'images',
+            await MultipartFile.fromFile(
+              path,
+              filename: fileName,
+              contentType:
+                  MediaType('image', extension == 'jpg' ? 'jpeg' : extension),
+            )));
+      }
+      formData.files.addAll(multipartFiles);
+
+      final response = await _client.post('/report', data: formData);
+
+      if (response['status'] == 'success') {
+        return right(unit);
+      }
+
+      return left(const Failure('Terjadi kesalahan, coba lagi nanti.'));
+    } catch (e) {
       final exception = NetworkExceptions.getDioException(e);
       return left(Failure(exception.getErrorMessage()));
     }
   }
-}
-
-class ReportRepository implements IReportRepository {
-  const ReportRepository(this._client);
-
-  final HttpClient _client;
 
   @override
-  Future<List<Report>> getReports({
-    required ReportQuery query,
+  Future<Either<Failure, List<Category>>> getCategories({
+    required String type,
     CancelToken? cancelToken,
   }) async {
-    final response = await _client.get(
-      '/reports',
-      queryParameters: {
-        'page': query.page,
-        'take': query.take,
-      },
-      cancelToken: cancelToken,
-    );
+    try {
+      final response = await _client.get('/category',
+          cancelToken: cancelToken,
+          queryParameters: {'type': type});
 
-    final reports = (response['data'] as List<dynamic>)
-        .map((e) => Report.fromJson(e))
-        .toList();
+      final categories = (response['data'] as List<dynamic>)
+          .map((e) => Category.fromJson(e))
+          .toList();
 
-    return reports;
-  }
-
-  @override
-  Future<ReportDetail> getReport(
-      {required String reportId, CancelToken? cancelToken}) {
-    // TODO: implement getReport
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, Comment>> addComment({required String reportId, required String comment, CancelToken? cancelToken}) {
-    // TODO: implement postComment
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, Unit>> addDislike({required String reportId, CancelToken? cancelToken}) {
-    // TODO: implement addDislike
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, Unit>> addLike({required String reportId, CancelToken? cancelToken}) {
-    // TODO: implement addLike
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, Unit>> removeDislike({required String reportId, CancelToken? cancelToken}) {
-    // TODO: implement removeDislike
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, Unit>> removeLike({required String reportId, CancelToken? cancelToken}) {
-    // TODO: implement removeLike
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, Unit>> postReport(ReportRequest report, List<File> images) {
-    // TODO: implement postReport
-    throw UnimplementedError();
+      return right(categories);
+    } catch (e) {
+      final exception = NetworkExceptions.getDioException(e);
+      return left(Failure(exception.getErrorMessage()));
+    }
   }
 }

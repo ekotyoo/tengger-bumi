@@ -2,8 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:school_watch_semeru/common/models/position.dart';
 
+import '../../../../common/models/position.dart';
 import '../../domain/room.dart';
 
 class RoomUiModel extends Equatable {
@@ -44,5 +44,5 @@ class RoomUiModel extends Equatable {
       );
 
   @override
-  List<Object?> get props => [label, polygon, color];
+  List<Object?> get props => [id, label, polygon, color];
 }

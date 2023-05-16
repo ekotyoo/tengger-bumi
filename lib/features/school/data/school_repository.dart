@@ -72,64 +72,6 @@ class FakeSchoolRepository implements ISchoolRepository {
       final exceptions = NetworkExceptions.getDioException(e);
       return left(Failure(exceptions.getErrorMessage()));
     }
-
-    // const reportLocations = [
-    //   Position(latitude: -7.943129, longitude: 112.603383),
-    //   Position(latitude: -7.943162, longitude: 112.603411),
-    //   Position(latitude: -7.943082, longitude: 112.603386),
-    //   Position(latitude: -7.943095, longitude: 112.603420),
-    // ];
-
-    // return right(
-    //   SchoolDetail(
-    //     id: '1',
-    //     name: 'SDN 1 Merjosari',
-    //     schoolLocation:
-    //         const Position(latitude: -7.943151, longitude: 112.603341),
-    //     reports: List.generate(
-    //       4,
-    //       (index) => Report(
-    //         id: '$index',
-    //         reportType: 'reportType-$index',
-    //         reportCategory: 'reportCategory-$index',
-    //         position: reportLocations[index],
-    //         description: 'description-$index',
-    //         author: Author(id: '$index', name: 'name-$index', avatar: ''),
-    //         school: 'school-$index',
-    //         createdAt: DateTime.now(),
-    //         likesCount: 10,
-    //         dislikesCount: 10,
-    //         commentsCount: 10,
-    //         isActive: true,
-    //       ),
-    //     ),
-    //     floorPlan: const FloorPlan(rooms: [
-    //       Room(
-    //         id: '',
-    //         color: '',
-    //         polygon: [
-    //           Position(latitude: -7.943151, longitude: 112.603341),
-    //           Position(latitude: -7.943177, longitude: 112.603413),
-    //           Position(latitude: -7.943123, longitude: 112.603433),
-    //           Position(latitude: -7.943097, longitude: 112.603359),
-    //         ],
-    //         label: 'Kelas 1',
-    //       ),
-    //       Room(
-    //         id: '',
-    //         color: '',
-    //         polygon: [
-    //           Position(latitude: -7.943097, longitude: 112.603359),
-    //           Position(latitude: -7.943123, longitude: 112.603433),
-    //           Position(latitude: -7.943074, longitude: 112.603447),
-    //           Position(latitude: -7.943049, longitude: 112.603374),
-    //         ],
-    //         label: 'Kelas 2',
-    //       ),
-    //     ]),
-    //     analysis: const SchoolAnalysis(),
-    //   ),
-    // );
   }
 
   @override

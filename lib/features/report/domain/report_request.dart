@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../../common/models/position.dart';
 
 part 'report_request.freezed.dart';
 
@@ -9,10 +8,12 @@ part 'report_request.g.dart';
 class ReportRequest with _$ReportRequest {
   const factory ReportRequest({
     @JsonKey(name: 'school_id') required String schoolId,
-    @JsonKey(name: 'report_type') required String reportType,
-    required String description,
+    @JsonKey(name: 'room_id') required String roomId,
     @JsonKey(name: 'category_id') required String categoryId,
-    required Position position,
+    required String description,
+    required double latitude,
+    required double longitude,
+    @JsonKey(name: 'is_active') bool? isActive,
   }) = _ReportRequest;
 
   factory ReportRequest.fromJson(Map<String, Object?> json) => _$ReportRequestFromJson(json);

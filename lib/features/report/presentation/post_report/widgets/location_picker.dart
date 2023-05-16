@@ -9,9 +9,10 @@ import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:maps_toolkit/maps_toolkit.dart' as mp;
 import 'package:polylabel/polylabel.dart';
-import 'package:school_watch_semeru/common/widgets/open_street_map_attribution.dart';
-import 'package:school_watch_semeru/features/school/presentation/models/floor_plan_ui_model.dart';
+import 'package:school_watch_semeru/features/school/presentation/models/room_ui_model.dart';
 
+import '../../../../../common/widgets/open_street_map_attribution.dart';
+import '../../../../school/presentation/models/floor_plan_ui_model.dart';
 import '../../../../../common/constants/constant.dart';
 import '../../../../../utils/snackbar_utils.dart';
 import '../extensions/latlng_extenstion.dart';
@@ -33,6 +34,7 @@ class LocationPicker extends StatefulWidget {
 class _LocationPickerState extends State<LocationPicker> {
   late MapController _mapController;
   late LatLng? _currentPosition;
+  late RoomUiModel? _currentRoom;
   late bool _markerValid;
   late FollowOnLocationUpdate _followOnLocationUpdate;
   late StreamController<double?> _followCurrentLocationStreamController;
@@ -45,6 +47,7 @@ class _LocationPickerState extends State<LocationPicker> {
     _markerValid = false;
     _mapController = MapController();
     _currentPosition = null;
+    _currentRoom = null;
     _followOnLocationUpdate = FollowOnLocationUpdate.never;
     _followCurrentLocationStreamController = StreamController();
     if (widget.selectedPosition != null) {
@@ -73,8 +76,11 @@ class _LocationPickerState extends State<LocationPicker> {
     _followCurrentLocationStreamController.close();
   }
 
-  _navigateBack(BuildContext context, {LatLng? result}) {
-    context.pop(result);
+  _navigateBack(BuildContext context, {LatLng? position, RoomUiModel? room}) {
+    context.pop({
+      'position': position,
+      'room': room,
+    });
   }
 
   @override
@@ -249,7 +255,7 @@ class _LocationPickerState extends State<LocationPicker> {
       child: ElevatedButton(
         onPressed: disabled
             ? null
-            : () => _navigateBack(context, result: _currentPosition),
+            : () => _navigateBack(context, position: _currentPosition, room: _currentRoom),
         child: const Text(SWStrings.labelSave),
       ),
     );
@@ -257,6 +263,7 @@ class _LocationPickerState extends State<LocationPicker> {
 
   void _checkValidPoint(BuildContext context, LatLng position) {
     List<bool> insidePolygonTemp = [];
+    RoomUiModel? selectedRoom;
 
     for (var room in widget.floorPlan.rooms) {
       final polygon = room.polygon.points.map((e) => e.toMpLatLng()).toList();
@@ -266,6 +273,10 @@ class _LocationPickerState extends State<LocationPicker> {
         false,
       );
 
+      if (contains) {
+        selectedRoom = room;
+      }
+
       insidePolygonTemp.add(contains);
     }
 
@@ -273,7 +284,8 @@ class _LocationPickerState extends State<LocationPicker> {
 
     setState(() {
       _currentPosition = position;
-      _markerValid = insidePolygon;
+      _currentRoom = selectedRoom;
+      _markerValid = insidePolygon && selectedRoom != null;
     });
 
     if (!insidePolygon) {
