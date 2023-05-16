@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:school_watch_semeru/utils/string_extension.dart';
 
 import '../../domain/report.dart';
 import '../../../../common/constants/constant.dart';
@@ -88,7 +89,7 @@ class ReportCard extends StatelessWidget {
               ],
             ),
             Text(
-              report.school,
+              '${report.school} - ${report.room}',
               style: Theme.of(context)
                   .textTheme
                   .bodySmall
@@ -124,7 +125,7 @@ class ReportCard extends StatelessWidget {
   }
 
   _buildCategoryList(BuildContext context, Report report) {
-    final categories = [report.category.name, report.category.type];
+    final categories = [report.category.name, report.category.type.capitalize()];
 
     return SizedBox(
       height: SWSizes.s32,

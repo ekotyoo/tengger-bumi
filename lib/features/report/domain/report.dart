@@ -26,6 +26,7 @@ class Report with _$Report {
     required String description,
     required Author author,
     required String school,
+    required String room,
     required ReportPosition position,
     @Default(false) bool liked,
     @Default(false) bool disliked,
