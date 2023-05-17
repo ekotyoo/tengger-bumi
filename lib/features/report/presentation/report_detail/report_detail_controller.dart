@@ -67,91 +67,116 @@ class ReportDetailController extends _$ReportDetailController {
   }
 
   void toggleLike() async {
+    final repo = ref.read(reportRepositoryProvider);
     final report = state.requireValue.report;
     if (report == null) return;
 
-    final liked = report.liked;
-    final likesCount = report.likesCount;
-    _setLike(liked: !liked, count: liked ? likesCount - 1 : likesCount + 1);
+    final oldLiked = report.liked;
+    final oldLikesCount = report.likesCount;
+    final oldDislikesCount = report.dislikesCount;
 
-    final disliked = report.disliked;
-    final dislikesCount = report.dislikesCount;
-    if (disliked) {
-      _setDislike(
-        disliked: !disliked,
-        count: disliked ? dislikesCount - 1 : dislikesCount + 1,
+    if (oldLiked == true) {
+      // Remove like local
+      // Decrement likes count local
+      // Delete like on remote
+      _setLike(liked: null, likesCount: oldLikesCount - 1);
+      final result = await repo.removeLike(reportId: reportId);
+      result.fold(
+            (l) {
+          // Revert changes
+          // Show error message
+          _setLike(liked: oldLiked, likesCount: oldLikesCount);
+          setErrorMessage(l.message);
+        },
+            (r) => null,
+      );
+    } else {
+      // Add like local
+      // Increment likes count local
+      // Post like on remote
+      _setLike(
+        liked: true,
+        likesCount: oldLikesCount + 1,
+        dislikesCount: oldLiked == false ? oldDislikesCount - 1 : null,
+      );
+      final result = await repo.addLike(reportId: reportId);
+      result.fold(
+            (l) {
+          // Revert changes
+          // Show error message
+          _setLike(
+              liked: oldLiked,
+              likesCount: oldLikesCount,
+              dislikesCount: oldDislikesCount
+          );
+          setErrorMessage(l.message);
+        },
+            (r) => null,
       );
     }
-
-    final repo = ref.read(reportRepositoryProvider);
-    final result = !liked
-        ? await repo.addLike(reportId: reportId)
-        : await repo.removeDislike(reportId: reportId);
-
-    result.mapLeft((e) {
-      _setLike(liked: liked, count: likesCount);
-      _setDislike(disliked: disliked, count: dislikesCount);
-      setErrorMessage(e.message);
-    });
-  }
-
-  void _setLike({required bool liked, required int count}) {
-    final oldState = state.requireValue;
-    final oldReport = oldState.report;
-
-    state = AsyncValue.data(
-      oldState.copyWith(
-        report: oldReport?.copyWith(
-          liked: liked,
-          likesCount: count,
-        ),
-      ),
-    );
   }
 
   void toggleDislike() async {
+    final repo = ref.read(reportRepositoryProvider);
     final report = state.requireValue.report;
     if (report == null) return;
 
-    final disliked = report.disliked;
-    final dislikesCount = report.dislikesCount;
-    _setDislike(
-      disliked: !disliked,
-      count: disliked ? dislikesCount - 1 : dislikesCount + 1,
-    );
+    final oldLiked = report.liked;
+    final oldDislikesCount = report.dislikesCount;
+    final oldLikesCount = report.likesCount;
 
-    final liked = report.liked;
-    final likesCount = report.likesCount;
-    if (liked) {
+    if (oldLiked == false) {
+      // Remove dislike local
+      // Decrement dislikes count local
+      // Delete like on remote
+      _setLike(liked: null, dislikesCount: oldDislikesCount - 1);
+      final result = await repo.removeLike(reportId: reportId);
+      result.fold(
+            (l) {
+          // Revert changes
+          // Show error message
+          _setLike(liked: oldLiked, dislikesCount: oldDislikesCount);
+          setErrorMessage(l.message);
+        },
+            (r) => null,
+      );
+    } else {
+      // Add dislike local
+      // Increment dislikes count local
+      // Post like on remote
       _setLike(
-        liked: !liked,
-        count: liked ? likesCount - 1 : likesCount + 1,
+        liked: false,
+        likesCount: oldLiked == true ? oldLikesCount - 1 : null,
+        dislikesCount: oldDislikesCount + 1,
+      );
+      final result = await repo.addLike(reportId: reportId, isLike: false);
+      result.fold(
+            (l) {
+          // Revert changes
+          // Show error message
+          _setLike(
+            liked: oldLiked,
+            likesCount: oldDislikesCount,
+            dislikesCount: oldDislikesCount,
+          );
+          setErrorMessage(l.message);
+        },
+            (r) => null,
       );
     }
-
-    final repo = ref.read(reportRepositoryProvider);
-    final result = !disliked
-        ? await repo.addDislike(reportId: reportId)
-        : await repo.removeDislike(reportId: reportId);
-
-    result.mapLeft((e) {
-      _setDislike(disliked: disliked, count: dislikesCount);
-      _setLike(liked: liked, count: likesCount);
-      setErrorMessage(e.message);
-    });
   }
 
-  void _setDislike({required bool disliked, required int count}) async {
-    final oldState = state.requireValue;
-    final oldReport = oldState.report;
+  void _setLike({bool? liked, int? likesCount, int? dislikesCount}) {
+    final oldReport = state.requireValue.report;
+    if (oldReport == null) return;
 
-    state = AsyncValue.data(
-      oldState.copyWith(
-        report: oldReport?.copyWith(
-          disliked: disliked,
-          dislikesCount: count,
-        ),
-      ),
-    );
+    final newReport = oldReport.copyWith(
+        liked: liked,
+        likesCount: likesCount ?? oldReport.likesCount,
+        dislikesCount: dislikesCount ?? oldReport.dislikesCount);
+
+    final newState = state.requireValue.copyWith(report: newReport);
+
+    state = AsyncValue.data(newState);
   }
 }

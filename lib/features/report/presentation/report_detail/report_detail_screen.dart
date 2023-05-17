@@ -191,8 +191,9 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
           context,
           icon: Icons.thumb_up_rounded,
           count: report.likesCount,
-          color:
-              report.liked ? Theme.of(context).primaryColor : kColorNeutral200,
+          color: report.liked == true
+              ? Theme.of(context).primaryColor
+              : kColorNeutral200,
           onTap: () {
             ref
                 .read(reportDetailControllerProvider(widget.reportId).notifier)
@@ -204,7 +205,7 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
           context,
           icon: Icons.thumb_down_rounded,
           count: report.dislikesCount,
-          color: report.disliked
+          color: report.liked == false
               ? Theme.of(context).primaryColor
               : kColorNeutral200,
           onTap: () {

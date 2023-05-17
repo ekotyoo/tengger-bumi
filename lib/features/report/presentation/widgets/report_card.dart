@@ -178,14 +178,15 @@ class ReportCard extends StatelessWidget {
     VoidCallback? onLiked,
     VoidCallback? onDisliked,
   }) {
+
+
     return Row(
       children: [
         _buildInteractionButton(
           context,
           icon: Icons.thumb_up_rounded,
           count: report.likesCount,
-          color:
-              report.liked ? Theme.of(context).primaryColor : kColorNeutral200,
+          color: report.liked == true ? Theme.of(context).primaryColor : kColorNeutral200,
           onTap: onLiked,
         ),
         const SizedBox(width: SWSizes.s16),
@@ -193,9 +194,7 @@ class ReportCard extends StatelessWidget {
           context,
           icon: Icons.thumb_down_rounded,
           count: report.dislikesCount,
-          color: report.disliked
-              ? Theme.of(context).primaryColor
-              : kColorNeutral200,
+          color: report.liked == false ? Theme.of(context).primaryColor : kColorNeutral200,
           onTap: onDisliked,
         ),
         const SizedBox(width: SWSizes.s16),

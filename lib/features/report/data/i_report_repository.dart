@@ -43,20 +43,11 @@ abstract class IReportRepository {
 
   Future<Either<Failure, Unit>> addLike({
     required String reportId,
+    bool isLike = true,
     CancelToken? cancelToken,
   });
 
   Future<Either<Failure, Unit>> removeLike({
-    required String reportId,
-    CancelToken? cancelToken,
-  });
-
-  Future<Either<Failure, Unit>> addDislike({
-    required String reportId,
-    CancelToken? cancelToken,
-  });
-
-  Future<Either<Failure, Unit>> removeDislike({
     required String reportId,
     CancelToken? cancelToken,
   });

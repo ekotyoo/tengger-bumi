@@ -14,7 +14,6 @@ import '../domain/comment.dart';
 import '../domain/report_detail.dart';
 import '../../../common/services/http_client.dart';
 import '../domain/report_query.dart';
-import '../../../common/constants/constant.dart';
 import '../domain/report.dart';
 import 'i_report_repository.dart';
 
@@ -144,10 +143,14 @@ class FakeReportRepository implements IReportRepository {
 
   @override
   Future<Either<Failure, Unit>> addLike(
-      {required String reportId, CancelToken? cancelToken}) async {
+      {required String reportId,
+      bool isLike = true,
+      CancelToken? cancelToken}) async {
     try {
-      await Future.delayed(kDurationLong);
-      return right(unit);
+      final response = await _client
+          .post('/report/$reportId/like', data: {'is_like': isLike});
+      if (response['status'] == 'success') return right(unit);
+      return left(const Failure('Terjadi kesalahan, coba lagi nanti'));
     } catch (e) {
       final exception = NetworkExceptions.getDioException(e);
       return left(Failure(exception.getErrorMessage()));
@@ -158,32 +161,9 @@ class FakeReportRepository implements IReportRepository {
   Future<Either<Failure, Unit>> removeLike(
       {required String reportId, CancelToken? cancelToken}) async {
     try {
-      await Future.delayed(kDurationLong);
-      return right(unit);
-    } catch (e) {
-      final exception = NetworkExceptions.getDioException(e);
-      return left(Failure(exception.getErrorMessage()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, Unit>> removeDislike(
-      {required String reportId, CancelToken? cancelToken}) async {
-    try {
-      await Future.delayed(kDurationLong);
-      return right(unit);
-    } catch (e) {
-      final exception = NetworkExceptions.getDioException(e);
-      return left(Failure(exception.getErrorMessage()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, Unit>> addDislike(
-      {required String reportId, CancelToken? cancelToken}) async {
-    try {
-      await Future.delayed(kDurationLong);
-      return right(unit);
+      final response = await _client.delete('/report/$reportId/like');
+      if (response['status'] == 'success') return right(unit);
+      return left(const Failure('Terjadi kesalahan, coba lagi nanti'));
     } catch (e) {
       final exception = NetworkExceptions.getDioException(e);
       return left(Failure(exception.getErrorMessage()));
