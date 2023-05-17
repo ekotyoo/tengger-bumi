@@ -15,5 +15,5 @@ class Comment with _$Comment {
     @JsonKey(name: 'created_at') @TimestampSerializer() required DateTime createdAt,
   }) = _Comment;
 
-  factory Comment.fromJson(Map<String, Object> json) => _$CommentFromJson(json);
+  factory Comment.fromJson(Map<String, Object?> json) => _$CommentFromJson(json);
 }

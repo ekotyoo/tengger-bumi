@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:school_watch_semeru/features/report/domain/additional_info.dart';
 
 import '../../../school/presentation/models/room_ui_model.dart';
 import '../../../school/data/i_school_repository.dart';
@@ -224,6 +225,12 @@ class PostReportController extends StateNotifier<PostReportState> {
       latitude: position.latitude,
       longitude: position.longitude,
       roomId: state.selectedRoom!.id!,
+      additionalInfos: state.additionalInfoInputs
+          .map((e) => AdditionalInfo(
+                label: e.labelInput.value,
+                information: e.informationInput.value,
+              ))
+          .toList(),
     );
     final images = state.imageInput.value.map((e) => File(e.path)).toList();
     final result = await _reportRepository.postReport(report, images);

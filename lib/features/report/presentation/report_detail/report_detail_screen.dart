@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:school_watch_semeru/utils/string_extension.dart';
 
 import '../../../../utils/snackbar_utils.dart';
+import '../../domain/additional_info.dart';
 import '../../domain/report_detail.dart';
 import '../../../../common/widgets/category_chip.dart';
 import '../../../../common/constants/constant.dart';
@@ -67,8 +69,11 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
       (previous, next) async {
         final successMessage = await next;
         if (successMessage != null && context.mounted) {
-          showSnackbar(context,
-              message: successMessage, type: SnackbarType.success);
+          showSnackbar(
+            context,
+            message: successMessage,
+            type: SnackbarType.success,
+          );
         }
         await Future.delayed(kDurationLong);
         ref
@@ -88,54 +93,67 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
             child: CircularProgressIndicator(),
           ),
           error: (error, stackTrace) => Text('$error'),
-          data: (state) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: SWSizes.s16),
-            child: Column(
-              children: [
-                Expanded(
-                  child: ListView(
-                    shrinkWrap: true,
-                    children: [
-                      const SizedBox(height: SWSizes.s16),
-                      _buildImage(context, state.report.images),
-                      const SizedBox(height: SWSizes.s16),
-                      _buildAuthorSection(context,
-                          author: state.report.author,
-                          createdAt: state.report.createdAt,
-                          isActive: state.report.isActive),
-                      const SizedBox(height: SWSizes.s8),
-                      _buildCaption(context, state.report.description),
-                      const SizedBox(height: SWSizes.s8),
-                      _buildInteractionBar(context, state.report),
-                      const SizedBox(height: SWSizes.s16),
-                      _buildInfoSection(context, state.report),
-                      const SizedBox(height: SWSizes.s8),
-                      const Divider(),
-                      const SizedBox(height: SWSizes.s8),
-                      _buildAdditionalInfoTile(context),
-                      const SizedBox(height: SWSizes.s8),
-                      const Divider(),
-                      const SizedBox(height: SWSizes.s8),
-                      _buildCommentList(state.report.comments),
-                    ],
+          data: (state) {
+            final report = state.report;
+
+            if (report == null) {
+              return const Center(child: Text('Data laporan tidak temukan'));
+            }
+
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: SWSizes.s16),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: [
+                        const SizedBox(height: SWSizes.s16),
+                        _buildImage(context, report.images),
+                        const SizedBox(height: SWSizes.s16),
+                        _buildAuthorSection(context,
+                            author: report.author,
+                            createdAt: report.createdAt,
+                            isActive: report.isActive),
+                        const SizedBox(height: SWSizes.s8),
+                        _buildCaption(context, report.description),
+                        const SizedBox(height: SWSizes.s8),
+                        _buildInteractionBar(context, report),
+                        const SizedBox(height: SWSizes.s16),
+                        _buildInfoSection(context, report),
+                        const SizedBox(height: SWSizes.s8),
+                        if (report.additionalInfos?.isNotEmpty ?? false) ...[
+                          const Divider(),
+                          const SizedBox(height: SWSizes.s8),
+                          _buildAdditionalInfoTile(
+                            context,
+                            report.additionalInfos ?? [],
+                          ),
+                          const SizedBox(height: SWSizes.s8),
+                        ],
+                        const Divider(),
+                        const SizedBox(height: SWSizes.s8),
+                        _buildCommentList(report.comments),
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: SWSizes.s16),
-                  child: CommentInput(
-                    isLoading: state.commentLoading,
-                    onSubmit: (value) {
-                      ref
-                          .read(reportDetailControllerProvider(
-                            widget.reportId,
-                          ).notifier)
-                          .addComment(value);
-                    },
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: SWSizes.s16),
+                    child: CommentInput(
+                      isLoading: state.commentLoading,
+                      onSubmit: (value) {
+                        ref
+                            .read(reportDetailControllerProvider(
+                              widget.reportId,
+                            ).notifier)
+                            .addComment(value);
+                      },
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );
@@ -173,7 +191,8 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
           context,
           icon: Icons.thumb_up_rounded,
           count: report.likesCount,
-          color: report.liked ? Theme.of(context).primaryColor : kColorNeutral200,
+          color:
+              report.liked ? Theme.of(context).primaryColor : kColorNeutral200,
           onTap: () {
             ref
                 .read(reportDetailControllerProvider(widget.reportId).notifier)
@@ -185,7 +204,9 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
           context,
           icon: Icons.thumb_down_rounded,
           count: report.dislikesCount,
-          color: report.disliked ? Theme.of(context).primaryColor : kColorNeutral200,
+          color: report.disliked
+              ? Theme.of(context).primaryColor
+              : kColorNeutral200,
           onTap: () {
             ref
                 .read(reportDetailControllerProvider(widget.reportId).notifier)
@@ -259,8 +280,8 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
     ];
 
     final infos = {
-      'Jenis Laporan': report.reportType,
-      'Kategori': report.reportCategory,
+      'Jenis Laporan': report.category.type.capitalize(),
+      'Kategori': report.category.name.capitalize(),
       'Sekolah': report.school,
       'Lokasi': report.room,
     };
@@ -319,7 +340,7 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
     );
   }
 
-  _buildAdditionalInfoTile(BuildContext context) {
+  _buildAdditionalInfoTile(BuildContext context, List<AdditionalInfo> infos) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -331,11 +352,22 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
               ?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: SWSizes.s16),
-        _buildInfoTile(
-          context,
-          label: 'label',
-          value: 'value',
-          icon: Icons.info_outline_rounded,
+        AlignedGridView.count(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: 2,
+          itemCount: infos.length,
+          mainAxisSpacing: SWSizes.s16,
+          crossAxisSpacing: SWSizes.s16,
+          itemBuilder: (context, index) {
+            final info = infos[index];
+            return _buildInfoTile(
+              context,
+              label: info.label,
+              value: info.information,
+              icon: Icons.info_outline_rounded,
+            );
+          },
         ),
       ],
     );

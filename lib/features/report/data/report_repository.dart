@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -12,7 +13,6 @@ import '../domain/category.dart';
 import '../domain/comment.dart';
 import '../domain/report_detail.dart';
 import '../../../common/services/http_client.dart';
-import '../domain/author.dart';
 import '../domain/report_query.dart';
 import '../../../common/constants/constant.dart';
 import '../domain/report.dart';
@@ -53,7 +53,8 @@ class FakeReportRepository implements IReportRepository {
         (e) {
           final r = Report.fromJson(e);
           final report = r.copyWith(
-            images: r.images.map((e) => e.replaceAll('public', kBaseUrl)).toList(),
+            images:
+                r.images.map((e) => e.replaceAll('public', kBaseUrl)).toList(),
             author: r.author.copyWith(
               avatar: r.author.avatar.replaceAll('public', kBaseUrl),
             ),
@@ -71,46 +72,25 @@ class FakeReportRepository implements IReportRepository {
   }
 
   @override
-  Future<ReportDetail> getReport(
-      {required String reportId, CancelToken? cancelToken}) async {
-    await Future.delayed(kDurationLong);
-
-    return ReportDetail(
-      id: '1',
-      reportType: 'Type',
-      reportCategory: 'Category',
-      description: SWStrings.dummyLongText,
-      author: const Author(
-        id: '1',
-        name: 'John Doe',
-        avatar: 'https://picsum.photos/100/100',
-      ),
-      school: 'SDN 2 Sidomulyo',
-      room: 'Kelas 1',
-      createdAt: DateTime.now(),
-      likesCount: 10,
-      dislikesCount: 10,
-      commentsCount: 10,
-      isActive: true,
-      images: [
-        'https://picsum.photos/100/100',
-        'https://picsum.photos/100/100',
-        'https://picsum.photos/100/100',
-      ],
-      additionalInfo: {'Tanggal Kadaluwarsa': '12 Januari 2023'},
-      comments: List.generate(
-        5,
-        (index) => Comment(
-          author: Author(
-            id: '$index',
-            name: 'John Doe - $index',
-            avatar: 'https://picsum.photos/100/100',
-          ),
-          comment: SWStrings.dummyText,
-          createdAt: DateTime.now(),
+  Future<Either<Failure, ReportDetail>> getReport({
+    required String reportId,
+    CancelToken? cancelToken,
+  }) async {
+    try {
+      final response = await _client.get('/report/$reportId');
+      final result = ReportDetail.fromJson(response['data']);
+      final report = result.copyWith(
+        images:
+            result.images.map((e) => e.replaceAll('public', kBaseUrl)).toList(),
+        author: result.author.copyWith(
+          avatar: result.author.avatar.replaceAll('public', kBaseUrl),
         ),
-      ),
-    );
+      );
+      return right(report);
+    } catch (e) {
+      final exception = NetworkExceptions.getDioException(e);
+      return left(Failure(exception.getErrorMessage()));
+    }
   }
 
   @override
@@ -119,14 +99,43 @@ class FakeReportRepository implements IReportRepository {
       required String comment,
       CancelToken? cancelToken}) async {
     try {
-      await Future.delayed(kDurationLong);
-      final newComment = Comment(
-        comment: comment,
-        author: const Author(
-            avatar: 'https://picsum.photos/100/100', name: 'John Doe', id: '1'),
-        createdAt: DateTime.now(),
+      final response = await _client.post('/comment', data: {
+        'comment': comment,
+        'report_id': reportId,
+      });
+      final result = Comment.fromJson(response['data']);
+      final newComment = result.copyWith(
+        author: result.author.copyWith(
+          avatar: result.author.avatar.replaceAll('public', kBaseUrl),
+        ),
       );
       return right(newComment);
+    } catch (e, stackTrace) {
+      debugPrintStack(stackTrace: stackTrace);
+      final exception = NetworkExceptions.getDioException(e);
+      return left(Failure(exception.getErrorMessage()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Comment>>> getComments({
+    required String reportId,
+    CancelToken? cancelToken,
+  }) async {
+    try {
+      final response = await _client.get('/comment', data: {
+        'report_id': reportId,
+      });
+      final result = (response['data'] as List<dynamic>).map((e) {
+        final c = Comment.fromJson(e);
+        final comment = c.copyWith(
+          author: c.author.copyWith(
+            avatar: c.author.avatar.replaceAll('public', kBaseUrl),
+          ),
+        );
+        return comment;
+      }).toList();
+      return right(result);
     } catch (e) {
       final exception = NetworkExceptions.getDioException(e);
       return left(Failure(exception.getErrorMessage()));
@@ -183,7 +192,9 @@ class FakeReportRepository implements IReportRepository {
 
   @override
   Future<Either<Failure, Unit>> postReport(
-      ReportRequest report, List<File> images) async {
+    ReportRequest report,
+    List<File> images,
+  ) async {
     try {
       final reportMap = report.toJson();
       final formData = FormData.fromMap(reportMap);
@@ -195,14 +206,17 @@ class FakeReportRepository implements IReportRepository {
         final fileName = path.split('/').last;
         final extension = fileName.split('.').last;
 
-        multipartFiles.add(MapEntry(
+        multipartFiles.add(
+          MapEntry(
             'images',
             await MultipartFile.fromFile(
               path,
               filename: fileName,
               contentType:
                   MediaType('image', extension == 'jpg' ? 'jpeg' : extension),
-            )));
+            ),
+          ),
+        );
       }
       formData.files.addAll(multipartFiles);
 

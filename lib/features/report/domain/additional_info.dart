@@ -1,11 +1,15 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class AdditionalInfo extends Equatable {
-  const AdditionalInfo({required this.label, required this.information});
+part 'additional_info.freezed.dart';
 
-  final String label;
-  final String information;
+part 'additional_info.g.dart';
 
-  @override
-  List<Object> get props => [label, information];
+@freezed
+class AdditionalInfo with _$AdditionalInfo {
+  const factory AdditionalInfo({
+    required String label,
+    required String information,
+  }) = _AdditionalInfo;
+
+  factory AdditionalInfo.fromJson(Map<String, Object?> json) => _$AdditionalInfoFromJson(json);
 }

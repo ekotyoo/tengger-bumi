@@ -1,4 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:school_watch_semeru/features/report/domain/comment.dart';
 
 import '../../data/report_repository.dart';
 import 'report_detail_state.dart';
@@ -9,10 +10,19 @@ part 'report_detail_controller.g.dart';
 class ReportDetailController extends _$ReportDetailController {
   @override
   FutureOr<ReportDetailState> build(String reportId) async {
-    final report = await ref.read(reportRepositoryProvider).getReport(
-          reportId: reportId,
-        );
-    return ReportDetailState(report: report);
+    final repo = ref.read(reportRepositoryProvider);
+    final commentResult = await repo.getComments(reportId: reportId);
+    final comments = commentResult.fold(
+      (l) => <Comment>[],
+      (r) => r,
+    );
+
+    final result = await repo.getReport(reportId: reportId);
+
+    return result.fold(
+      (l) => const ReportDetailState(),
+      (r) => ReportDetailState(report: r.copyWith(comments: comments)),
+    );
   }
 
   void setSuccessMessage(String? message) {
@@ -35,10 +45,15 @@ class ReportDetailController extends _$ReportDetailController {
         );
 
     result.fold(
-      (l) => setErrorMessage(l.message),
+      (l) {
+        setErrorMessage(l.message);
+        state = AsyncValue.data(oldState.copyWith(commentLoading: false));
+      },
       (newComment) {
-        final newComments = [newComment, ...oldState.report.comments];
         final oldReport = oldState.report;
+        if (oldReport == null) return;
+
+        final newComments = [newComment, ...oldReport.comments];
         final newReport = oldReport.copyWith(comments: newComments);
         final newState = AsyncValue.data(oldState.copyWith(
           commentLoading: false,
@@ -53,6 +68,7 @@ class ReportDetailController extends _$ReportDetailController {
 
   void toggleLike() async {
     final report = state.requireValue.report;
+    if (report == null) return;
 
     final liked = report.liked;
     final likesCount = report.likesCount;
@@ -85,7 +101,7 @@ class ReportDetailController extends _$ReportDetailController {
 
     state = AsyncValue.data(
       oldState.copyWith(
-        report: oldReport.copyWith(
+        report: oldReport?.copyWith(
           liked: liked,
           likesCount: count,
         ),
@@ -95,6 +111,7 @@ class ReportDetailController extends _$ReportDetailController {
 
   void toggleDislike() async {
     final report = state.requireValue.report;
+    if (report == null) return;
 
     final disliked = report.disliked;
     final dislikesCount = report.dislikesCount;
@@ -130,7 +147,7 @@ class ReportDetailController extends _$ReportDetailController {
 
     state = AsyncValue.data(
       oldState.copyWith(
-        report: oldReport.copyWith(
+        report: oldReport?.copyWith(
           disliked: disliked,
           dislikesCount: count,
         ),

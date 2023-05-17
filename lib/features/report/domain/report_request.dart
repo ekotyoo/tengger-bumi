@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'additional_info.dart';
+
 part 'report_request.freezed.dart';
 
 part 'report_request.g.dart';
@@ -14,6 +16,7 @@ class ReportRequest with _$ReportRequest {
     required double latitude,
     required double longitude,
     @JsonKey(name: 'is_active') bool? isActive,
+    @JsonKey(name: 'additional_infos') List<AdditionalInfo>? additionalInfos,
   }) = _ReportRequest;
 
   factory ReportRequest.fromJson(Map<String, Object?> json) => _$ReportRequestFromJson(json);

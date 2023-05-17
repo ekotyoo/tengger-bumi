@@ -17,7 +17,7 @@ abstract class IReportRepository {
     CancelToken? cancelToken,
   });
 
-  Future<ReportDetail> getReport({
+  Future<Either<Failure, ReportDetail>> getReport({
     required String reportId,
     CancelToken? cancelToken,
   });
@@ -33,6 +33,11 @@ abstract class IReportRepository {
   Future<Either<Failure, Comment>> addComment({
     required String reportId,
     required String comment,
+    CancelToken? cancelToken,
+  });
+
+  Future<Either<Failure, List<Comment>>> getComments({
+    required String reportId,
     CancelToken? cancelToken,
   });
 
