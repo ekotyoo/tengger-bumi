@@ -144,25 +144,40 @@ class ReportFilterHeader extends ConsumerWidget {
       child: Row(
         children: [
           Expanded(
-            child: ListView.separated(
-              itemCount: _reportTypes.length,
+            child: ListView(
               padding: const EdgeInsets.symmetric(
                 horizontal: SWSizes.s16,
               ),
               scrollDirection: Axis.horizontal,
-              separatorBuilder: (context, index) =>
-                  const SizedBox(width: SWSizes.s8),
-              itemBuilder: (context, index) => SelectChip(
-                label: _reportTypes[index].name,
-                selected: reportQuery.reportType == _reportTypes[index],
-                onTap: () {
-                  ref
-                      .read(reportFilterStateProvider.notifier)
-                      .updateFilterState(
-                        reportQuery.copyWith(reportType: _reportTypes[index]),
-                      );
-                },
-              ),
+              children: [
+                SelectChip(
+                  label: 'Semua',
+                  selected: reportQuery.reportType == null,
+                  onTap: () {
+                    ref
+                        .read(reportFilterStateProvider.notifier)
+                        .updateFilterState(
+                      reportQuery.copyWith(reportType: null),
+                    );
+                  },
+                ),
+                ..._reportTypes
+                    .map((type) => Padding(
+                      padding: const EdgeInsets.only(left: SWSizes.s8),
+                      child: SelectChip(
+                            label: type.name,
+                            selected: reportQuery.reportType == type,
+                            onTap: () {
+                              ref
+                                  .read(reportFilterStateProvider.notifier)
+                                  .updateFilterState(
+                                    reportQuery.copyWith(reportType: type),
+                                  );
+                            },
+                          ),
+                    ))
+                    .toList(),
+              ],
             ),
           ),
           InkWell(

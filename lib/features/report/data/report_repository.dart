@@ -42,7 +42,7 @@ class FakeReportRepository implements IReportRepository {
         '/report',
         queryParameters: {'page': query.page, 'take': query.take},
         data: {
-          'type': query.reportType.name.toLowerCase(),
+          'type': query.reportType?.name.toLowerCase(),
           'is_active': query.isActive,
           'school_id': query.schoolId,
         },

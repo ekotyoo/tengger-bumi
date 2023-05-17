@@ -237,7 +237,7 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
 
   @override
   void initState() {
-    reportTypes = ReportType.values.filter((t) => t != ReportType.all).toList();
+    reportTypes = ReportType.values;
     _reports = widget.reports
         .filter((t) => t.category.type == reportTypes[_selectedTab].name.toLowerCase())
         .toList();
