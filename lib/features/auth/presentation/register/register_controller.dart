@@ -1,5 +1,4 @@
 import 'package:formz/formz.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:school_watch_semeru/features/auth/data/auth_repository.dart';
 
@@ -13,7 +12,7 @@ part 'register_controller.g.dart';
 @riverpod
 class RegisterController extends _$RegisterController {
   @override
-  RegisterState build() => RegisterState(successOrFailure: none());
+  RegisterState build() => const RegisterState();
 
   void onNameChange(String value) {
     final name = NameTextInput.dirty(value: value);
@@ -51,6 +50,12 @@ class RegisterController extends _$RegisterController {
     );
   }
 
+  void setSuccessMessage(String? message) =>
+      state = state.copyWith(successMessage: message);
+
+  void setErrorMessage(String? message) =>
+      state = state.copyWith(errorMessage: message);
+
   void onSubmit() async {
     state = state.copyWith(isSubmitting: true);
 
@@ -62,9 +67,11 @@ class RegisterController extends _$RegisterController {
       password: state.passwordTextInput.value,
     );
 
-    state = state.copyWith(
-      successOrFailure: optionOf(result),
-      isSubmitting: false,
+    result.fold(
+      (l) => setErrorMessage(l.message),
+      (r) => setSuccessMessage('Register berhasil, silahkan cek email untuk memverifikasi akun'),
     );
+
+    state = state.copyWith(isSubmitting: false);
   }
 }

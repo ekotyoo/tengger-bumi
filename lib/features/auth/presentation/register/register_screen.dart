@@ -17,22 +17,31 @@ class RegisterScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(registerControllerProvider, (previous, next) {
-      next.successOrFailure.fold(
-        () {},
-        (either) => either.fold(
-          (l) => showSnackbar(context,
-              message: l.message, type: SnackbarType.error),
-          (r) {
-            showSnackbar(context, message: SWStrings.messageRegisterSuccess);
-            context.goNamed(
-              Routes.emailVerification,
-              extra: next.emailTextInput.value,
-            );
-          },
-        ),
-      );
-    });
+    ref.listen(
+      registerControllerProvider.select((value) => value.errorMessage),
+          (previous, next) {
+        if (next != null && context.mounted) {
+          showSnackbar(context, message: next, type: SnackbarType.error);
+        }
+        ref.read(registerControllerProvider.notifier).setErrorMessage(null);
+      },
+    );
+
+    ref.listen(
+      registerControllerProvider.select((value) => value.successMessage),
+          (previous, next) {
+        if (next != null && context.mounted) {
+          showSnackbar(context, message: next);
+          final email = ref.read(registerControllerProvider).emailTextInput.value;
+
+          context.goNamed(
+            Routes.emailVerification,
+            extra: email,
+          );
+        }
+        ref.read(registerControllerProvider.notifier).setSuccessMessage(null);
+      },
+    );
 
     return SafeArea(
       child: Scaffold(
