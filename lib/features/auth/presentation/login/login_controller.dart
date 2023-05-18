@@ -1,6 +1,6 @@
 import 'package:formz/formz.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:school_watch_semeru/features/auth/auth_controller.dart';
 
 import '../../data/auth_repository.dart';
 import '../models/email_text_input.dart';
@@ -12,9 +12,7 @@ part 'login_controller.g.dart';
 @riverpod
 class LoginController extends _$LoginController {
   @override
-  LoginState build() => LoginState(
-    successOrFailure: none(),
-  );
+  LoginState build() => const LoginState();
 
   void onEmailChange(value) {
     final email = EmailTextInput.dirty(value: value);
@@ -32,6 +30,14 @@ class LoginController extends _$LoginController {
     );
   }
 
+  void setSuccessMessage(String? message) =>
+      state = state.copyWith(successMessage: message);
+
+  void setErrorMessage(String? message) =>
+      state = state.copyWith(errorMessage: message);
+
+  void setShouldVerifyEmail(bool value) => state = state.copyWith(shouldVerifyEmail: value);
+
   Future<void> onSubmit() async {
     state = state.copyWith(isSubmitting: true);
     final repository = ref.read(authRepositoryProvider);
@@ -41,6 +47,19 @@ class LoginController extends _$LoginController {
       password: state.passwordTextInput.value,
     );
 
-    state = state.copyWith(successOrFailure: optionOf(result), isSubmitting: false);
+    result.fold(
+      (l) {
+        if (l.cause is UserUnverifiedException) {
+          setShouldVerifyEmail(true);
+        }
+        setErrorMessage(l.message);
+      },
+      (r) {
+        ref.read(authControllerProvider.notifier).setAuthUser(r);
+        setSuccessMessage('Login berhasil');
+      },
+    );
+
+    state = state.copyWith(isSubmitting: false);
   }
 }

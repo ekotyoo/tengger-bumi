@@ -1,47 +1,18 @@
-import 'package:equatable/equatable.dart';
-import 'package:fpdart/fpdart.dart';
-import '../../../../common/error/failure.dart';
-import '../../domain/auth_user.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import '../models/email_text_input.dart';
 import '../models/password_login_text_input.dart';
 
-class LoginState extends Equatable {
-  const LoginState({
-    this.emailTextInput = const EmailTextInput.pure(),
-    this.passwordTextInput = const PasswordLoginTextInput.pure(),
-    this.validated = false,
-    this.isSubmitting = false,
-    required this.successOrFailure,
-  });
+part 'login_state.freezed.dart';
 
-  final EmailTextInput emailTextInput;
-  final PasswordLoginTextInput passwordTextInput;
-  final bool validated;
-  final bool isSubmitting;
-  final Option<Either<Failure, AuthUser>> successOrFailure;
-
-  LoginState copyWith({
-    EmailTextInput? emailTextInput,
-    PasswordLoginTextInput? passwordTextInput,
-    bool? validated,
-    bool? isSubmitting,
-    Option<Either<Failure, AuthUser>>? successOrFailure,
-  }) {
-    return LoginState(
-      emailTextInput: emailTextInput ?? this.emailTextInput,
-      passwordTextInput: passwordTextInput ?? this.passwordTextInput,
-      validated: validated ?? this.validated,
-      isSubmitting: isSubmitting ?? this.isSubmitting,
-      successOrFailure: successOrFailure ?? this.successOrFailure,
-    );
-  }
-
-  @override
-  List<Object?> get props => [
-        emailTextInput,
-        passwordTextInput,
-        validated,
-        isSubmitting,
-        successOrFailure,
-      ];
+@freezed
+class LoginState with _$LoginState {
+  const factory LoginState({
+    @Default(EmailTextInput.pure()) emailTextInput,
+    @Default(PasswordLoginTextInput.pure()) passwordTextInput,
+    @Default(false) validated,
+    @Default(false) isSubmitting,
+    @Default(false) bool shouldVerifyEmail,
+    String? successMessage,
+    String? errorMessage,
+  }) = _LoginState;
 }

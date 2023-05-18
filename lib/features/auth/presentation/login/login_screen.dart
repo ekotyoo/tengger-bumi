@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:school_watch_semeru/features/auth/auth_controller.dart';
+import 'package:school_watch_semeru/features/auth/presentation/models/email_text_input.dart';
 
 import '../../../../common/widgets/sw_button.dart';
 import '../../../../utils/snackbar_utils.dart';
@@ -17,23 +17,38 @@ class LoginScreen extends ConsumerWidget {
   void _navigateToRegister(BuildContext context) =>
       context.goNamed(Routes.register);
 
-  void _navigateToHome(BuildContext context) => context.goNamed(Routes.home);
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(loginControllerProvider, (previous, next) {
-      next.successOrFailure.fold(
-        () => () {},
-        (either) => either.fold(
-          (l) => showSnackbar(context,
-              message: l.message, type: SnackbarType.error),
-          (r) {
-            ref.read(authControllerProvider.notifier).setAuthUser(r);
-            showSnackbar(context, message: SWStrings.messageLoginSuccess);
-          },
-        ),
-      );
-    });
+    ref.listen(
+      loginControllerProvider.select((value) => value.shouldVerifyEmail),
+      (previous, shouldVerifyEmail) {
+        if (shouldVerifyEmail) {
+          final email = (ref.read(loginControllerProvider).emailTextInput as EmailTextInput).value;
+          context.pushNamed(Routes.emailVerification, extra: email);
+          ref.read(loginControllerProvider.notifier).setShouldVerifyEmail(false);
+        }
+      },
+    );
+
+    ref.listen(
+      loginControllerProvider.select((value) => value.errorMessage),
+      (previous, next) {
+        if (next != null && context.mounted) {
+          showSnackbar(context, message: next, type: SnackbarType.error);
+        }
+        ref.read(loginControllerProvider.notifier).setErrorMessage(null);
+      },
+    );
+
+    ref.listen(
+      loginControllerProvider.select((value) => value.successMessage),
+      (previous, next) {
+        if (next != null && context.mounted) {
+          showSnackbar(context, message: next);
+        }
+        ref.read(loginControllerProvider.notifier).setSuccessMessage(null);
+      },
+    );
 
     return SafeArea(
       child: Scaffold(

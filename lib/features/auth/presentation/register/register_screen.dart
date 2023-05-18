@@ -49,11 +49,6 @@ class RegisterScreen extends ConsumerWidget {
               ..._buildHeader(context),
               const SizedBox(height: SWSizes.s32),
               ..._buildRegisterInputs(context, ref),
-              const SizedBox(height: SWSizes.s8),
-              TextButton(
-                onPressed: () => context.pushNamed(Routes.emailVerification),
-                child: const Text(SWStrings.labelEmailVerification),
-              ),
               const Spacer(),
               ..._buildRegisterActions(context, ref),
               const SizedBox(height: SWSizes.s32),

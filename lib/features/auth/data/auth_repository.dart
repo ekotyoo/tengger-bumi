@@ -15,6 +15,8 @@ part 'auth_repository.g.dart';
 final authStateProvider =
     StateProvider<AuthUser>((ref) => const AuthUser.signedOut());
 
+class UserUnverifiedException implements Exception {}
+
 @riverpod
 IAuthRepository authRepository(AuthRepositoryRef ref) {
   final client = ref.watch(httpClientProvider);
@@ -38,6 +40,16 @@ class AuthRepository implements IAuthRepository {
         'password': password,
       });
       final response = AuthUserWrapper.fromJson(result['data']);
+
+      if (!response.isActive) {
+        return left(
+          Failure(
+            'Email belum terverifikasi, silahkan verifikasi email terlebih dahulu',
+            cause: UserUnverifiedException(),
+          ),
+        );
+      }
+
       final user = AuthUser.signedIn(
         id: response.id,
         name: response.name,
@@ -88,7 +100,7 @@ class AuthRepository implements IAuthRepository {
       ref.read(authStateProvider.notifier).state = const AuthUser.signedOut();
       final prefs = await SharedPreferences.getInstance();
       prefs.remove(kAccessToken);
-      
+
       return right(unit);
     } catch (e) {
       final exception = NetworkExceptions.getDioException(e);
@@ -122,12 +134,11 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> verifyEmail({required String email, required String otp}) async {
+  Future<Either<Failure, Unit>> verifyEmail(
+      {required String email, required String otp}) async {
     try {
-      final response = await _client.post('/auth/verify', data: {
-        'email': email,
-        'otp': otp
-      });
+      final response = await _client
+          .post('/auth/verify', data: {'email': email, 'otp': otp});
 
       if (response['status'] == 'success') {
         return right(unit);

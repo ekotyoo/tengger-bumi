@@ -12,7 +12,8 @@ class AuthUserWrapper with _$AuthUserWrapper {
     required String email,
     @JsonKey(name: 'access_token') String? accessToken,
     String? avatar,
-    @Default(false) bool isAdmin,
+    @JsonKey(name: 'is_admin', defaultValue: false) required bool isAdmin,
+    @JsonKey(name: 'is_active', defaultValue: false) required bool isActive
   }) = _AuthUserWrapper;
 
   factory AuthUserWrapper.fromJson(Map<String, dynamic> json) => _$AuthUserWrapperFromJson(json);
