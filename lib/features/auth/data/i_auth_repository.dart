@@ -17,7 +17,10 @@ abstract class IAuthRepository {
     required String password,
   });
 
-  Future<Either<Failure, AuthUser>> getAuthUser();
+  Future<Either<Failure, Unit>> verifyEmail({
+    required String email,
+    required String otp,
+  });
 
   Future<Either<Failure, Unit>> logout();
 }

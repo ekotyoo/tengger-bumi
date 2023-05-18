@@ -1,8 +1,11 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:polylabel/polylabel.dart';
+import 'package:school_watch_semeru/common/models/position.dart';
 import 'package:school_watch_semeru/features/school/domain/school_request.dart';
 
 import '../../data/school_repository.dart';
@@ -56,10 +59,12 @@ class AddSchoolController extends StateNotifier<AddSchoolState> {
 
     state = state.copyWith(finalFormSubmitting: true);
 
+    final schoolCentroid = _getSchoolCentroid(state.floorPlan!);
     final school = SchoolRequest(
-      schoolName: state.schoolNameInput.value,
-      schoolAddress: state.schoolAddressInput.value,
+      name: state.schoolNameInput.value,
+      address: state.schoolAddressInput.value,
       floorPlan: state.floorPlan!.toDomain(),
+      centroid: schoolCentroid,
     );
 
     final image = state.coverImage != null ? File(state.coverImage!.path) : null;
@@ -71,6 +76,17 @@ class AddSchoolController extends StateNotifier<AddSchoolState> {
       (l) => setErrorMessage(l.message),
       (r) => setSuccessMessage('Berhasil menambahkan sekolah'),
     );
+  }
+
+  Position _getSchoolCentroid(FloorPlanUiModel floorPlan) {
+    final points = floorPlan.rooms
+        .map((e) => e.polygon.points
+        .map((p) => Point(p.latitude, p.longitude))
+        .toList())
+        .toList();
+
+    final result = polylabel(points).point;
+    return Position(latitude: result.x.toDouble(), longitude: result.y.toDouble());
   }
 
   void _validateForm() {

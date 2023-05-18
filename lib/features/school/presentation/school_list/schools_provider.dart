@@ -49,3 +49,33 @@ Future<List<School>> getSchools(GetSchoolsRef ref) async {
     (r) => r,
   );
 }
+
+@riverpod
+Future<List<School>> getSchoolsMap(GetSchoolsRef ref) async {
+  final schoolRepo = ref.watch(schoolRepositoryProvider);
+
+  final cancelToken = CancelToken();
+
+  final link = ref.keepAlive();
+  Timer? timer;
+
+  ref.onDispose(() {
+    cancelToken.cancel();
+    timer?.cancel();
+  });
+
+  ref.onCancel(() {
+    timer = Timer(const Duration(seconds: 30), () {
+      link.close();
+    });
+  });
+
+  await Future.delayed(kDurationLong);
+  if (cancelToken.isCancelled) throw Exception();
+
+  final result = await schoolRepo.getSchools(cancelToken: cancelToken);
+  return result.fold(
+        (l) => const [],
+        (r) => r,
+  );
+}

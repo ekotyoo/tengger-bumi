@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:school_watch_semeru/common/models/position.dart';
 
 import 'school_analysis.dart';
 
@@ -12,6 +13,7 @@ class School with _$School {
     required String id,
     required String name,
     required SchoolAnalysis analysis,
+    required Position centroid,
     String? cover,
   }) = _School;
 

@@ -10,6 +10,7 @@ class Routes {
   static const register = 'register';
   static const profile = 'profile';
   static const editProfile = 'editprofile';
+  static const emailVerification = 'emailverification';
 
   static const reportDetail = 'reportdetail';
   static const locationPicker = 'locationpicker';

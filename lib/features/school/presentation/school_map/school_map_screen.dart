@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -7,9 +8,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:polylabel/polylabel.dart';
 import 'package:school_watch_semeru/common/widgets/open_street_map_attribution.dart';
 
 import '../../../../common/routing/routes.dart';
+import '../../domain/school.dart';
 import '../school_list/school_list_screen.dart';
 import '../school_list/schools_provider.dart';
 import '../../../../common/constants/constant.dart';
@@ -44,6 +47,15 @@ class _SchoolMapScreenState extends ConsumerState<SchoolMapScreen> {
     _mapController.dispose();
     _pageController.dispose();
     _followCurrentLocationStreamController.close();
+  }
+
+  LatLng _getSchoolsCentroid(List<School> schools) {
+    final points = schools
+        .map((e) => Point(e.centroid.latitude, e.centroid.longitude))
+        .toList();
+
+    final result = polylabel([points]).point;
+    return LatLng(result.x.toDouble(), result.y.toDouble());
   }
 
   _buildMapControl() {
@@ -109,7 +121,15 @@ class _SchoolMapScreenState extends ConsumerState<SchoolMapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final reportsAsync = ref.watch(getSchoolsProvider);
+    final schoolsAsync = ref.watch(getSchoolsMapProvider);
+
+    final defaultCentroid = LatLng(-2.5489, 118.0149);
+    final defaultMapOption = MapOptions(
+      center: defaultCentroid,
+      zoom: 10,
+      minZoom: 1,
+      absorbPanEventsOnScrollables: false,
+    );
 
     return SafeArea(
       child: Scaffold(
@@ -121,12 +141,18 @@ class _SchoolMapScreenState extends ConsumerState<SchoolMapScreen> {
           children: [
             FlutterMap(
               mapController: _mapController,
-              options: MapOptions(
-                center: LatLng(-7.956197, 112.627658),
-                zoom: 10,
-                minZoom: 1,
-                absorbPanEventsOnScrollables: false,
-                onTap: (_, point) {},
+              options: schoolsAsync.when(
+                data: (schools) {
+                  final centroid = _getSchoolsCentroid(schools);
+                  return MapOptions(
+                    center: centroid,
+                    zoom: 10,
+                    minZoom: 1,
+                    absorbPanEventsOnScrollables: false,
+                  );
+                },
+                error: (error, stackTrace) =>  defaultMapOption,
+                loading: () => defaultMapOption,
               ),
               nonRotatedChildren: const [
                 OpenStreetMapAttribution(),
@@ -158,15 +184,16 @@ class _SchoolMapScreenState extends ConsumerState<SchoolMapScreen> {
                     headingSectorRadius: 60,
                   ),
                 ),
-                reportsAsync.when(
-                  data: (reports) => MarkerLayer(
-                    markers: reports
+                schoolsAsync.when(
+                  data: (schools) => MarkerLayer(
+                    markers: schools
                         .mapWithIndex(
-                          (report, index) => Marker(
-                            key: ValueKey(report.id),
+                          (school, index) => Marker(
+                            key: ValueKey(school.id),
                             width: SWSizes.s40,
                             height: SWSizes.s40,
-                            point: LatLng(.0, .0),
+                            point: LatLng(school.centroid.latitude,
+                                school.centroid.longitude),
                             rotate: true,
                             builder: (context) => GestureDetector(
                               onTap: () {
@@ -206,7 +233,7 @@ class _SchoolMapScreenState extends ConsumerState<SchoolMapScreen> {
                 ),
               ],
             ),
-            reportsAsync.when(
+            schoolsAsync.when(
               data: (schools) => _selectedSchool == null
                   ? Container()
                   : Align(

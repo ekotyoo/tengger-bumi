@@ -8,7 +8,7 @@ class DoubleSerializer implements JsonConverter<double, dynamic> {
   const DoubleSerializer();
 
   @override
-  double fromJson(dynamic value) => double.parse(value);
+  double fromJson(dynamic value) => value is double ? value : double.parse(value);
 
   @override
   String toJson(double value) => value.toString();

@@ -19,6 +19,7 @@ class SWStrings {
   static const labelRegister = 'Register';
   static const labelLogout = 'Logout';
   static const labelEditProfile = 'Edit Profil';
+  static const labelEmailVerification = 'Verifikasi Email';
   static const descDidNotHaveAccount = 'Tidak punya akun? Register';
   static const descAlreadyHaveAccount = 'Sudah punya akun? Login';
   static const labelName = 'Nama';

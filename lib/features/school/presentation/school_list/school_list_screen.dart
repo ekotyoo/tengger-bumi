@@ -47,23 +47,43 @@ class SchoolListScreen extends StatelessWidget {
   }
 }
 
-class SchoolSearchBar extends ConsumerWidget {
+class SchoolSearchBar extends ConsumerStatefulWidget {
   const SchoolSearchBar({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState createState() => _SchoolSearchBarState();
+}
+
+class _SchoolSearchBarState extends ConsumerState<SchoolSearchBar> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    final text = ref.read(schoolSearchQueryProvider);
+    _controller = TextEditingController(text: text);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return TextField(
+      controller: _controller,
       maxLines: 1,
       style: Theme.of(context).textTheme.bodyMedium,
       decoration: const InputDecoration(
         hintText: SWStrings.labelSearchSchool,
         suffixIcon: Icon(Icons.search_rounded),
       ),
-      onChanged: (value) {
-        ref.read(schoolSearchQueryProvider.notifier).updateSearchQuery(value);
-      },
+      onChanged: (value) =>
+          ref.read(schoolSearchQueryProvider.notifier).updateSearchQuery(value),
     );
   }
 }
@@ -124,7 +144,8 @@ class SchoolCard extends StatelessWidget {
                 _buildSchoolAnalysisInfo(
                   context,
                   label: 'Tanggap Darurat',
-                  value: school.analysis.emergencyResponseLevel?.toString() ?? '-',
+                  value:
+                      school.analysis.emergencyResponseLevel?.toString() ?? '-',
                 ),
                 _buildSchoolAnalysisInfo(
                   context,
@@ -192,7 +213,7 @@ class SchoolList extends ConsumerWidget {
               onTap: () {
                 context.pushNamed(
                   Routes.schoolDetail,
-                  params: {'schoolId' : school.id },
+                  params: {'schoolId': school.id},
                 );
               },
             );

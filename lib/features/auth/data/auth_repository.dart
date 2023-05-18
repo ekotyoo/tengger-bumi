@@ -7,7 +7,6 @@ import '../domain/auth_user.dart';
 import '../../../common/error/network_exceptions.dart';
 import '../../../common/services/auth_interceptor.dart';
 import '../../../common/services/http_client.dart';
-import '../../../common/constants/constant.dart';
 import '../../../common/error/failure.dart';
 import 'i_auth_repository.dart';
 
@@ -104,8 +103,18 @@ class AuthRepository implements IAuthRepository {
     required String password,
   }) async {
     try {
-      await Future.delayed(kDurationLong);
-      return right(unit);
+      final response = await _client.post('/auth/signup', data: {
+        'name': name,
+        'email': email,
+        'password': password,
+        'confirm_password': password,
+      });
+
+      if (response['status'] == 'success') {
+        return right(unit);
+      }
+
+      return left(const Failure('Terjadi kesalahan, coba lagi nanti'));
     } catch (e) {
       final exception = NetworkExceptions.getDioException(e);
       return left(Failure(exception.getErrorMessage()));
@@ -113,18 +122,18 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<Either<Failure, AuthUser>> getAuthUser() async {
+  Future<Either<Failure, Unit>> verifyEmail({required String email, required String otp}) async {
     try {
-      await Future.delayed(kDurationLong);
+      final response = await _client.post('/auth/verify', data: {
+        'email': email,
+        'otp': otp
+      });
 
-      const dummyUser = AuthUser.signedIn(
-        id: "id",
-        name: "name",
-        email: "email",
-        accessToken: "accessToken",
-      );
+      if (response['status'] == 'success') {
+        return right(unit);
+      }
 
-      return right(dummyUser);
+      return left(const Failure('Terjadi kesalahan, coba lagi nanti'));
     } catch (e) {
       final exception = NetworkExceptions.getDioException(e);
       return left(Failure(exception.getErrorMessage()));

@@ -1,11 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../common/models/position.dart';
 import 'category.dart';
 import 'additional_info.dart';
 import 'report.dart';
 import 'author.dart';
 import 'comment.dart';
-import 'report_position.dart';
 
 part 'report_detail.freezed.dart';
 part 'report_detail.g.dart';
@@ -19,7 +19,7 @@ class ReportDetail with _$ReportDetail {
     required Author author,
     required String school,
     required String room,
-    required ReportPosition position,
+    required Position position,
     bool? liked,
     @JsonKey(name: 'created_at') @TimestampSerializer() required DateTime createdAt,
     @JsonKey(name: 'likes_count', defaultValue: 0) required int likesCount,

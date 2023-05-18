@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:school_watch_semeru/features/auth/presentation/edit_profile/edit_profile_screen.dart';
+import 'package:school_watch_semeru/features/auth/presentation/email_verification/email_verification_screen.dart';
 
 import '../../features/report/presentation/models/location_pick_nav_arg.dart';
 import '../../features/report/presentation/report_detail/report_detail_screen.dart';
@@ -138,6 +139,17 @@ class AppRouter extends _$AppRouter implements Listenable {
                 key: state.pageKey,
                 child: const RegisterScreen(),
               ),
+            ),
+            GoRoute(
+              path: 'verify',
+              name: Routes.emailVerification,
+              pageBuilder: (context, state) {
+                final email = state.extra as String?;
+                return MaterialPage(
+                  key: state.pageKey,
+                  child: EmailVerificationScreen(email: email),
+                );
+              },
             ),
           ],
         ),
