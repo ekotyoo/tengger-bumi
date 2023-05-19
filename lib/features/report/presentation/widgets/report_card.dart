@@ -54,7 +54,11 @@ class ReportCard extends StatelessWidget {
 
     return Row(
       children: [
-        CircleAvatar(backgroundImage: NetworkImage(author.avatar)),
+        CircleAvatar(
+          foregroundImage: author.avatar != null ? NetworkImage(author.avatar!) : null,
+          backgroundColor: kColorPrimary50,
+          child: const Icon(Icons.person, color: kColorPrimary100),
+        ),
         const SizedBox(width: SWSizes.s8),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,7 +129,10 @@ class ReportCard extends StatelessWidget {
   }
 
   _buildCategoryList(BuildContext context, Report report) {
-    final categories = [report.category.name, report.category.type.capitalize()];
+    final categories = [
+      report.category.name,
+      report.category.type.capitalize()
+    ];
 
     return SizedBox(
       height: SWSizes.s32,
@@ -178,15 +185,15 @@ class ReportCard extends StatelessWidget {
     VoidCallback? onLiked,
     VoidCallback? onDisliked,
   }) {
-
-
     return Row(
       children: [
         _buildInteractionButton(
           context,
           icon: Icons.thumb_up_rounded,
           count: report.likesCount,
-          color: report.liked == true ? Theme.of(context).primaryColor : kColorNeutral200,
+          color: report.liked == true
+              ? Theme.of(context).primaryColor
+              : kColorNeutral200,
           onTap: onLiked,
         ),
         const SizedBox(width: SWSizes.s16),
@@ -194,7 +201,9 @@ class ReportCard extends StatelessWidget {
           context,
           icon: Icons.thumb_down_rounded,
           count: report.dislikesCount,
-          color: report.liked == false ? Theme.of(context).primaryColor : kColorNeutral200,
+          color: report.liked == false
+              ? Theme.of(context).primaryColor
+              : kColorNeutral200,
           onTap: onDisliked,
         ),
         const SizedBox(width: SWSizes.s16),

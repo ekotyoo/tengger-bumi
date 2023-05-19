@@ -22,7 +22,7 @@ abstract class IReportRepository {
     CancelToken? cancelToken,
   });
 
-  Future<Either<Failure, Unit>> postReport(
+  Future<Either<Failure, Report>> postReport(
       ReportRequest report, List<File> images);
 
   Future<Either<Failure, List<Category>>> getCategories({

@@ -1,4 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:school_watch_semeru/features/report/domain/report.dart';
 
 import '../../data/report_repository.dart';
 import '../../domain/report_query.dart';
@@ -27,6 +28,11 @@ class ReportFeedController extends _$ReportFeedController {
       (l) => ReportFeedState(errorMessage: l.message),
       (r) => ReportFeedState(reports: r),
     );
+  }
+
+  void addReport(Report report) {
+    final oldState = state.requireValue;
+    state = AsyncValue.data(oldState.copyWith(reports: [report, ...oldState.reports]));
   }
 
   void setSuccessMessage(String? message) {

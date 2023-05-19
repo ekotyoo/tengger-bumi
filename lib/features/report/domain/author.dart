@@ -9,7 +9,7 @@ class Author with _$Author {
   const factory Author({
     required String id,
     required String name,
-    required String avatar,
+    String? avatar,
   }) = _Author;
 
   factory Author.fromJson(Map<String, Object?> json) => _$AuthorFromJson(json);

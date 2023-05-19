@@ -6,12 +6,14 @@ import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:school_watch_semeru/features/report/domain/additional_info.dart';
+import 'package:school_watch_semeru/features/report/domain/report_query.dart';
 
 import '../../../school/presentation/models/room_ui_model.dart';
 import '../../../school/data/i_school_repository.dart';
 import '../../../school/data/school_repository.dart';
 import '../../data/i_report_repository.dart';
 import '../../data/report_repository.dart';
+import '../../domain/report.dart';
 import '../../domain/report_request.dart';
 import '../../../../common/models/position.dart';
 import '../models/image_pick_input.dart';
@@ -22,6 +24,7 @@ import '../models/category_option_input.dart';
 import '../models/location_pick_input.dart';
 import '../../domain/category.dart';
 import '../models/description_text_input.dart';
+import '../report_feed/report_feed_controller.dart';
 import 'post_report_state.dart';
 import 'widgets/pick_report_type_form.dart';
 import 'widgets/pick_school_form.dart';
@@ -29,11 +32,12 @@ import 'widgets/pick_school_form.dart';
 const kMaxAdditionalInfo = 3;
 
 class PostReportController extends StateNotifier<PostReportState> {
-  PostReportController(this._reportRepository, this._schoolRepository)
+  PostReportController(this._reportRepository, this._schoolRepository, this._ref)
       : super(const PostReportState());
 
   final IReportRepository _reportRepository;
   final ISchoolRepository _schoolRepository;
+  final Ref _ref;
 
   void onPageChange(int page) => state = state.copyWith(currentPage: page);
 
@@ -241,6 +245,10 @@ class PostReportController extends StateNotifier<PostReportState> {
         state = state.copyWith(finalFormSubmitting: false);
       },
       (r) {
+        final reportFilter = _ref.read(reportFilterStateProvider);
+        if (r.category.type == reportFilter.reportType?.name.toLowerCase() || reportFilter.reportType == null) {
+          _ref.read(reportFeedControllerProvider(reportFilter).notifier).addReport(r);
+        }
         setSuccessMessage('Laporan berhasil diunggah');
         state = state.copyWith(finalFormSubmitting: false);
       },
@@ -253,6 +261,6 @@ final postReportControllerProvider =
   (ref) {
     final reportRepository = ref.watch(reportRepositoryProvider);
     final schoolRepository = ref.watch(schoolRepositoryProvider);
-    return PostReportController(reportRepository, schoolRepository);
+    return PostReportController(reportRepository, schoolRepository, ref);
   },
 );

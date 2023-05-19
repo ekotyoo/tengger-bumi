@@ -528,7 +528,11 @@ class CommentTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        CircleAvatar(backgroundImage: NetworkImage(comment.author.avatar)),
+        CircleAvatar(
+          backgroundImage: NetworkImage(
+            comment.author.avatar ?? '',
+          ),
+        ),
         const SizedBox(width: SWSizes.s8),
         Expanded(
           child: Column(

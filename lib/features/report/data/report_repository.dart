@@ -55,7 +55,7 @@ class FakeReportRepository implements IReportRepository {
             images:
                 r.images.map((e) => e.replaceAll('public', kBaseUrl)).toList(),
             author: r.author.copyWith(
-              avatar: r.author.avatar.replaceAll('public', kBaseUrl),
+              avatar: r.author.avatar?.replaceAll('public', kBaseUrl),
             ),
           );
 
@@ -82,7 +82,7 @@ class FakeReportRepository implements IReportRepository {
         images:
             result.images.map((e) => e.replaceAll('public', kBaseUrl)).toList(),
         author: result.author.copyWith(
-          avatar: result.author.avatar.replaceAll('public', kBaseUrl),
+          avatar: result.author.avatar?.replaceAll('public', kBaseUrl),
         ),
       );
       return right(report);
@@ -105,7 +105,7 @@ class FakeReportRepository implements IReportRepository {
       final result = Comment.fromJson(response['data']);
       final newComment = result.copyWith(
         author: result.author.copyWith(
-          avatar: result.author.avatar.replaceAll('public', kBaseUrl),
+          avatar: result.author.avatar?.replaceAll('public', kBaseUrl),
         ),
       );
       return right(newComment);
@@ -129,7 +129,7 @@ class FakeReportRepository implements IReportRepository {
         final c = Comment.fromJson(e);
         final comment = c.copyWith(
           author: c.author.copyWith(
-            avatar: c.author.avatar.replaceAll('public', kBaseUrl),
+            avatar: c.author.avatar?.replaceAll('public', kBaseUrl),
           ),
         );
         return comment;
@@ -171,7 +171,7 @@ class FakeReportRepository implements IReportRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> postReport(
+  Future<Either<Failure, Report>> postReport(
     ReportRequest report,
     List<File> images,
   ) async {
@@ -202,8 +202,16 @@ class FakeReportRepository implements IReportRepository {
 
       final response = await _client.post('/report', data: formData);
 
-      if (response['status'] == 'success') {
-        return right(unit);
+      if (response['status'] == 'success' && response['data'] != null) {
+        final report = Report.fromJson(response['data']);
+        final newReport = report.copyWith(
+          images:
+          report.images.map((e) => e.replaceAll('public', kBaseUrl)).toList(),
+          author: report.author.copyWith(
+            avatar: report.author.avatar?.replaceAll('public', kBaseUrl),
+          ),
+        );
+        return right(newReport);
       }
 
       return left(const Failure('Terjadi kesalahan, coba lagi nanti.'));
