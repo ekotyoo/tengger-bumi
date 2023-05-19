@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:school_watch_semeru/utils/string_extension.dart';
 
+import '../../../../utils/string_extension.dart';
 import '../../domain/report.dart';
 import '../../../../common/constants/constant.dart';
 import '../../../../common/widgets/category_chip.dart';
@@ -13,14 +13,22 @@ class ReportCard extends StatelessWidget {
     this.onTap,
     this.onLiked,
     this.onDisliked,
+    this.onDeleted,
+    this.onEdited,
     this.showInteractionBar = true,
+    this.showMenu = false,
+    this.deleting = false,
   });
 
   final Report report;
   final VoidCallback? onTap;
   final VoidCallback? onLiked;
   final VoidCallback? onDisliked;
+  final VoidCallback? onDeleted;
+  final VoidCallback? onEdited;
   final bool showInteractionBar;
+  final bool showMenu;
+  final bool deleting;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +63,8 @@ class ReportCard extends StatelessWidget {
     return Row(
       children: [
         CircleAvatar(
-          foregroundImage: author.avatar != null ? NetworkImage(author.avatar!) : null,
+          foregroundImage:
+              author.avatar != null ? NetworkImage(author.avatar!) : null,
           backgroundColor: kColorPrimary50,
           child: const Icon(Icons.person, color: kColorPrimary100),
         ),
@@ -101,7 +110,37 @@ class ReportCard extends StatelessWidget {
             ),
           ],
         ),
+        const Spacer(),
+        if (showMenu && !deleting)
+          PopupMenuButton(
+            icon: const Icon(Icons.more_vert),
+            iconSize: SWSizes.s24,
+            splashRadius: SWSizes.s16,
+            padding: EdgeInsets.zero,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(SWSizes.s8),
+            ),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                onTap: onEdited,
+                child: const Text(SWStrings.labelEditReport),
+              ),
+              PopupMenuItem(
+                onTap: onDeleted,
+                child: const Text(SWStrings.labelDeleteReport),
+              ),
+            ],
+          ),
+        if (deleting) _buildLoadingIndicator(context)
       ],
+    );
+  }
+
+  _buildLoadingIndicator(BuildContext context) {
+    return const SizedBox(
+      height: SWSizes.s32,
+      width: SWSizes.s32,
+      child: CircularProgressIndicator(strokeWidth: SWSizes.s4),
     );
   }
 
@@ -114,6 +153,7 @@ class ReportCard extends StatelessWidget {
       child: PageView.builder(
         controller: _pageController,
         itemBuilder: (context, index) => FractionallySizedBox(
+          key: ValueKey(report.images[index]),
           widthFactor: 1 / _pageController.viewportFraction,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(SWSizes.s8),

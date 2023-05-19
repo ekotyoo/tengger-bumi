@@ -28,6 +28,7 @@ class ReportDetail with _$ReportDetail {
     @JsonKey(name: 'is_active', defaultValue: true) required bool isActive,
     @JsonKey(name: 'additional_infos') List<AdditionalInfo>? additionalInfos,
     @Default([]) List<Comment> comments,
+    @JsonKey(name: 'allow_edit', defaultValue: false) required bool allowEdit,
   }) = _ReportDetail;
 
   factory ReportDetail.fromJson(Map<String, Object?> json) => _$ReportDetailFromJson(json);

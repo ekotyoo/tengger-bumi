@@ -49,7 +49,7 @@ class ProfileScreen extends ConsumerWidget {
               children: [
                 _buildProfileHeader(context, state.user),
                 const SizedBox(height: SWSizes.s32),
-                const ReportListWithFilter(),
+                ReportListWithFilter(reports: state.reports),
               ],
             );
           },
@@ -65,7 +65,9 @@ class ProfileScreen extends ConsumerWidget {
         children: [
           CircleAvatar(
             radius: SWSizes.s56,
-            foregroundImage: NetworkImage(userSignedIn.avatar.toString()),
+            foregroundImage: userSignedIn.avatar != null ? NetworkImage(userSignedIn.avatar!) : null,
+            backgroundColor: kColorPrimary50,
+            child: const Icon(Icons.person, color: kColorPrimary100, size: SWSizes.s56),
           ),
           const SizedBox(height: SWSizes.s16),
           Text(

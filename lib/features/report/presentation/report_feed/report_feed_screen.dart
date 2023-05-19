@@ -59,11 +59,10 @@ class ReportList extends ConsumerWidget {
         if (errorMessage != null && context.mounted) {
           showSnackbar(context,
               message: errorMessage, type: SnackbarType.error);
+          ref
+              .read(reportFeedControllerProvider(reportQuery).notifier)
+              .setErrorMessage(null);
         }
-        await Future.delayed(kDurationLong);
-        ref
-            .read(reportFeedControllerProvider(reportQuery).notifier)
-            .setErrorMessage(null);
       },
     );
 
@@ -74,13 +73,11 @@ class ReportList extends ConsumerWidget {
       (previous, next) async {
         final successMessage = await next;
         if (successMessage != null && context.mounted) {
-          showSnackbar(context,
-              message: successMessage, type: SnackbarType.success);
+          showSnackbar(context, message: successMessage);
+          ref
+              .read(reportFeedControllerProvider(reportQuery).notifier)
+              .setErrorMessage(null);
         }
-        await Future.delayed(kDurationLong);
-        ref
-            .read(reportFeedControllerProvider(reportQuery).notifier)
-            .setErrorMessage(null);
       },
     );
 
@@ -101,26 +98,33 @@ class ReportList extends ConsumerWidget {
             separatorBuilder: (context, index) {
               return const SizedBox(height: SWSizes.s16);
             },
-            itemBuilder: (context, index) => ReportCard(
-              key: ValueKey(reports[index].id),
-              report: reports[index],
-              onLiked: () {
-                ref
+            itemBuilder: (context, index) {
+              final report = reports[index];
+              return ReportCard(
+                key: ValueKey(report.id),
+                report: report,
+                showMenu: report.allowEdit,
+                deleting: report.deleting,
+                onLiked: () => ref
                     .read(reportFeedControllerProvider(reportQuery).notifier)
-                    .toggleLike(index, reports[index].id);
-              },
-              onDisliked: () {
-                ref
+                    .toggleLike(index, report.id),
+                onDisliked: () => ref
                     .read(reportFeedControllerProvider(reportQuery).notifier)
-                    .toggleDislike(index, reports[index].id);
-              },
-              onTap: () {
-                context.pushNamed(
-                  Routes.reportDetail,
-                  params: {'reportId': reports[index].id},
-                );
-              },
-            ),
+                    .toggleDislike(index, report.id),
+                onDeleted: () => ref
+                    .read(reportFeedControllerProvider(reportQuery).notifier)
+                    .deleteReport(report, index),
+                onEdited: () {
+                  // TODO: Navigate to edit page
+                },
+                onTap: () {
+                  context.pushNamed(
+                    Routes.reportDetail,
+                    params: {'reportId': report.id},
+                  );
+                },
+              );
+            },
           ),
         );
       },
@@ -157,14 +161,14 @@ class ReportFilterHeader extends ConsumerWidget {
                     ref
                         .read(reportFilterStateProvider.notifier)
                         .updateFilterState(
-                      reportQuery.copyWith(reportType: null),
-                    );
+                          reportQuery.copyWith(reportType: null),
+                        );
                   },
                 ),
                 ..._reportTypes
                     .map((type) => Padding(
-                      padding: const EdgeInsets.only(left: SWSizes.s8),
-                      child: SelectChip(
+                          padding: const EdgeInsets.only(left: SWSizes.s8),
+                          child: SelectChip(
                             label: type.name,
                             selected: reportQuery.reportType == type,
                             onTap: () {
@@ -175,7 +179,7 @@ class ReportFilterHeader extends ConsumerWidget {
                                   );
                             },
                           ),
-                    ))
+                        ))
                     .toList(),
               ],
             ),

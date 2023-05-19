@@ -45,6 +45,7 @@ class FakeReportRepository implements IReportRepository {
           'type': query.reportType?.name.toLowerCase(),
           'is_active': query.isActive,
           'school_id': query.schoolId,
+          'author_id': query.authorId
         },
       );
 
@@ -205,8 +206,9 @@ class FakeReportRepository implements IReportRepository {
       if (response['status'] == 'success' && response['data'] != null) {
         final report = Report.fromJson(response['data']);
         final newReport = report.copyWith(
-          images:
-          report.images.map((e) => e.replaceAll('public', kBaseUrl)).toList(),
+          images: report.images
+              .map((e) => e.replaceAll('public', kBaseUrl))
+              .toList(),
           author: report.author.copyWith(
             avatar: report.author.avatar?.replaceAll('public', kBaseUrl),
           ),
@@ -236,6 +238,23 @@ class FakeReportRepository implements IReportRepository {
 
       return right(categories);
     } catch (e) {
+      final exception = NetworkExceptions.getDioException(e);
+      return left(Failure(exception.getErrorMessage()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> deleteReport({
+    required String reportId,
+    CancelToken? cancelToken,
+  }) async {
+    try {
+      final response = await _client.delete('/report/$reportId');
+      if (response['status'] == 'success') {
+        return right(unit);
+      }
+      return left(const Failure('Gagal menghapus laporan'));
+    } catch(e) {
       final exception = NetworkExceptions.getDioException(e);
       return left(Failure(exception.getErrorMessage()));
     }

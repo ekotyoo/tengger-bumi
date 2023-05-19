@@ -17,6 +17,7 @@ class LoadingImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Image(
+      key: ValueKey(url),
       image: NetworkImage(url),
       height: height,
       width: width,
@@ -26,7 +27,7 @@ class LoadingImage extends StatelessWidget {
         return const Center(child: CircularProgressIndicator());
       },
       errorBuilder: (context, error, stackTrace) {
-        return const Text('Failed to load image');
+        return const Center(child: Text('Failed to load image'));
       },
     );
   }

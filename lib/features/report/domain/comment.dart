@@ -13,6 +13,7 @@ class Comment with _$Comment {
     required String comment,
     required Author author,
     @JsonKey(name: 'created_at') @TimestampSerializer() required DateTime createdAt,
+    @JsonKey(name: 'allow_edit', defaultValue: false) required bool allowEdit,
   }) = _Comment;
 
   factory Comment.fromJson(Map<String, Object?> json) => _$CommentFromJson(json);

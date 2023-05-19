@@ -66,6 +66,8 @@ class SWStrings {
   static const labelReportPostTime = 'Waktu Posting';
   static const labelWriteComment = 'Tulis Komentar';
   static const descSchoolNotAvailable = 'Belum ada sekolah yang tersedia untuk saat ini.';
+  static const labelEditReport = 'Edit Laporan';
+  static const labelDeleteReport = 'Hapus Laporan';
 
   // School
   static const labelSchoolList = 'Daftar Sekolah';

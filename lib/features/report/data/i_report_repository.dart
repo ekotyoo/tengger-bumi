@@ -51,4 +51,9 @@ abstract class IReportRepository {
     required String reportId,
     CancelToken? cancelToken,
   });
+
+  Future<Either<Failure, Unit>> deleteReport({
+    required String reportId,
+    CancelToken? cancelToken,
+  });
 }

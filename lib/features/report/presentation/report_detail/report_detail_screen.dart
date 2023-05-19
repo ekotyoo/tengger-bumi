@@ -417,7 +417,9 @@ class AuthorSection extends StatelessWidget {
     return Row(
       children: [
         CircleAvatar(
-          backgroundImage: avatar != null ? NetworkImage(avatar!) : null,
+          foregroundImage: avatar != null ? NetworkImage(avatar!) : null,
+          backgroundColor: kColorPrimary50,
+          child: const Icon(Icons.person, color: kColorPrimary100),
         ),
         const SizedBox(width: SWSizes.s8),
         Column(
@@ -529,9 +531,9 @@ class CommentTile extends StatelessWidget {
     return Row(
       children: [
         CircleAvatar(
-          backgroundImage: NetworkImage(
-            comment.author.avatar ?? '',
-          ),
+          foregroundImage: comment.author.avatar != null ? NetworkImage(comment.author.avatar!) : null,
+          backgroundColor: kColorPrimary50,
+          child: const Icon(Icons.person, color: kColorPrimary100),
         ),
         const SizedBox(width: SWSizes.s8),
         Expanded(

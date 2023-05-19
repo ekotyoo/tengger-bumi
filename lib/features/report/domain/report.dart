@@ -28,6 +28,7 @@ class Report with _$Report {
     required String school,
     required String room,
     required Position position,
+    @Default(false) bool deleting,
     bool? liked,
     @JsonKey(name: 'created_at') @TimestampSerializer() required DateTime createdAt,
     @JsonKey(name: 'likes_count', defaultValue: 0) required int likesCount,
@@ -35,6 +36,7 @@ class Report with _$Report {
     @JsonKey(name: 'comments_count', defaultValue: 0) required int commentsCount,
     @Default([]) List<String> images,
     @JsonKey(name: 'is_active', defaultValue: true) required bool isActive,
+    @JsonKey(name: 'allow_edit', defaultValue: false) required bool allowEdit,
   }) = _Report;
 
   factory Report.fromJson(Map<String, Object?> json) => _$ReportFromJson(json);

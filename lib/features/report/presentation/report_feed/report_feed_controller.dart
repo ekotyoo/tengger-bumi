@@ -30,9 +30,39 @@ class ReportFeedController extends _$ReportFeedController {
     );
   }
 
+  void deleteReport(Report report, int index) async {
+    final reportRepo = ref.read(reportRepositoryProvider);
+
+    final oldState = state.requireValue;
+    final oldReports = oldState.reports.toList();
+    oldReports[index] = report.copyWith(deleting: true);
+    state = AsyncValue.data(oldState.copyWith(reports: oldReports));
+
+    final result = await reportRepo.deleteReport(reportId: report.id);
+    result.fold(
+      (l) {
+        setErrorMessage(l.message);
+        oldReports[index] = report.copyWith(deleting: false);
+        state = AsyncValue.data(oldState.copyWith(reports: oldReports));
+      },
+      (r) {
+        setSuccessMessage('Laporan berhasil dihapus');
+        _deleteReport(index);
+      },
+    );
+  }
+
+  void _deleteReport(int index) {
+    final oldState = state.requireValue;
+    final oldReports = oldState.reports.toList();
+    oldReports.removeAt(index);
+    state = AsyncValue.data(oldState.copyWith(reports: oldReports));
+  }
+
   void addReport(Report report) {
     final oldState = state.requireValue;
-    state = AsyncValue.data(oldState.copyWith(reports: [report, ...oldState.reports]));
+    state = AsyncValue.data(
+        oldState.copyWith(reports: [report, ...oldState.reports]));
   }
 
   void setSuccessMessage(String? message) {
@@ -83,12 +113,10 @@ class ReportFeedController extends _$ReportFeedController {
         (l) {
           // Revert changes
           // Show error message
-          _setLike(
-            index,
-            liked: oldLiked,
-            likesCount: oldLikesCount,
-            dislikesCount: oldDislikesCount
-          );
+          _setLike(index,
+              liked: oldLiked,
+              likesCount: oldLikesCount,
+              dislikesCount: oldDislikesCount);
           setErrorMessage(l.message);
         },
         (r) => null,
