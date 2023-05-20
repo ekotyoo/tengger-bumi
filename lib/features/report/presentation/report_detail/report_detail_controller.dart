@@ -66,6 +66,36 @@ class ReportDetailController extends _$ReportDetailController {
     );
   }
 
+  void deleteComment(String commentId, int index) async {
+    final oldState = state.requireValue;
+    final oldComments = oldState.report?.comments;
+    final oldReport = oldState.report;
+    if (oldComments == null) return;
+    final commentToDelete = oldComments[index].copyWith(deleting: true);
+
+    final newComments = oldComments.toList();
+    newComments[index] = commentToDelete;
+    final newReport = oldReport?.copyWith(comments: newComments);
+    if(newReport == null) return;
+    state = AsyncValue.data(oldState.copyWith(report: newReport));
+
+    final repo = ref.read(reportRepositoryProvider);
+    final result = await repo.deleteComment(reportId: reportId, commentId: commentId);
+
+    result.fold(
+      (l) {
+        state = AsyncValue.data(oldState);
+        setErrorMessage(l.message);
+      },
+      (r) {
+        newComments.removeAt(index);
+        final newReport = oldReport?.copyWith(comments: newComments);
+        state = AsyncValue.data(oldState.copyWith(report: newReport));
+        setSuccessMessage('Komentar berhasil dihapus');
+      },
+    );
+  }
+
   void toggleLike() async {
     final repo = ref.read(reportRepositoryProvider);
     final report = state.requireValue.report;
@@ -82,13 +112,13 @@ class ReportDetailController extends _$ReportDetailController {
       _setLike(liked: null, likesCount: oldLikesCount - 1);
       final result = await repo.removeLike(reportId: reportId);
       result.fold(
-            (l) {
+        (l) {
           // Revert changes
           // Show error message
           _setLike(liked: oldLiked, likesCount: oldLikesCount);
           setErrorMessage(l.message);
         },
-            (r) => null,
+        (r) => null,
       );
     } else {
       // Add like local
@@ -101,17 +131,16 @@ class ReportDetailController extends _$ReportDetailController {
       );
       final result = await repo.addLike(reportId: reportId);
       result.fold(
-            (l) {
+        (l) {
           // Revert changes
           // Show error message
           _setLike(
               liked: oldLiked,
               likesCount: oldLikesCount,
-              dislikesCount: oldDislikesCount
-          );
+              dislikesCount: oldDislikesCount);
           setErrorMessage(l.message);
         },
-            (r) => null,
+        (r) => null,
       );
     }
   }
@@ -132,13 +161,13 @@ class ReportDetailController extends _$ReportDetailController {
       _setLike(liked: null, dislikesCount: oldDislikesCount - 1);
       final result = await repo.removeLike(reportId: reportId);
       result.fold(
-            (l) {
+        (l) {
           // Revert changes
           // Show error message
           _setLike(liked: oldLiked, dislikesCount: oldDislikesCount);
           setErrorMessage(l.message);
         },
-            (r) => null,
+        (r) => null,
       );
     } else {
       // Add dislike local
@@ -151,7 +180,7 @@ class ReportDetailController extends _$ReportDetailController {
       );
       final result = await repo.addLike(reportId: reportId, isLike: false);
       result.fold(
-            (l) {
+        (l) {
           // Revert changes
           // Show error message
           _setLike(
@@ -161,7 +190,7 @@ class ReportDetailController extends _$ReportDetailController {
           );
           setErrorMessage(l.message);
         },
-            (r) => null,
+        (r) => null,
       );
     }
   }

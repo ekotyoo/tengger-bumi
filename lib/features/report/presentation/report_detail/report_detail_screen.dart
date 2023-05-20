@@ -392,8 +392,18 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
           physics: const NeverScrollableScrollPhysics(),
           separatorBuilder: (context, index) =>
               const SizedBox(height: SWSizes.s16),
-          itemBuilder: (context, index) =>
-              CommentTile(comment: comments[index]),
+          itemBuilder: (context, index) => CommentTile(
+            comment: comments[index],
+            onDelete: () {
+              ref
+                  .read(
+                      reportDetailControllerProvider(widget.reportId).notifier)
+                  .deleteComment(
+                    comments[index].id,
+                    index,
+                  );
+            },
+          ),
         ),
       ],
     );
@@ -522,16 +532,20 @@ class CommentTile extends StatelessWidget {
   const CommentTile({
     Key? key,
     required this.comment,
+    this.onDelete,
   }) : super(key: key);
 
   final Comment comment;
+  final VoidCallback? onDelete;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         CircleAvatar(
-          foregroundImage: comment.author.avatar != null ? NetworkImage(comment.author.avatar!) : null,
+          foregroundImage: comment.author.avatar != null
+              ? NetworkImage(comment.author.avatar!)
+              : null,
           backgroundColor: kColorPrimary50,
           child: const Icon(Icons.person, color: kColorPrimary100),
         ),
@@ -581,7 +595,29 @@ class CommentTile extends StatelessWidget {
             ],
           ),
         ),
+        if (comment.deleting) _buildLoadingIndicator(context),
+        if (comment.allowEdit && !comment.deleting)
+          PopupMenuButton(
+            icon: const Icon(Icons.more_vert),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(SWSizes.s8),
+            ),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                onTap: onDelete,
+                child: const Text(SWStrings.labelDeleteComment),
+              ),
+            ],
+          ),
       ],
+    );
+  }
+
+  _buildLoadingIndicator(BuildContext context) {
+    return const SizedBox(
+      height: SWSizes.s24,
+      width: SWSizes.s24,
+      child: CircularProgressIndicator(strokeWidth: SWSizes.s2),
     );
   }
 }

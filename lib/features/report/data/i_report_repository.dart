@@ -36,6 +36,12 @@ abstract class IReportRepository {
     CancelToken? cancelToken,
   });
 
+  Future<Either<Failure, Unit>> deleteComment({
+    required String reportId,
+    required String commentId,
+    CancelToken? cancelToken,
+  });
+
   Future<Either<Failure, List<Comment>>> getComments({
     required String reportId,
     CancelToken? cancelToken,

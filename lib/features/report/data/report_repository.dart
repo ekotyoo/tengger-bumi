@@ -254,6 +254,24 @@ class FakeReportRepository implements IReportRepository {
         return right(unit);
       }
       return left(const Failure('Gagal menghapus laporan'));
+    } catch (e) {
+      final exception = NetworkExceptions.getDioException(e);
+      return left(Failure(exception.getErrorMessage()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> deleteComment({
+    required String reportId,
+    required String commentId,
+    CancelToken? cancelToken,
+  }) async {
+    try {
+      final response = await _client.delete('/report/$reportId/comment/$commentId');
+      if (response['status'] == 'success') {
+        return right(unit);
+      }
+      return left(const Failure('Gagal menghapus komentar'));
     } catch(e) {
       final exception = NetworkExceptions.getDioException(e);
       return left(Failure(exception.getErrorMessage()));

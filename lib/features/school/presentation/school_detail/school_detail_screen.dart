@@ -319,7 +319,7 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
             itemCount: reports.length,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) => ReportCard(report: reports[index]),
+            itemBuilder: (context, index) => ReportCard(report: reports[index], showInteractionBar: false),
             separatorBuilder: (context, index) =>
                 const SizedBox(height: SWSizes.s8),
           );
