@@ -2,18 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../auth/data/auth_repository.dart';
 import 'schools_provider.dart';
 import '../../../../common/constants/constant.dart';
 import '../../../../common/routing/routes.dart';
 import '../../domain/school.dart';
 
-class SchoolListScreen extends StatelessWidget {
+class SchoolListScreen extends ConsumerWidget {
   const SchoolListScreen({super.key});
 
-  final isAdmin = true;
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isAdmin = ref.watch(authStateProvider).map(
+          signedIn: (value) => value.isAdmin,
+          signedOut: (value) => false,
+        );
+
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,

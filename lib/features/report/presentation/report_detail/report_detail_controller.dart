@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:school_watch_semeru/features/report/domain/comment.dart';
 
+import '../../domain/comment.dart';
 import '../../data/report_repository.dart';
 import 'report_detail_state.dart';
 
@@ -76,11 +76,12 @@ class ReportDetailController extends _$ReportDetailController {
     final newComments = oldComments.toList();
     newComments[index] = commentToDelete;
     final newReport = oldReport?.copyWith(comments: newComments);
-    if(newReport == null) return;
+    if (newReport == null) return;
     state = AsyncValue.data(oldState.copyWith(report: newReport));
 
     final repo = ref.read(reportRepositoryProvider);
-    final result = await repo.deleteComment(reportId: reportId, commentId: commentId);
+    final result =
+        await repo.deleteComment(reportId: reportId, commentId: commentId);
 
     result.fold(
       (l) {

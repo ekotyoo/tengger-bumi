@@ -27,6 +27,7 @@ class ReportDetailScreen extends ConsumerStatefulWidget {
 
 class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
   late PageController _pageController;
+  final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
@@ -52,13 +53,11 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
       (previous, next) async {
         final errorMessage = await next;
         if (errorMessage != null && context.mounted) {
-          showSnackbar(context,
-              message: errorMessage, type: SnackbarType.error);
+          showSnackbar(context, message: errorMessage, type: SnackbarType.error);
+          ref
+              .read(reportDetailControllerProvider(widget.reportId).notifier)
+              .setErrorMessage(null);
         }
-        await Future.delayed(kDurationLong);
-        ref
-            .read(reportDetailControllerProvider(widget.reportId).notifier)
-            .setErrorMessage(null);
       },
     );
 
@@ -74,11 +73,10 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
             message: successMessage,
             type: SnackbarType.success,
           );
+          ref
+              .read(reportDetailControllerProvider(widget.reportId).notifier)
+              .setSuccessMessage(null);
         }
-        await Future.delayed(kDurationLong);
-        ref
-            .read(reportDetailControllerProvider(widget.reportId).notifier)
-            .setErrorMessage(null);
       },
     );
 
@@ -100,57 +98,64 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
               return const Center(child: Text('Data laporan tidak temukan'));
             }
 
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: SWSizes.s16),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: ListView(
-                      shrinkWrap: true,
-                      children: [
-                        const SizedBox(height: SWSizes.s16),
-                        _buildImage(context, report.images),
-                        const SizedBox(height: SWSizes.s16),
-                        _buildAuthorSection(context,
-                            author: report.author,
-                            createdAt: report.createdAt,
-                            isActive: report.isActive),
-                        const SizedBox(height: SWSizes.s8),
-                        _buildCaption(context, report.description),
-                        const SizedBox(height: SWSizes.s8),
-                        _buildInteractionBar(context, report),
-                        const SizedBox(height: SWSizes.s16),
-                        _buildInfoSection(context, report),
-                        const SizedBox(height: SWSizes.s8),
-                        if (report.additionalInfos?.isNotEmpty ?? false) ...[
+            return RefreshIndicator(
+              key: _refreshIndicatorKey,
+              onRefresh: () {
+                ref.invalidate(reportDetailControllerProvider(widget.reportId));
+                return ref.read(reportDetailControllerProvider(widget.reportId).future);
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: SWSizes.s16),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: ListView(
+                        shrinkWrap: true,
+                        children: [
+                          const SizedBox(height: SWSizes.s16),
+                          _buildImage(context, report.images),
+                          const SizedBox(height: SWSizes.s16),
+                          _buildAuthorSection(context,
+                              author: report.author,
+                              createdAt: report.createdAt,
+                              isActive: report.isActive),
+                          const SizedBox(height: SWSizes.s8),
+                          _buildCaption(context, report.description),
+                          const SizedBox(height: SWSizes.s8),
+                          _buildInteractionBar(context, report),
+                          const SizedBox(height: SWSizes.s16),
+                          _buildInfoSection(context, report),
+                          const SizedBox(height: SWSizes.s8),
+                          if (report.additionalInfos?.isNotEmpty ?? false) ...[
+                            const Divider(),
+                            const SizedBox(height: SWSizes.s8),
+                            _buildAdditionalInfoTile(
+                              context,
+                              report.additionalInfos ?? [],
+                            ),
+                            const SizedBox(height: SWSizes.s8),
+                          ],
                           const Divider(),
                           const SizedBox(height: SWSizes.s8),
-                          _buildAdditionalInfoTile(
-                            context,
-                            report.additionalInfos ?? [],
-                          ),
-                          const SizedBox(height: SWSizes.s8),
+                          _buildCommentList(report.comments),
                         ],
-                        const Divider(),
-                        const SizedBox(height: SWSizes.s8),
-                        _buildCommentList(report.comments),
-                      ],
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: SWSizes.s16),
-                    child: CommentInput(
-                      isLoading: state.commentLoading,
-                      onSubmit: (value) {
-                        ref
-                            .read(reportDetailControllerProvider(
-                              widget.reportId,
-                            ).notifier)
-                            .addComment(value);
-                      },
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: SWSizes.s16),
+                      child: CommentInput(
+                        isLoading: state.commentLoading,
+                        onSubmit: (value) {
+                          ref
+                              .read(reportDetailControllerProvider(
+                                widget.reportId,
+                              ).notifier)
+                              .addComment(value);
+                        },
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           },

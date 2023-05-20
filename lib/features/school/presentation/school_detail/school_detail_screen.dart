@@ -239,7 +239,8 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
   void initState() {
     reportTypes = ReportType.values;
     _reports = widget.reports
-        .filter((t) => t.category.type == reportTypes[_selectedTab].name.toLowerCase())
+        .filter((t) =>
+            t.category.type == reportTypes[_selectedTab].name.toLowerCase())
         .toList();
     super.initState();
   }
@@ -268,8 +269,9 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
               () {
                 _selectedTab = i;
                 _reports = widget.reports
-                    .filter(
-                        (t) => t.category.type == reportTypes[_selectedTab].name.toLowerCase())
+                    .filter((t) =>
+                        t.category.type ==
+                        reportTypes[_selectedTab].name.toLowerCase())
                     .toList();
               },
             ),
@@ -319,7 +321,16 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
             itemCount: reports.length,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) => ReportCard(report: reports[index], showInteractionBar: false),
+            itemBuilder: (context, index) => ReportCard(
+              report: reports[index],
+              showInteractionBar: false,
+              onTap: () {
+                context.pushNamed(
+                  Routes.reportDetail,
+                  params: {'reportId': reports[index].id},
+                );
+              },
+            ),
             separatorBuilder: (context, index) =>
                 const SizedBox(height: SWSizes.s8),
           );

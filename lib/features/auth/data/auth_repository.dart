@@ -59,6 +59,7 @@ class AuthRepository implements IAuthRepository {
         name: response.name,
         email: response.email,
         avatar: '${response.avatar}'.replaceAll('public', kBaseUrl),
+        isAdmin: response.isAdmin,
         accessToken: response.accessToken,
       ) as SignedIn;
 
@@ -86,6 +87,7 @@ class AuthRepository implements IAuthRepository {
         id: response.id,
         name: response.name,
         email: response.email,
+        isAdmin: response.isAdmin,
         avatar: '${response.avatar}'.replaceAll('public', kBaseUrl),
         accessToken: token,
       ) as SignedIn;
