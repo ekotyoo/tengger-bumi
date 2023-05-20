@@ -14,6 +14,7 @@ class SWTextField extends StatefulWidget {
     this.maxLines = 1,
     this.errorText,
     this.onChanged,
+    this.enabled = true,
   });
 
   final SWTextFieldType type;
@@ -23,6 +24,7 @@ class SWTextField extends StatefulWidget {
   final TextEditingController? controller;
   final String? errorText;
   final Function(String)? onChanged;
+  final bool enabled;
 
   @override
   State<SWTextField> createState() => _SWTextFieldState();
@@ -60,6 +62,7 @@ class _SWTextFieldState extends State<SWTextField> {
         TextField(
           controller: widget.controller,
           keyboardType: keyboardType,
+          enabled: widget.enabled,
           textInputAction: widget.action,
           maxLines: widget.maxLines,
           style: Theme.of(context).textTheme.bodyMedium,

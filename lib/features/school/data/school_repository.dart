@@ -5,13 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:school_watch_semeru/common/error/failure.dart';
-import 'package:school_watch_semeru/common/error/network_exceptions.dart';
-import 'package:school_watch_semeru/common/services/http_client.dart';
-import 'package:school_watch_semeru/features/school/domain/school_detail.dart';
-import 'package:school_watch_semeru/features/school/domain/school_request.dart';
 
-import '../../../common/models/position.dart';
+import '../../../common/error/failure.dart';
+import '../../../common/error/network_exceptions.dart';
+import '../../../common/services/http_client.dart';
+import '../domain/school_detail.dart';
+import '../domain/school_request.dart';
 import 'i_school_repository.dart';
 import '../domain/school.dart';
 
@@ -27,19 +26,6 @@ class FakeSchoolRepository implements ISchoolRepository {
   FakeSchoolRepository(this._client);
 
   final HttpClient _client;
-
-  final locations = const [
-    Position(latitude: -7.991096, longitude: 112.506890),
-    Position(latitude: -7.980968, longitude: 112.619544),
-    Position(latitude: -7.971096, longitude: 112.526890),
-    Position(latitude: -7.961096, longitude: 112.536890),
-    Position(latitude: -7.951096, longitude: 112.546890),
-    Position(latitude: -7.941096, longitude: 112.556890),
-    Position(latitude: -7.931096, longitude: 112.566890),
-    Position(latitude: -7.921096, longitude: 112.576890),
-    Position(latitude: -7.911096, longitude: 112.586890),
-    Position(latitude: -7.901096, longitude: 112.596890),
-  ];
 
   @override
   Future<Either<Failure, List<School>>> getSchools(

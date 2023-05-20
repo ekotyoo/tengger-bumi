@@ -91,6 +91,10 @@ class SWTheme {
             borderRadius: BorderRadius.circular(SWSizes.s8),
             borderSide: BorderSide.none,
           ),
+          disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(SWSizes.s8),
+            borderSide: BorderSide.none,
+          ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(SWSizes.s8),
             borderSide: const BorderSide(

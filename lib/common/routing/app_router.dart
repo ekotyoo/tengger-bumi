@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:school_watch_semeru/features/auth/domain/auth_user.dart';
 import 'package:school_watch_semeru/features/auth/presentation/edit_profile/edit_profile_screen.dart';
 import 'package:school_watch_semeru/features/auth/presentation/email_verification/email_verification_screen.dart';
 
@@ -258,8 +259,9 @@ class AppRouter extends _$AppRouter implements Listenable {
           name: Routes.editProfile,
           parentNavigatorKey: navigatorKey,
           pageBuilder: (context, state) {
-            return const MaterialPage(
-              child: EditProfileScreen(),
+            final user = state.extra as SignedIn;
+            return MaterialPage(
+              child: EditProfileScreen(user: user),
             );
           },
         ),

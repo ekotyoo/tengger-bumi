@@ -26,17 +26,23 @@ class ProfileScreen extends ConsumerWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(SWSizes.s8),
               ),
-              itemBuilder: (context) => [
-                PopupMenuItem(
-                  child: const Text(SWStrings.labelEditProfile),
-                  onTap: () => context.pushNamed(Routes.editProfile),
-                ),
-                PopupMenuItem(
-                  child: const Text(SWStrings.labelLogout),
-                  onTap: () =>
-                      ref.read(profileControllerProvider.notifier).logout(),
-                ),
-              ],
+              itemBuilder: (context) => stateAsync.when(
+                data: (data) {
+                  return [
+                    PopupMenuItem(
+                      child: const Text(SWStrings.labelEditProfile),
+                      onTap: () => context.pushNamed(Routes.editProfile, extra: data.user),
+                    ),
+                    PopupMenuItem(
+                      child: const Text(SWStrings.labelLogout),
+                      onTap: () =>
+                          ref.read(profileControllerProvider.notifier).logout(),
+                    ),
+                  ];
+                },
+                error: (error, stackTrace) => [],
+                loading: () => [],
+              ),
             ),
           ],
         ),
@@ -65,9 +71,12 @@ class ProfileScreen extends ConsumerWidget {
         children: [
           CircleAvatar(
             radius: SWSizes.s56,
-            foregroundImage: userSignedIn.avatar != null ? NetworkImage(userSignedIn.avatar!) : null,
+            foregroundImage: userSignedIn.avatar != null
+                ? NetworkImage(userSignedIn.avatar!)
+                : null,
             backgroundColor: kColorPrimary50,
-            child: const Icon(Icons.person, color: kColorPrimary100, size: SWSizes.s56),
+            child: const Icon(Icons.person,
+                color: kColorPrimary100, size: SWSizes.s56),
           ),
           const SizedBox(height: SWSizes.s16),
           Text(

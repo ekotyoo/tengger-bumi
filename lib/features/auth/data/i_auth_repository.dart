@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fpdart/fpdart.dart';
 
 import '../../../common/error/failure.dart';
@@ -15,6 +17,13 @@ abstract class IAuthRepository {
     required String name,
     required String email,
     required String password,
+  });
+
+  Future<Either<Failure, AuthUser>> updateProfile({
+    required String userId,
+    String? name,
+    bool? deleteOld,
+    File? newAvatar,
   });
 
   Future<Either<Failure, Unit>> verifyEmail({

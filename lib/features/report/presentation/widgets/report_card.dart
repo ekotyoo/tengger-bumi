@@ -138,9 +138,9 @@ class ReportCard extends StatelessWidget {
 
   _buildLoadingIndicator(BuildContext context) {
     return const SizedBox(
-      height: SWSizes.s32,
-      width: SWSizes.s32,
-      child: CircularProgressIndicator(strokeWidth: SWSizes.s4),
+      height: SWSizes.s24,
+      width: SWSizes.s24,
+      child: CircularProgressIndicator(strokeWidth: SWSizes.s2),
     );
   }
 

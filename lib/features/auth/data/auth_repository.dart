@@ -1,5 +1,9 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -144,6 +148,65 @@ class AuthRepository implements IAuthRepository {
         return right(unit);
       }
 
+      return left(const Failure('Terjadi kesalahan, coba lagi nanti'));
+    } catch (e) {
+      final exception = NetworkExceptions.getDioException(e);
+      return left(Failure(exception.getErrorMessage()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AuthUser>> updateProfile({
+    required String userId,
+    String? name,
+    bool? deleteOld,
+    File? newAvatar,
+  }) async {
+    try {
+      final formData = FormData.fromMap({
+        'name': name,
+        'delete_old': deleteOld,
+      });
+
+      if (newAvatar != null) {
+        final path = newAvatar.path;
+        final fileName = path.split('/').last;
+        final extension = fileName.split('.').last;
+
+        formData.files.add(
+          MapEntry(
+            'avatar',
+            await MultipartFile.fromFile(
+              path,
+              filename: fileName,
+              contentType:
+              MediaType('image', extension == 'jpg' ? 'jpeg' : extension),
+            ),
+          ),
+        );
+      }
+
+      final response = await _client.put(
+        '/user/$userId',
+        data: formData,
+      );
+      if (response['status'] == 'success' && response['data'] != null) {
+        final newAuthUserWrapper = AuthUserWrapper.fromJson(response['data']);
+
+        var currentAuthUser = ref.read(authStateProvider);
+
+        if (currentAuthUser is SignedIn) {
+          final newAuthUser = AuthUser.signedIn(
+            id: newAuthUserWrapper.id,
+            name: newAuthUserWrapper.name,
+            email: newAuthUserWrapper.email,
+            avatar: newAuthUserWrapper.avatar?.replaceAll('public', kBaseUrl),
+            isAdmin: newAuthUserWrapper.isAdmin,
+            accessToken: currentAuthUser.accessToken,
+          );
+          return right(newAuthUser);
+        }
+      }
       return left(const Failure('Terjadi kesalahan, coba lagi nanti'));
     } catch (e) {
       final exception = NetworkExceptions.getDioException(e);
