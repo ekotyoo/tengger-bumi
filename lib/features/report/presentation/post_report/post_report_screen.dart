@@ -29,8 +29,14 @@ const reportTypes = [
   ),
 ];
 
+enum FormType { post, edit }
+
 class PostReportScreen extends ConsumerStatefulWidget {
-  const PostReportScreen({super.key});
+  const PostReportScreen(
+      {super.key, this.formType = FormType.post, this.reportId});
+
+  final FormType formType;
+  final String? reportId;
 
   @override
   ConsumerState<PostReportScreen> createState() => _PostReportScreenState();
@@ -45,8 +51,14 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
     super.initState();
     _pageController = PageController(viewportFraction: 1.1, initialPage: 0);
     _descriptionController = TextEditingController();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) =>
-        ref.read(postReportControllerProvider.notifier).getSchools());
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => ref
+        .read(postReportControllerProvider(widget.formType).notifier)
+        .getSchools());
+    if (widget.formType == FormType.edit && widget.reportId != null) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) => ref
+          .read(postReportControllerProvider(widget.formType).notifier)
+          .getReportDetail(widget.reportId!));
+    }
   }
 
   @override
@@ -58,33 +70,36 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(postReportControllerProvider);
+    final state = ref.watch(postReportControllerProvider(widget.formType));
 
     ref.listen(
-      postReportControllerProvider.select((value) => value.errorMessage),
-          (previous, next) {
+      postReportControllerProvider(widget.formType)
+          .select((value) => value.errorMessage),
+      (previous, next) {
         if (next != null && context.mounted) {
           showSnackbar(context, message: next, type: SnackbarType.error);
         }
-        ref.read(postReportControllerProvider.notifier).setErrorMessage(null);
+        ref
+            .read(postReportControllerProvider(widget.formType).notifier)
+            .setErrorMessage(null);
       },
     );
 
     ref.listen(
-      postReportControllerProvider.select((value) => value.successMessage),
-          (previous, next) {
+      postReportControllerProvider(widget.formType)
+          .select((value) => value.successMessage),
+      (previous, next) {
         if (next != null && context.mounted) {
           showSnackbar(context, message: next);
           context.pop();
         }
-        ref.read(postReportControllerProvider.notifier).setSuccessMessage(null);
+        ref
+            .read(postReportControllerProvider(widget.formType).notifier)
+            .setSuccessMessage(null);
       },
     );
 
-    final screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width - (2 * SWSizes.s16);
+    final screenWidth = MediaQuery.of(context).size.width - (2 * SWSizes.s16);
 
     final canGoBack = state.currentPage > 0;
 
@@ -93,12 +108,11 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
         widthFactor: 1 / _pageController.viewportFraction,
         child: PickSchoolForm(
           schools: state.schools,
-          isLoading: state.schoolLoading,
+          isLoading: state.firstFormLoading,
           selectedSchool: state.selectedSchool,
-          onSchoolSelected: (school) =>
-              ref
-                  .read(postReportControllerProvider.notifier)
-                  .onSchoolChange(school),
+          onSchoolSelected: (school) => ref
+              .read(postReportControllerProvider(widget.formType).notifier)
+              .onSchoolChange(school),
         ),
       ),
       FractionallySizedBox(
@@ -106,16 +120,16 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
         child: PickReportTypeForm(
           types: reportTypes,
           selectedType: state.selectedReportType,
-          onTypeSelected: (type) =>
-              ref
-                  .read(postReportControllerProvider.notifier)
-                  .onReportTypeChange(type),
+          onTypeSelected: (type) => ref
+              .read(postReportControllerProvider(widget.formType).notifier)
+              .onReportTypeChange(type),
         ),
       ),
       FractionallySizedBox(
         widthFactor: 1 / _pageController.viewportFraction,
         child: ReportInfoForm(
           descriptionController: _descriptionController,
+          formType: widget.formType,
         ),
       ),
     ];
@@ -161,7 +175,7 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
                       duration: kDurationShort,
                       color: kColorPrimary500,
                       width:
-                      screenWidth * state.currentPage / (forms.length - 1),
+                          screenWidth * state.currentPage / (forms.length - 1),
                       height: SWSizes.s4,
                     ),
                   ],
@@ -171,10 +185,10 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
                   child: PageView(
                     scrollDirection: Axis.horizontal,
                     controller: _pageController,
-                    onPageChanged: (value) =>
-                        ref
-                            .read(postReportControllerProvider.notifier)
-                            .onPageChange(value),
+                    onPageChanged: (value) => ref
+                        .read(postReportControllerProvider(widget.formType)
+                            .notifier)
+                        .onPageChange(value),
                     physics: const NeverScrollableScrollPhysics(),
                     children: forms,
                   ),
@@ -198,9 +212,11 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
     );
   }
 
-  _buildFormActions(BuildContext context,
-      PostReportState state,
-      List<Widget> forms,) {
+  _buildFormActions(
+    BuildContext context,
+    PostReportState state,
+    List<Widget> forms,
+  ) {
     var disabled = false;
 
     if (state.currentPage == 0 && state.selectedSchool == null) {
@@ -220,7 +236,9 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
         if (currentPage < forms.length - 1) {
           _animateToPage(currentPage + 1);
         } else {
-          ref.read(postReportControllerProvider.notifier).onSubmit();
+          ref
+              .read(postReportControllerProvider(widget.formType).notifier)
+              .onSubmit();
         }
       },
     );

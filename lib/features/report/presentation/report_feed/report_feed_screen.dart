@@ -115,7 +115,10 @@ class ReportList extends ConsumerWidget {
                     .read(reportFeedControllerProvider(reportQuery).notifier)
                     .deleteReport(report, index),
                 onEdited: () {
-                  // TODO: Navigate to edit page
+                  context.pushNamed(
+                    Routes.editReport,
+                    params: {'reportId': report.id},
+                  );
                 },
                 onTap: () {
                   context.pushNamed(

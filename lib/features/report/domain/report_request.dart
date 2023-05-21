@@ -17,6 +17,7 @@ class ReportRequest with _$ReportRequest {
     required double longitude,
     @JsonKey(name: 'is_active') bool? isActive,
     @JsonKey(name: 'additional_infos') List<AdditionalInfo>? additionalInfos,
+    @JsonKey(name: 'deleted_images') List<String>? deletedImages,
   }) = _ReportRequest;
 
   factory ReportRequest.fromJson(Map<String, Object?> json) => _$ReportRequestFromJson(json);

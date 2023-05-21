@@ -13,6 +13,7 @@ class Routes {
   static const emailVerification = 'emailverification';
 
   static const reportDetail = 'reportdetail';
+  static const editReport = 'editReport';
   static const locationPicker = 'locationpicker';
 
   static const schoolList = 'schoollist';

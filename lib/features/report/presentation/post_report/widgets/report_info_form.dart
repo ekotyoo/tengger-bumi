@@ -17,12 +17,15 @@ import '../post_report_controller.dart';
 import '../../../../../common/widgets/sw_text_field.dart';
 import '../../../../../common/constants/constant.dart';
 import '../../../../../common/widgets/title_with_caption.dart';
+import '../post_report_screen.dart';
 import '../post_report_state.dart';
 
 class ReportInfoForm extends ConsumerStatefulWidget {
-  const ReportInfoForm({super.key, this.descriptionController});
+  const ReportInfoForm(
+      {super.key, this.descriptionController, this.formType = FormType.post});
 
   final TextEditingController? descriptionController;
+  final FormType formType;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ReportInfoFormState();
@@ -32,13 +35,14 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) =>
-        ref.read(postReportControllerProvider.notifier).initReportInfoForm());
+    WidgetsBinding.instance.addPostFrameCallback((_) => ref
+        .read(postReportControllerProvider(widget.formType).notifier)
+        .initReportInfoForm());
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(postReportControllerProvider);
+    final state = ref.watch(postReportControllerProvider(widget.formType));
     const loadingWidget = Center(child: CircularProgressIndicator());
 
     return Column(
@@ -56,7 +60,27 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
                   children: [
                     ..._buildFormInputFields(context, state),
                     const Divider(),
-                    ImagePickerInput(),
+                    ImagePickerInput(
+                      images: state.imageInput.value,
+                      onImageFromGalleryPicked: (images) {
+                        ref
+                            .read(postReportControllerProvider(widget.formType)
+                                .notifier)
+                            .onImagesSelected(images);
+                      },
+                      onImageFroCameraPicked: (image) {
+
+                        ref
+                            .read(postReportControllerProvider(widget.formType).notifier)
+                            .onImagesSelected([image]);
+                      },
+                      onImageDeleted: (image) {
+                        ref
+                            .read(postReportControllerProvider(widget.formType).notifier)
+                            .onImageDeleted(image);
+                      },
+                      errorText: !state.imageInput.isPure && state.imageInput.error != null ? state.imageInput.error!.getErrorMessage() : null,
+                    ),
                   ],
                 ),
         ),
@@ -65,6 +89,11 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
   }
 
   _buildFormInputFields(BuildContext context, PostReportState state) {
+    if (state.formType == FormType.edit) {
+      final description = state.descriptionInput.value;
+      widget.descriptionController?.text = description;
+    }
+
     return [
       SWTextField(
         controller: widget.descriptionController,
@@ -75,7 +104,7 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
             : state.descriptionInput.error?.getErrorMessage(),
         action: TextInputAction.done,
         onChanged: (value) => ref
-            .read(postReportControllerProvider.notifier)
+            .read(postReportControllerProvider(widget.formType).notifier)
             .onDescriptionChange(value),
       ),
       const SizedBox(height: SWSizes.s16),
@@ -85,7 +114,7 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
             ? null
             : state.categoryInput.error?.getErrorMessage(),
         onChanged: (value) => ref
-            .read(postReportControllerProvider.notifier)
+            .read(postReportControllerProvider(widget.formType).notifier)
             .onCategoryChange(value),
         value: state.categoryInput.value,
         items: state.categories
@@ -110,7 +139,7 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
           final position = result?['position'];
           final room = result?['room'];
 
-          ref.read(postReportControllerProvider.notifier)
+          ref.read(postReportControllerProvider(widget.formType).notifier)
             ..onLocationChange(position)
             ..onSelectedRoomChange(room);
         },
@@ -122,16 +151,16 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
           input: state.additionalInfoInputs[i],
           onLabelChanged: (value) {
             ref
-                .read(postReportControllerProvider.notifier)
+                .read(postReportControllerProvider(widget.formType).notifier)
                 .onLabelChange(i, value);
           },
           onInformationChanged: (value) {
             ref
-                .read(postReportControllerProvider.notifier)
+                .read(postReportControllerProvider(widget.formType).notifier)
                 .onInformationChange(i, value);
           },
           onDelete: () => ref
-              .read(postReportControllerProvider.notifier)
+              .read(postReportControllerProvider(widget.formType).notifier)
               .removeAdditionalInfo(i),
         ),
         const SizedBox(height: SWSizes.s8),
@@ -140,7 +169,7 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
       if (state.additionalInfoInputs.length < kMaxAdditionalInfo)
         TextButton(
           onPressed: () => ref
-              .read(postReportControllerProvider.notifier)
+              .read(postReportControllerProvider(widget.formType).notifier)
               .addAdditionalInfo(),
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -155,10 +184,23 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
 }
 
 class ImagePickerInput extends ConsumerWidget {
-  ImagePickerInput({Key? key, this.errorText}) : super(key: key);
+  ImagePickerInput({
+    Key? key,
+    this.errorText,
+    this.onImageFromGalleryPicked,
+    this.onImageFroCameraPicked,
+    this.onImageDeleted,
+    this.images = const [],
+    this.errorMessage,
+  }) : super(key: key);
 
   final _imagePicker = ImagePicker();
   final String? errorText;
+  final Function(List<XFile>)? onImageFromGalleryPicked;
+  final Function(XFile)? onImageFroCameraPicked;
+  final Function(XFile)? onImageDeleted;
+  final List<XFile> images;
+  final String? errorMessage;
 
   void _pickImageFromGallery(WidgetRef ref) async {
     try {
@@ -167,7 +209,7 @@ class ImagePickerInput extends ConsumerWidget {
         maxHeight: 600,
         imageQuality: 70,
       );
-      ref.read(postReportControllerProvider.notifier).onImagesSelected(images);
+      onImageFromGalleryPicked?.call(images);
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -182,9 +224,7 @@ class ImagePickerInput extends ConsumerWidget {
         imageQuality: 70,
       );
       if (image != null) {
-        ref
-            .read(postReportControllerProvider.notifier)
-            .onImagesSelected([image]);
+        onImageFroCameraPicked?.call(image);
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -196,9 +236,7 @@ class ImagePickerInput extends ConsumerWidget {
       scrollDirection: Axis.horizontal,
       itemBuilder: (context, index) => ImageCard(
         path: images[index].path,
-        onDelete: () => ref
-            .read(postReportControllerProvider.notifier)
-            .onImageDeleted(images[index]),
+        onDelete: () => onImageDeleted?.call(images[index]),
       ),
       separatorBuilder: (context, index) => const SizedBox(width: SWSizes.s8),
       itemCount: images.length,
@@ -207,9 +245,6 @@ class ImagePickerInput extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(postReportControllerProvider);
-    final images = state.imageInput.value;
-
     final emptyImagePlaceholder = DottedBorder(
       borderType: BorderType.RRect,
       radius: const Radius.circular(SWSizes.s8),
@@ -261,10 +296,10 @@ class ImagePickerInput extends ConsumerWidget {
             )
           ],
         ),
-        if (!state.imageInput.isPure && state.imageInput.error != null) ...[
+        if (errorMessage != null) ...[
           const SizedBox(height: SWSizes.s4),
           Text(
-            state.imageInput.error!.getErrorMessage(),
+            errorMessage!,
             style: Theme.of(context)
                 .textTheme
                 .labelSmall

@@ -1,7 +1,9 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:school_watch_semeru/features/report/presentation/post_report/post_report_screen.dart';
 import 'package:school_watch_semeru/features/school/domain/school_detail.dart';
 import 'package:school_watch_semeru/features/school/presentation/models/room_ui_model.dart';
 
+import '../../domain/report_detail.dart';
 import 'widgets/pick_report_type_form.dart';
 import 'widgets/pick_school_form.dart';
 import '../../domain/category.dart';
@@ -16,12 +18,14 @@ part 'post_report_state.freezed.dart';
 @freezed
 class PostReportState with _$PostReportState {
   const factory PostReportState({
+    ReportDetail? reportDetail,
+    @Default(FormType.post) FormType formType,
     @Default(0) int currentPage,
     SchoolOption? selectedSchool,
     RoomUiModel? selectedRoom,
     SchoolDetail? selectedSchoolData,
     @Default([]) List<SchoolOption> schools,
-    @Default(true) bool schoolLoading,
+    @Default(true) bool firstFormLoading,
     @Default(true) bool infoFormLoading,
     @Default(false) bool finalFormSubmitting,
     ReportType? selectedReportType,

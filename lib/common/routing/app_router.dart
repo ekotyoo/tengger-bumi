@@ -162,26 +162,39 @@ class AppRouter extends _$AppRouter implements Listenable {
             key: state.pageKey,
             child: const PostReportScreen(),
           ),
-          routes: [
-            GoRoute(
-              path: 'locationpicker',
-              name: Routes.locationPicker,
-              parentNavigatorKey: navigatorKey,
-              pageBuilder: (context, state) {
-                final arg = state.extra as LocationPickNavArg?;
+        ),
+        GoRoute(
+          path: '/editreport/:reportId',
+          name: Routes.editReport,
+          parentNavigatorKey: navigatorKey,
+          pageBuilder: (context, state) {
+            final reportId = state.params['reportId'];
+            return MaterialPage(
+              key: state.pageKey,
+              child: PostReportScreen(
+                formType: FormType.edit,
+                reportId: reportId,
+              ),
+            );
+          },
+        ),
+        GoRoute(
+          path: '/locationpicker',
+          name: Routes.locationPicker,
+          parentNavigatorKey: navigatorKey,
+          pageBuilder: (context, state) {
+            final arg = state.extra as LocationPickNavArg?;
 
-                if (arg == null) throw Exception();
+            if (arg == null) throw Exception();
 
-                return MaterialPage(
-                  key: state.pageKey,
-                  child: LocationPicker(
-                    selectedPosition: arg.selectedPosition,
-                    floorPlan: arg.floorPlan,
-                  ),
-                );
-              },
-            ),
-          ],
+            return MaterialPage(
+              key: state.pageKey,
+              child: LocationPicker(
+                selectedPosition: arg.selectedPosition,
+                floorPlan: arg.floorPlan,
+              ),
+            );
+          },
         ),
         GoRoute(
           path: '/report/:reportId',
