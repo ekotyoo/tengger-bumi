@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:school_watch_semeru/features/report/domain/report.dart';
 
+import '../../domain/report.dart';
 import '../../data/report_repository.dart';
 import '../../domain/report_query.dart';
 import 'report_feed_state.dart';
@@ -57,6 +57,15 @@ class ReportFeedController extends _$ReportFeedController {
     final oldReports = oldState.reports.toList();
     oldReports.removeAt(index);
     state = AsyncValue.data(oldState.copyWith(reports: oldReports));
+  }
+
+  void updateReport(Report report) {
+    final oldState = state.requireValue;
+    final reports = oldState.reports.toList();
+    final index = reports.indexWhere((element) => element.id == report.id);
+    reports[index] = report;
+
+    state = AsyncValue.data(oldState.copyWith(reports: reports));
   }
 
   void addReport(Report report) {

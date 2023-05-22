@@ -361,7 +361,13 @@ class PostReportController extends StateNotifier<PostReportState> {
           state = state.copyWith(finalFormSubmitting: false);
         },
         (r) {
-          // Todo handle new received report
+          final reportFilter = _ref.read(reportFilterStateProvider);
+          if (r.category.type == reportFilter.reportType?.name.toLowerCase() ||
+              reportFilter.reportType == null) {
+            _ref
+                .read(reportFeedControllerProvider(reportFilter).notifier)
+                .updateReport(r);
+          }
           setSuccessMessage('Laporan berhasil disunting');
           state = state.copyWith(finalFormSubmitting: false);
         },
