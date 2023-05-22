@@ -224,6 +224,58 @@ class FakeReportRepository implements IReportRepository {
   }
 
   @override
+  Future<Either<Failure, Report>> updateReport({
+    required String reportId,
+    required ReportRequest report,
+    required List<File> images,
+  }) async {
+    try {
+      final reportMap = report.toJson();
+      final formData = FormData.fromMap(reportMap);
+
+      final multipartFiles = <MapEntry<String, MultipartFile>>[];
+
+      for (var image in images) {
+        final path = image.path;
+        final fileName = path.split('/').last;
+        final extension = fileName.split('.').last;
+
+        multipartFiles.add(
+          MapEntry(
+            'images',
+            await MultipartFile.fromFile(
+              path,
+              filename: fileName,
+              contentType:
+                  MediaType('image', extension == 'jpg' ? 'jpeg' : extension),
+            ),
+          ),
+        );
+      }
+      formData.files.addAll(multipartFiles);
+
+      final response = await _client.put('/report/$reportId', data: formData);
+
+      if (response['status'] == 'success' && response['data'] != null) {
+        final report = Report.fromJson(response['data']);
+        final newReport = report.copyWith(
+          images: report.images
+              .map((e) => e.replaceAll('public', kBaseUrl))
+              .toList(),
+          author: report.author.copyWith(
+            avatar: report.author.avatar?.replaceAll('public', kBaseUrl),
+          ),
+        );
+        return right(newReport);
+      }
+      return left(const Failure('Terjadi kesalahan, coba lagi nanti.'));
+    } catch (e) {
+      final exception = NetworkExceptions.getDioException(e);
+      return left(Failure(exception.getErrorMessage()));
+    }
+  }
+
+  @override
   Future<Either<Failure, List<Category>>> getCategories({
     required String type,
     CancelToken? cancelToken,
@@ -267,12 +319,13 @@ class FakeReportRepository implements IReportRepository {
     CancelToken? cancelToken,
   }) async {
     try {
-      final response = await _client.delete('/report/$reportId/comment/$commentId');
+      final response =
+          await _client.delete('/report/$reportId/comment/$commentId');
       if (response['status'] == 'success') {
         return right(unit);
       }
       return left(const Failure('Gagal menghapus komentar'));
-    } catch(e) {
+    } catch (e) {
       final exception = NetworkExceptions.getDioException(e);
       return left(Failure(exception.getErrorMessage()));
     }

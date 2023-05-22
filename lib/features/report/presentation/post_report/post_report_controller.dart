@@ -3,10 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:school_watch_semeru/features/report/domain/report_detail.dart';
-import 'package:school_watch_semeru/features/report/presentation/post_report/post_report_screen.dart';
+import 'package:school_watch_semeru/common/services/http_client.dart';
+import '../../domain/report_detail.dart';
+import 'post_report_screen.dart';
+import 'package:collection/collection.dart';
 
 import '../../domain/additional_info.dart';
 import '../../../school/presentation/models/room_ui_model.dart';
@@ -48,14 +51,11 @@ class PostReportController extends StateNotifier<PostReportState> {
   void onReportTypeChange(ReportType type) =>
       state = state.copyWith(selectedReportType: type);
 
-  void onDescriptionChange(String value) =>
-      state = state.copyWith(
-          descriptionInput: DescriptionTextInput.dirty(value: value));
+  void onDescriptionChange(String value) => state = state.copyWith(
+      descriptionInput: DescriptionTextInput.dirty(value: value));
 
-  void onCategoryChange(Category? value) =>
-      state =
-          state.copyWith(
-              categoryInput: CategoryOptionInput.dirty(value: value));
+  void onCategoryChange(Category? value) => state =
+      state.copyWith(categoryInput: CategoryOptionInput.dirty(value: value));
 
   void onLocationChange(LatLng? value) {
     if (value == null) return;
@@ -121,16 +121,35 @@ class PostReportController extends StateNotifier<PostReportState> {
   }
 
   void onImagesSelected(List<XFile> images) {
-    state = state.copyWith(
-      imageInput: ImagePickInput.dirty(value: state.imageInput.value + images),
+    final imageInput = ImagePickInput.dirty(
+      value: [
+        ...state.imageInput.value,
+        ...images.map((e) => left<XFile, String>(e)).toList()
+      ],
     );
+
+    Formz.validate([imageInput]);
+
+    state = state.copyWith(imageInput: imageInput);
   }
 
-  void onImageDeleted(XFile image) {
+  void onImageDeleted(Either<XFile, String> image) {
     final newList = state.imageInput.value;
     newList.remove(image);
 
-    state = state.copyWith(imageInput: ImagePickInput.dirty(value: newList));
+    image.fold(
+      (l) => null,
+      (r) {
+        final newDeletedImages = [...state.deletedImages, r];
+        return state = state.copyWith(deletedImages: newDeletedImages);
+      },
+    );
+
+    final imageInput = ImagePickInput.dirty(value: newList);
+
+    Formz.validate([imageInput]);
+
+    state = state.copyWith(imageInput: imageInput);
   }
 
   void _validateForm() {
@@ -146,80 +165,96 @@ class PostReportController extends StateNotifier<PostReportState> {
       ),
       additionalInfoInputs: state.additionalInfoInputs
           .map(
-            (e) =>
-            AdditionalInfoInputWrapper(
+            (e) => AdditionalInfoInputWrapper(
               key: e.key,
               labelInput: LabelTextInput.dirty(value: e.labelInput.value),
               informationInput:
-              InformationTextInput.dirty(value: e.informationInput.value),
+                  InformationTextInput.dirty(value: e.informationInput.value),
             ),
-      )
+          )
           .toList(),
       imageInput: ImagePickInput.dirty(value: state.imageInput.value),
-      validated: Formz.validate([
-        state.descriptionInput,
-        state.categoryInput,
-        state.locationInput,
-        ...state.additionalInfoInputs.map((e) => e.labelInput).toList(),
-        ...state.additionalInfoInputs
-            .map((e) => e.informationInput)
-            .toList(),
-        state.imageInput,
-      ]) ||
-          state.selectedRoom != null,
     );
+
+    final validated = Formz.validate([
+          state.descriptionInput,
+          state.categoryInput,
+          state.locationInput,
+          ...state.additionalInfoInputs.map((e) => e.labelInput).toList(),
+          ...state.additionalInfoInputs.map((e) => e.informationInput).toList(),
+          state.imageInput,
+        ]) &&
+        state.selectedRoom != null;
+
+    debugPrint('Validated: $validated');
+
+    state = state.copyWith(validated: validated);
   }
 
-  void getSchools() async {
+  void initForm(String? reportId) async {
     state = state.copyWith(firstFormLoading: true);
+    await getSchools();
+    if (reportId != null) {
+      await getReportDetail(reportId);
+      await _populateReportDetail(state.reportDetail);
+    }
+    state = state.copyWith(firstFormLoading: false);
+  }
+
+  Future<void> getSchools() async {
     final schools = await _schoolRepository.getSchools();
     final schoolOptions = schools.fold(
-          (l) {
+      (l) {
         setErrorMessage(l.message);
         return const <SchoolOption>[];
       },
-          (r) => r.map((e) => SchoolOption(id: e.id, name: e.name)).toList(),
+      (r) => r.map((e) => SchoolOption(id: e.id, name: e.name)).toList(),
     );
-    state = state.copyWith(firstFormLoading: false, schools: schoolOptions);
+    state = state.copyWith(schools: schoolOptions);
   }
 
-  void getReportDetail(String reportId) async {
-    state = state.copyWith(firstFormLoading: true);
+  Future<void> getReportDetail(String reportId) async {
     final result = await _reportRepository.getReport(reportId: reportId);
     final report = await result.fold(
-          (l) {
+      (l) {
         setErrorMessage(l.message);
         return null;
       },
-          (r) async {
-        await _populateReportDetail(r);
+      (r) async {
         return r;
       },
     );
-    state = state.copyWith(firstFormLoading: false, reportDetail: report);
+    state = state.copyWith(reportDetail: report);
   }
 
   Future<void> _populateReportDetail(ReportDetail? report) async {
     if (report == null) return;
+
     final selectedSchool =
-    state.schools.firstWhere((element) => element.name == report.school);
+        state.schools.firstWhere((element) => element.name == report.school);
     final selectedReportType = reportTypes.firstWhere(
-            (element) => element.name.toLowerCase() == report.category.type);
+        (element) => element.name.toLowerCase() == report.category.type);
     final selectedLocation = report.position;
     final additionalInfos = report.additionalInfos;
+    final images = report.images.map((e) => right<XFile, String>(e)).toList();
 
     state = state.copyWith(
       selectedSchool: selectedSchool,
       selectedReportType: selectedReportType,
       locationInput: LocationPickInput.dirty(value: selectedLocation),
       descriptionInput: DescriptionTextInput.dirty(value: report.description),
-      additionalInfoInputs: additionalInfos?.map(
-            (e) =>
-            AdditionalInfoInputWrapper(
-              labelInput: LabelTextInput.dirty(value: e.label),
-              informationInput: InformationTextInput.dirty(value: e.information),
-              key: UniqueKey(),),
-      ).toList() ??  [],
+      imageInput: ImagePickInput.dirty(value: images),
+      additionalInfoInputs: additionalInfos
+              ?.map(
+                (e) => AdditionalInfoInputWrapper(
+                  labelInput: LabelTextInput.dirty(value: e.label),
+                  informationInput:
+                      InformationTextInput.dirty(value: e.information),
+                  key: UniqueKey(),
+                ),
+              )
+              .toList() ??
+          [],
     );
   }
 
@@ -234,11 +269,28 @@ class PostReportController extends StateNotifier<PostReportState> {
     await _getCategories(state.selectedReportType!.name.toLowerCase());
 
     if (state.formType == FormType.edit) {
-      final selectedCategory = state.categories.firstWhere(
-            (element) => element.id == state.reportDetail?.category.id,
-      );
+      final report = state.reportDetail;
+      if (report == null) return;
+
+      Category? selectedCategory;
+
+      if (report.category.type ==
+          (state.selectedReportType?.name.toLowerCase() ?? false)) {
+        selectedCategory = state.categories.firstWhereOrNull(
+          (element) {
+            return element.id == report.category.id;
+          },
+        );
+      }
+      final room = state.selectedSchoolData?.floorPlan.rooms
+          .firstWhere((element) => element.label == report.room);
+
       state = state.copyWith(
-          categoryInput: CategoryOptionInput.dirty(value: selectedCategory));
+        categoryInput: selectedCategory != null
+            ? CategoryOptionInput.dirty(value: selectedCategory)
+            : const CategoryOptionInput.pure(),
+        selectedRoom: room != null ? RoomUiModel.fromDomain(room) : null,
+      );
     }
 
     state = state.copyWith(infoFormLoading: false);
@@ -247,17 +299,16 @@ class PostReportController extends StateNotifier<PostReportState> {
   Future<void> _getSchoolDetail(String schoolId) async {
     final result = await _schoolRepository.getSchool(schoolId: schoolId);
     result.fold(
-          (l) => setErrorMessage(l.message),
-          (r) => state = state.copyWith(selectedSchoolData: r),
+      (l) => setErrorMessage(l.message),
+      (r) => state = state.copyWith(selectedSchoolData: r),
     );
   }
 
   Future<void> _getCategories(String reportType) async {
     final result = await _reportRepository.getCategories(type: reportType);
     result.fold(
-          (l) => setErrorMessage(l.message),
-          (r) =>
-      state = state.copyWith(
+      (l) => setErrorMessage(l.message),
+      (r) => state = state.copyWith(
         categories: r,
       ),
     );
@@ -277,29 +328,56 @@ class PostReportController extends StateNotifier<PostReportState> {
 
     final position = state.locationInput.value!;
     final report = ReportRequest(
-      schoolId: state.selectedSchool!.id,
-      description: state.descriptionInput.value,
-      categoryId: state.categoryInput.value!.id,
-      latitude: position.latitude,
-      longitude: position.longitude,
-      roomId: state.selectedRoom!.id!,
-      additionalInfos: state.additionalInfoInputs
-          .map((e) =>
-          AdditionalInfo(
-            label: e.labelInput.value,
-            information: e.informationInput.value,
-          ))
-          .toList(),
-    );
-    final images = state.imageInput.value.map((e) => File(e.path)).toList();
+        schoolId: state.selectedSchool!.id,
+        description: state.descriptionInput.value,
+        categoryId: state.categoryInput.value!.id,
+        latitude: position.latitude,
+        longitude: position.longitude,
+        roomId: state.selectedRoom!.id!,
+        additionalInfos: state.additionalInfoInputs
+            .map((e) => AdditionalInfo(
+                  label: e.labelInput.value,
+                  information: e.informationInput.value,
+                ))
+            .toList(),
+        deletedImages: state.deletedImages
+            .map((e) => e.replaceAll(kBaseUrl, 'public'))
+            .toList());
+
+    final images = state.imageInput.value
+        .map((e) => e.fold((l) => l, (r) => null))
+        .where((e) => e != null)
+        .map((e) => File(e!.path))
+        .toList();
+
+    if (state.formType == FormType.edit) {
+      if (state.reportDetail == null) return;
+      final result = await _reportRepository.updateReport(
+          reportId: state.reportDetail!.id, report: report, images: images);
+
+      result.fold(
+        (l) {
+          setErrorMessage(l.message);
+          state = state.copyWith(finalFormSubmitting: false);
+        },
+        (r) {
+          // Todo handle new received report
+          setSuccessMessage('Laporan berhasil disunting');
+          state = state.copyWith(finalFormSubmitting: false);
+        },
+      );
+
+      return;
+    }
+
     final result = await _reportRepository.postReport(report, images);
 
     result.fold(
-          (l) {
+      (l) {
         setErrorMessage(l.message);
         state = state.copyWith(finalFormSubmitting: false);
       },
-          (r) {
+      (r) {
         final reportFilter = _ref.read(reportFilterStateProvider);
         if (r.category.type == reportFilter.reportType?.name.toLowerCase() ||
             reportFilter.reportType == null) {
@@ -316,7 +394,7 @@ class PostReportController extends StateNotifier<PostReportState> {
 
 final postReportControllerProvider = StateNotifierProvider.autoDispose
     .family<PostReportController, PostReportState, FormType>(
-      (ref, type) {
+  (ref, type) {
     final reportRepository = ref.watch(reportRepositoryProvider);
     final schoolRepository = ref.watch(schoolRepositoryProvider);
     return PostReportController(reportRepository, schoolRepository, ref, type);

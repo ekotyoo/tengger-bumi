@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart' as fp;
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -69,17 +70,20 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
                             .onImagesSelected(images);
                       },
                       onImageFroCameraPicked: (image) {
-
                         ref
-                            .read(postReportControllerProvider(widget.formType).notifier)
+                            .read(postReportControllerProvider(widget.formType)
+                                .notifier)
                             .onImagesSelected([image]);
                       },
                       onImageDeleted: (image) {
                         ref
-                            .read(postReportControllerProvider(widget.formType).notifier)
+                            .read(postReportControllerProvider(widget.formType)
+                                .notifier)
                             .onImageDeleted(image);
                       },
-                      errorText: !state.imageInput.isPure && state.imageInput.error != null ? state.imageInput.error!.getErrorMessage() : null,
+                      errorText: state.imageInput.isPure
+                          ? null
+                          : state.imageInput.error?.getErrorMessage(),
                     ),
                   ],
                 ),
@@ -89,14 +93,9 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
   }
 
   _buildFormInputFields(BuildContext context, PostReportState state) {
-    if (state.formType == FormType.edit) {
-      final description = state.descriptionInput.value;
-      widget.descriptionController?.text = description;
-    }
-
     return [
       SWTextField(
-        controller: widget.descriptionController,
+        initialText: state.reportDetail?.description,
         hint: SWStrings.labelDescription,
         maxLines: 5,
         errorText: state.descriptionInput.isPure
@@ -191,16 +190,14 @@ class ImagePickerInput extends ConsumerWidget {
     this.onImageFroCameraPicked,
     this.onImageDeleted,
     this.images = const [],
-    this.errorMessage,
   }) : super(key: key);
 
   final _imagePicker = ImagePicker();
   final String? errorText;
   final Function(List<XFile>)? onImageFromGalleryPicked;
   final Function(XFile)? onImageFroCameraPicked;
-  final Function(XFile)? onImageDeleted;
-  final List<XFile> images;
-  final String? errorMessage;
+  final Function(fp.Either<XFile, String>)? onImageDeleted;
+  final List<fp.Either<XFile, String>> images;
 
   void _pickImageFromGallery(WidgetRef ref) async {
     try {
@@ -231,11 +228,11 @@ class ImagePickerInput extends ConsumerWidget {
     }
   }
 
-  _buildImageList(List<XFile> images, WidgetRef ref) {
+  _buildImageList(List<fp.Either<XFile, String>> images, WidgetRef ref) {
     return ListView.separated(
       scrollDirection: Axis.horizontal,
       itemBuilder: (context, index) => ImageCard(
-        path: images[index].path,
+        src: images[index],
         onDelete: () => onImageDeleted?.call(images[index]),
       ),
       separatorBuilder: (context, index) => const SizedBox(width: SWSizes.s8),
@@ -296,10 +293,10 @@ class ImagePickerInput extends ConsumerWidget {
             )
           ],
         ),
-        if (errorMessage != null) ...[
+        if (errorText != null) ...[
           const SizedBox(height: SWSizes.s4),
           Text(
-            errorMessage!,
+            errorText!,
             style: Theme.of(context)
                 .textTheme
                 .labelSmall
@@ -313,10 +310,10 @@ class ImagePickerInput extends ConsumerWidget {
 }
 
 class ImageCard extends StatelessWidget {
-  const ImageCard({Key? key, required this.path, this.onDelete})
+  const ImageCard({Key? key, required this.src, this.onDelete})
       : super(key: key);
 
-  final String path;
+  final fp.Either<XFile, String> src;
   final VoidCallback? onDelete;
 
   @override
@@ -328,10 +325,17 @@ class ImageCard extends StatelessWidget {
           width: SWSizes.s80,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(SWSizes.s8),
-            child: Image.file(
-              key: ValueKey(path),
-              File(path),
-              fit: BoxFit.cover,
+            child: src.fold(
+              (l) => Image.file(
+                key: ValueKey(src),
+                File(l.path),
+                fit: BoxFit.cover,
+              ),
+              (r) => Image.network(
+                r,
+                key: ValueKey(r),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ),
@@ -378,25 +382,6 @@ class _AdditionalInfoTextField extends StatefulWidget {
 }
 
 class _AdditionalInfoTextFieldState extends State<_AdditionalInfoTextField> {
-  late TextEditingController _labelController;
-  late TextEditingController _informationController;
-
-  @override
-  void initState() {
-    super.initState();
-    _labelController =
-        TextEditingController(text: widget.input.labelInput.value);
-    _informationController =
-        TextEditingController(text: widget.input.informationInput.value);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _labelController.dispose();
-    _informationController.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -404,7 +389,7 @@ class _AdditionalInfoTextFieldState extends State<_AdditionalInfoTextField> {
       children: [
         Expanded(
           child: SWTextField(
-            controller: _labelController,
+            initialText: widget.input.labelInput.value,
             hint: SWStrings.labelLabel,
             onChanged: widget.onLabelChanged,
             errorText: widget.input.labelInput.isPure
@@ -415,7 +400,7 @@ class _AdditionalInfoTextFieldState extends State<_AdditionalInfoTextField> {
         const SizedBox(width: SWSizes.s16),
         Expanded(
           child: SWTextField(
-            controller: _informationController,
+            initialText: widget.input.informationInput.value,
             hint: SWStrings.labelInformation,
             onChanged: widget.onInformationChanged,
             errorText: widget.input.informationInput.isPure

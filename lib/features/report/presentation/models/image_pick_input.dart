@@ -1,4 +1,5 @@
 import 'package:formz/formz.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../common/constants/constant.dart';
@@ -14,13 +15,13 @@ enum ImagePickInputError {
   }
 }
 
-class ImagePickInput extends FormzInput<List<XFile>, ImagePickInputError> {
+class ImagePickInput extends FormzInput<List<Either<XFile, String>>, ImagePickInputError> {
   const ImagePickInput.pure(): super.pure(const []);
 
-  const ImagePickInput.dirty({List<XFile> value = const []}): super.dirty(value);
+  const ImagePickInput.dirty({List<Either<XFile, String>> value = const []}): super.dirty(value);
 
   @override
-  ImagePickInputError? validator(List<XFile> value) {
+  ImagePickInputError? validator(List<Either<XFile, String>> value) {
     if (value.isEmpty) return ImagePickInputError.empty;
 
     return null;

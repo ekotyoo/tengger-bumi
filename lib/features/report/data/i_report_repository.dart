@@ -23,7 +23,15 @@ abstract class IReportRepository {
   });
 
   Future<Either<Failure, Report>> postReport(
-      ReportRequest report, List<File> images);
+    ReportRequest report,
+    List<File> images,
+  );
+
+  Future<Either<Failure, Report>> updateReport({
+    required String reportId,
+    required ReportRequest report,
+    required List<File> images,
+  });
 
   Future<Either<Failure, List<Category>>> getCategories({
     required String type,

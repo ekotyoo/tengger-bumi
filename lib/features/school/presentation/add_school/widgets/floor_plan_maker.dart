@@ -360,24 +360,6 @@ class _FloorPlanMakerState extends State<FloorPlanMaker> {
                         errorText: _labelError,
                       ),
                     ),
-                    // const SizedBox(width: SWSizes.s16),
-                    // GestureDetector(
-                    //   onTap: _resetPolyEditor,
-                    //   child: Column(
-                    //     children: [
-                    //       Container(
-                    //         padding: const EdgeInsets.all(SWSizes.s4),
-                    //         decoration: BoxDecoration(
-                    //           color: kColorPrimary50,
-                    //           borderRadius: BorderRadius.circular(SWSizes.s8),
-                    //         ),
-                    //         child: const Center(child: Icon(Icons.restart_alt)),
-                    //       ),
-                    //       const SizedBox(height: SWSizes.s4),
-                    //       const Text(SWStrings.labelReset),
-                    //     ],
-                    //   ),
-                    // ),
                   ],
                 ),
               ],

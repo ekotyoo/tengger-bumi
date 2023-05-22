@@ -51,14 +51,11 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
     super.initState();
     _pageController = PageController(viewportFraction: 1.1, initialPage: 0);
     _descriptionController = TextEditingController();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => ref
-        .read(postReportControllerProvider(widget.formType).notifier)
-        .getSchools());
-    if (widget.formType == FormType.edit && widget.reportId != null) {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) => ref
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) => ref
           .read(postReportControllerProvider(widget.formType).notifier)
-          .getReportDetail(widget.reportId!));
-    }
+          .initForm(widget.reportId),
+    );
   }
 
   @override

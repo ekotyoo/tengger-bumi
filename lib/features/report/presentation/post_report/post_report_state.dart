@@ -35,6 +35,7 @@ class PostReportState with _$PostReportState {
     @Default(LocationPickInput.pure()) LocationPickInput locationInput,
     @Default(ImagePickInput.pure()) ImagePickInput imageInput,
     @Default([]) List<AdditionalInfoInputWrapper> additionalInfoInputs,
+    @Default([]) List<String> deletedImages,
     @Default(false) bool validated,
     String? successMessage,
     String? errorMessage,

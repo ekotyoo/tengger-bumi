@@ -15,13 +15,15 @@ class SWTextField extends StatefulWidget {
     this.errorText,
     this.onChanged,
     this.enabled = true,
+    this.initialText,
   });
 
+  final TextEditingController? controller;
+  final String? initialText;
   final SWTextFieldType type;
   final String? hint;
   final TextInputAction? action;
   final int maxLines;
-  final TextEditingController? controller;
   final String? errorText;
   final Function(String)? onChanged;
   final bool enabled;
@@ -32,11 +34,22 @@ class SWTextField extends StatefulWidget {
 
 class _SWTextFieldState extends State<SWTextField> {
   var obscureText = false;
+  late TextEditingController _controller;
 
   @override
   void initState() {
     super.initState();
+    _controller = widget.controller ?? TextEditingController();
+    if (widget.initialText != null) {
+      _controller.text = widget.initialText!;
+    }
     obscureText = widget.type == SWTextFieldType.password;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
   }
 
   @override
@@ -60,7 +73,7 @@ class _SWTextFieldState extends State<SWTextField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextField(
-          controller: widget.controller,
+          controller: _controller,
           keyboardType: keyboardType,
           enabled: widget.enabled,
           textInputAction: widget.action,
