@@ -168,7 +168,10 @@ class AppRouter extends _$AppRouter implements Listenable {
           name: Routes.editReport,
           parentNavigatorKey: navigatorKey,
           pageBuilder: (context, state) {
-            final reportId = state.params['reportId'];
+            final params = state.params['reportId'];
+            if (params == null) throw Exception();
+
+            final reportId = int.parse(params);
             return MaterialPage(
               key: state.pageKey,
               child: PostReportScreen(
@@ -201,9 +204,10 @@ class AppRouter extends _$AppRouter implements Listenable {
           name: Routes.reportDetail,
           parentNavigatorKey: navigatorKey,
           pageBuilder: (context, state) {
-            final reportId = state.params['reportId'];
+            final params = state.params['reportId'];
+            if (params == null) throw Exception();
+            final reportId  = int.parse(params);
 
-            if (reportId == null) throw Exception();
             return MaterialPage(
               child: ReportDetailScreen(
                 reportId: reportId,
@@ -240,9 +244,10 @@ class AppRouter extends _$AppRouter implements Listenable {
           name: Routes.schoolDetail,
           parentNavigatorKey: navigatorKey,
           pageBuilder: (context, state) {
-            final schoolId = state.params['schoolId'];
+            final params = state.params['schoolId'];
+            if (params == null) throw Exception();
 
-            if (schoolId == null) throw Exception();
+            final schoolId = int.parse(params);
             return MaterialPage(
               child: SchoolDetailScreen(
                 schoolId: schoolId,

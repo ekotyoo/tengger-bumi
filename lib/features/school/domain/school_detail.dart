@@ -11,7 +11,7 @@ part 'school_detail.g.dart';
 @freezed
 class SchoolDetail with _$SchoolDetail {
   const factory SchoolDetail({
-    required String id,
+    required int id,
     required String name,
     required String address,
     required SchoolAnalysis analysis,

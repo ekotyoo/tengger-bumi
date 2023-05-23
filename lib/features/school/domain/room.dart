@@ -9,7 +9,7 @@ part 'room.g.dart';
 @freezed
 class Room with _$Room {
   const factory Room({
-    required String? id,
+    required int? id,
     required String label,
     required List<Position> polygon,
     required String color,

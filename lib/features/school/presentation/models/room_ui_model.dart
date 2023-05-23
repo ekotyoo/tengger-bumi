@@ -14,7 +14,7 @@ class RoomUiModel extends Equatable {
     this.color = Colors.yellow,
   });
 
-  final String? id;
+  final int? id;
   final String label;
   final Polygon polygon;
   final Color color;

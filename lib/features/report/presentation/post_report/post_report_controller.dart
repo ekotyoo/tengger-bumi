@@ -141,7 +141,7 @@ class PostReportController extends StateNotifier<PostReportState> {
       (l) => null,
       (r) {
         final newDeletedImages = [...state.deletedImages, r];
-        return state = state.copyWith(deletedImages: newDeletedImages);
+        state = state.copyWith(deletedImages: newDeletedImages);
       },
     );
 
@@ -191,7 +191,7 @@ class PostReportController extends StateNotifier<PostReportState> {
     state = state.copyWith(validated: validated);
   }
 
-  void initForm(String? reportId) async {
+  void initForm(int? reportId) async {
     state = state.copyWith(firstFormLoading: true);
     await getSchools();
     if (reportId != null) {
@@ -213,7 +213,7 @@ class PostReportController extends StateNotifier<PostReportState> {
     state = state.copyWith(schools: schoolOptions);
   }
 
-  Future<void> getReportDetail(String reportId) async {
+  Future<void> getReportDetail(int reportId) async {
     final result = await _reportRepository.getReport(reportId: reportId);
     final report = await result.fold(
       (l) {
@@ -296,7 +296,7 @@ class PostReportController extends StateNotifier<PostReportState> {
     state = state.copyWith(infoFormLoading: false);
   }
 
-  Future<void> _getSchoolDetail(String schoolId) async {
+  Future<void> _getSchoolDetail(int schoolId) async {
     final result = await _schoolRepository.getSchool(schoolId: schoolId);
     result.fold(
       (l) => setErrorMessage(l.message),

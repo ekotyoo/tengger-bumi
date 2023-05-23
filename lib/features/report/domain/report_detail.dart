@@ -13,7 +13,7 @@ part 'report_detail.g.dart';
 @freezed
 class ReportDetail with _$ReportDetail {
   const factory ReportDetail({
-    required String id,
+    required int id,
     required Category category,
     required String description,
     required Author author,

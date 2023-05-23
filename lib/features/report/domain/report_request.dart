@@ -9,9 +9,9 @@ part 'report_request.g.dart';
 @freezed
 class ReportRequest with _$ReportRequest {
   const factory ReportRequest({
-    @JsonKey(name: 'school_id') required String schoolId,
-    @JsonKey(name: 'room_id') required String roomId,
-    @JsonKey(name: 'category_id') required String categoryId,
+    @JsonKey(name: 'school_id') required int schoolId,
+    @JsonKey(name: 'room_id') required int roomId,
+    @JsonKey(name: 'category_id') required int categoryId,
     required String description,
     required double latitude,
     required double longitude,

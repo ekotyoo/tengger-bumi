@@ -11,7 +11,7 @@ part 'school_detail_controller.g.dart';
 @riverpod
 class SchoolDetailController extends _$SchoolDetailController {
   @override
-  FutureOr<SchoolDetail?> build(String schoolId) async {
+  FutureOr<SchoolDetail?> build(int schoolId) async {
     final schoolRepo = ref.watch(schoolRepositoryProvider);
     final reportRepo = ref.watch(reportRepositoryProvider);
 

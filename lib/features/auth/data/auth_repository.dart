@@ -159,7 +159,7 @@ class AuthRepository implements IAuthRepository {
 
   @override
   Future<Either<Failure, AuthUser>> updateProfile({
-    required String userId,
+    required int userId,
     String? name,
     bool? deleteOld,
     File? newAvatar,

@@ -7,7 +7,7 @@ part 'auth_user.g.dart';
 @freezed
 class AuthUserWrapper with _$AuthUserWrapper {
   const factory AuthUserWrapper({
-    required String id,
+    required int id,
     required String name,
     required String email,
     @JsonKey(name: 'access_token') String? accessToken,
@@ -22,7 +22,7 @@ class AuthUserWrapper with _$AuthUserWrapper {
 @freezed
 class AuthUser with _$AuthUser {
   const factory AuthUser.signedIn({
-    required String id,
+    required int id,
     required String name,
     required String email,
     required String? accessToken,

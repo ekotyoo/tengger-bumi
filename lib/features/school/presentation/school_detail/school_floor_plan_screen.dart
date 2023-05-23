@@ -230,7 +230,7 @@ class _SchoolFloorPlanScreenState extends State<SchoolFloorPlanScreen> {
                                         label: SWStrings.labelSeeMore,
                                         onPressed: () => context.pushNamed(
                                             Routes.reportDetail,
-                                            params: {'reportId': report.id}),
+                                            params: {'reportId': report.id.toString()}),
                                       ),
                                     ],
                                   ),

@@ -21,7 +21,7 @@ class TimestampSerializer implements JsonConverter<DateTime, dynamic> {
 @freezed
 class Report with _$Report {
   const factory Report({
-    required String id,
+    required int id,
     required Category category,
     required String description,
     required Author author,

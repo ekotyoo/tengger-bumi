@@ -24,24 +24,12 @@ class EditProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
-  late TextEditingController _emailController;
-  late TextEditingController _nameController;
   late ImagePicker _imagePicker;
 
   @override
   void initState() {
     super.initState();
-    final user = widget.user;
     _imagePicker = ImagePicker();
-    _emailController = TextEditingController(text: user.email);
-    _nameController = TextEditingController(text: user.name);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _emailController.dispose();
-    _nameController.dispose();
   }
 
   void _pickImageFromGallery(WidgetRef ref) async {
@@ -212,13 +200,13 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               const SizedBox(height: SWSizes.s32),
               SWTextField(
                 hint: SWStrings.labelEmail,
-                controller: _emailController,
+                initialText: widget.user.email,
                 enabled: false,
               ),
               const SizedBox(height: SWSizes.s16),
               SWTextField(
                 hint: SWStrings.labelName,
-                controller: _nameController,
+                initialText: widget.user.name,
                 errorText: (state.nameTextInput as NameTextInput).isPure
                     ? null
                     : (state.nameTextInput as NameTextInput)

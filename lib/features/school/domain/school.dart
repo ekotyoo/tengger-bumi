@@ -10,7 +10,7 @@ part 'school.g.dart';
 @freezed
 class School with _$School {
   const factory School({
-    required String id,
+    required int id,
     required String name,
     required SchoolAnalysis analysis,
     required Position centroid,

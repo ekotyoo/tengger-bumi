@@ -19,7 +19,7 @@ class ReportDetailScreen extends ConsumerStatefulWidget {
     required this.reportId,
   }) : super(key: key);
 
-  final String reportId;
+  final int reportId;
 
   @override
   ConsumerState createState() => _ReportDetailScreenState();

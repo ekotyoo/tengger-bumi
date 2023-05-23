@@ -64,8 +64,9 @@ class ReportFeedController extends _$ReportFeedController {
     final reports = oldState.reports.toList();
     final index = reports.indexWhere((element) => element.id == report.id);
     reports[index] = report;
+    final newReports = reports.toList();
 
-    state = AsyncValue.data(oldState.copyWith(reports: reports));
+    state = AsyncValue.data(oldState.copyWith(reports: newReports));
   }
 
   void addReport(Report report) {
@@ -133,7 +134,7 @@ class ReportFeedController extends _$ReportFeedController {
     }
   }
 
-  void toggleDislike(int index, String reportId) async {
+  void toggleDislike(int index, int reportId) async {
     final repo = ref.read(reportRepositoryProvider);
     final report = state.requireValue.reports[index];
 

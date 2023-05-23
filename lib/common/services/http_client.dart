@@ -14,12 +14,10 @@ Dio dio(DioRef ref) {
   return Dio();
 }
 
-const _defaultConnectTimeout =
-    Duration(milliseconds: Duration.millisecondsPerMinute);
-const _defaultReceiveTimeout =
-    Duration(milliseconds: Duration.millisecondsPerMinute);
+const _defaultConnectTimeout = Duration(seconds: 20);
+const _defaultReceiveTimeout = Duration(seconds: 20);
 
-const kBaseUrl = 'http://192.168.100.21:3000';
+const kBaseUrl = 'http://sw.guyub.net';
 
 @Riverpod(keepAlive: true)
 HttpClient httpClient(HttpClientRef ref) {
@@ -126,14 +124,14 @@ class HttpClient {
   }
 
   Future<dynamic> put(
-      String uri, {
-        data,
-        Map<String, dynamic>? queryParameters,
-        Options? options,
-        CancelToken? cancelToken,
-        ProgressCallback? onSendProgress,
-        ProgressCallback? onReceiveProgress,
-      }) async {
+    String uri, {
+    data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
     try {
       var response = await _dio.put(
         uri,
@@ -153,12 +151,12 @@ class HttpClient {
   }
 
   Future<dynamic> delete(
-      String uri, {
-        data,
-        Map<String, dynamic>? queryParameters,
-        Options? options,
-        CancelToken? cancelToken,
-      }) async {
+    String uri, {
+    data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
     try {
       var response = await _dio.delete(
         uri,

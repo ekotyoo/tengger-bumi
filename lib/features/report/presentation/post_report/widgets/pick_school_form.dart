@@ -8,7 +8,7 @@ import '../../../../../common/widgets/title_with_caption.dart';
 class SchoolOption extends Equatable {
   const SchoolOption({required this.id, required this.name});
 
-  final String id;
+  final int id;
   final String name;
 
   @override

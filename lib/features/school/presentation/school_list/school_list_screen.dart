@@ -217,7 +217,7 @@ class SchoolList extends ConsumerWidget {
               onTap: () {
                 context.pushNamed(
                   Routes.schoolDetail,
-                  params: {'schoolId': school.id},
+                  params: {'schoolId': school.id.toString()},
                 );
               },
             );

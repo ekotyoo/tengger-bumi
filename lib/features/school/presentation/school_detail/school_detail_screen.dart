@@ -22,7 +22,7 @@ class SchoolDetailScreen extends ConsumerWidget {
     required this.schoolId,
   }) : super(key: key);
 
-  final String schoolId;
+  final int schoolId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -43,7 +43,7 @@ class SchoolDetailScreen extends ConsumerWidget {
                   icon: const Icon(Icons.location_on_rounded),
                   onPressed: () => context.pushNamed(
                     Routes.schoolFloorPlan,
-                    params: {'schoolId': schoolId},
+                    params: {'schoolId': schoolId.toString()},
                     extra: SchoolDetailFloorPlanNavArg(
                       floorPlan:
                           FloorPlanUiModel.fromDomain(reportDetail.floorPlan),
@@ -327,7 +327,7 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
               onTap: () {
                 context.pushNamed(
                   Routes.reportDetail,
-                  params: {'reportId': reports[index].id},
+                  params: {'reportId': reports[index].id.toString()},
                 );
               },
             ),

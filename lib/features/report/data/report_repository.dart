@@ -73,7 +73,7 @@ class FakeReportRepository implements IReportRepository {
 
   @override
   Future<Either<Failure, ReportDetail>> getReport({
-    required String reportId,
+    required int reportId,
     CancelToken? cancelToken,
   }) async {
     try {
@@ -95,7 +95,7 @@ class FakeReportRepository implements IReportRepository {
 
   @override
   Future<Either<Failure, Comment>> addComment(
-      {required String reportId,
+      {required int reportId,
       required String comment,
       CancelToken? cancelToken}) async {
     try {
@@ -119,7 +119,7 @@ class FakeReportRepository implements IReportRepository {
 
   @override
   Future<Either<Failure, List<Comment>>> getComments({
-    required String reportId,
+    required int reportId,
     CancelToken? cancelToken,
   }) async {
     try {
@@ -144,7 +144,7 @@ class FakeReportRepository implements IReportRepository {
 
   @override
   Future<Either<Failure, Unit>> addLike(
-      {required String reportId,
+      {required int reportId,
       bool isLike = true,
       CancelToken? cancelToken}) async {
     try {
@@ -160,7 +160,7 @@ class FakeReportRepository implements IReportRepository {
 
   @override
   Future<Either<Failure, Unit>> removeLike(
-      {required String reportId, CancelToken? cancelToken}) async {
+      {required int reportId, CancelToken? cancelToken}) async {
     try {
       final response = await _client.delete('/report/$reportId/like');
       if (response['status'] == 'success') return right(unit);
@@ -225,7 +225,7 @@ class FakeReportRepository implements IReportRepository {
 
   @override
   Future<Either<Failure, Report>> updateReport({
-    required String reportId,
+    required int reportId,
     required ReportRequest report,
     required List<File> images,
   }) async {
@@ -297,7 +297,7 @@ class FakeReportRepository implements IReportRepository {
 
   @override
   Future<Either<Failure, Unit>> deleteReport({
-    required String reportId,
+    required int reportId,
     CancelToken? cancelToken,
   }) async {
     try {
@@ -314,8 +314,8 @@ class FakeReportRepository implements IReportRepository {
 
   @override
   Future<Either<Failure, Unit>> deleteComment({
-    required String reportId,
-    required String commentId,
+    required int reportId,
+    required int commentId,
     CancelToken? cancelToken,
   }) async {
     try {

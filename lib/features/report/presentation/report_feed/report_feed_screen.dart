@@ -117,13 +117,13 @@ class ReportList extends ConsumerWidget {
                 onEdited: () {
                   context.pushNamed(
                     Routes.editReport,
-                    params: {'reportId': report.id},
+                    params: {'reportId': report.id.toString()},
                   );
                 },
                 onTap: () {
                   context.pushNamed(
                     Routes.reportDetail,
-                    params: {'reportId': report.id},
+                    params: {'reportId': report.id.toString()},
                   );
                 },
               );

@@ -257,7 +257,7 @@ class _SchoolMapScreenState extends ConsumerState<SchoolMapScreen> {
                                   onTap: () {
                                     context.pushNamed(
                                       Routes.schoolDetail,
-                                      params: {'schoolId': school.id},
+                                      params: {'schoolId': school.id.toString()},
                                     );
                                   },
                                 ),

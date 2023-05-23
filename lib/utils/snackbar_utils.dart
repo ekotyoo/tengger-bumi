@@ -12,7 +12,7 @@ showSnackbar(
     content: Text(message),
     backgroundColor:
         type == SnackbarType.success ? kColorSuccess300 : kColorError300,
-    duration: kDurationLong,
+    duration: kDurationExtraLong,
   );
   ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()

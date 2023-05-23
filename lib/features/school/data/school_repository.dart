@@ -50,7 +50,7 @@ class FakeSchoolRepository implements ISchoolRepository {
 
   @override
   Future<Either<Failure, SchoolDetail>> getSchool(
-      {required String schoolId, CancelToken? cancelToken}) async {
+      {required int schoolId, CancelToken? cancelToken}) async {
     try {
       final response = await _client.get('/school/$schoolId');
       var school = SchoolDetail.fromJson(response['data']);
@@ -116,7 +116,7 @@ class SchoolRepository implements ISchoolRepository {
 
   @override
   Future<Either<Failure, SchoolDetail>> getSchool(
-      {required String schoolId, CancelToken? cancelToken}) {
+      {required int schoolId, CancelToken? cancelToken}) {
     // TODO: implement getSchool
     throw UnimplementedError();
   }

@@ -9,7 +9,7 @@ part 'report_detail_controller.g.dart';
 @riverpod
 class ReportDetailController extends _$ReportDetailController {
   @override
-  FutureOr<ReportDetailState> build(String reportId) async {
+  FutureOr<ReportDetailState> build(int reportId) async {
     final repo = ref.read(reportRepositoryProvider);
     final commentResult = await repo.getComments(reportId: reportId);
     final comments = commentResult.fold(
@@ -66,7 +66,7 @@ class ReportDetailController extends _$ReportDetailController {
     );
   }
 
-  void deleteComment(String commentId, int index) async {
+  void deleteComment(int commentId, int index) async {
     final oldState = state.requireValue;
     final oldComments = oldState.report?.comments;
     final oldReport = oldState.report;

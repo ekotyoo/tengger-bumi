@@ -14,7 +14,7 @@ abstract class ISchoolRepository {
   });
 
   Future<Either<Failure, SchoolDetail>> getSchool({
-    required String schoolId,
+    required int schoolId,
     CancelToken? cancelToken,
   });
 

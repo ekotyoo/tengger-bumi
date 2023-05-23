@@ -18,7 +18,7 @@ abstract class IReportRepository {
   });
 
   Future<Either<Failure, ReportDetail>> getReport({
-    required String reportId,
+    required int reportId,
     CancelToken? cancelToken,
   });
 
@@ -28,7 +28,7 @@ abstract class IReportRepository {
   );
 
   Future<Either<Failure, Report>> updateReport({
-    required String reportId,
+    required int reportId,
     required ReportRequest report,
     required List<File> images,
   });
@@ -39,35 +39,35 @@ abstract class IReportRepository {
   });
 
   Future<Either<Failure, Comment>> addComment({
-    required String reportId,
+    required int reportId,
     required String comment,
     CancelToken? cancelToken,
   });
 
   Future<Either<Failure, Unit>> deleteComment({
-    required String reportId,
-    required String commentId,
+    required int reportId,
+    required int commentId,
     CancelToken? cancelToken,
   });
 
   Future<Either<Failure, List<Comment>>> getComments({
-    required String reportId,
+    required int reportId,
     CancelToken? cancelToken,
   });
 
   Future<Either<Failure, Unit>> addLike({
-    required String reportId,
+    required int reportId,
     bool isLike = true,
     CancelToken? cancelToken,
   });
 
   Future<Either<Failure, Unit>> removeLike({
-    required String reportId,
+    required int reportId,
     CancelToken? cancelToken,
   });
 
   Future<Either<Failure, Unit>> deleteReport({
-    required String reportId,
+    required int reportId,
     CancelToken? cancelToken,
   });
 }

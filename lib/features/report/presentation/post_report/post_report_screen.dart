@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:school_watch_semeru/common/widgets/sw_button.dart';
-import 'package:school_watch_semeru/utils/snackbar_utils.dart';
 
+import '../../../../common/widgets/sw_button.dart';
+import '../../../../utils/snackbar_utils.dart';
 import 'post_report_state.dart';
 import '../../../../common/constants/constant.dart';
 import 'widgets/pick_report_type_form.dart';
@@ -36,7 +36,7 @@ class PostReportScreen extends ConsumerStatefulWidget {
       {super.key, this.formType = FormType.post, this.reportId});
 
   final FormType formType;
-  final String? reportId;
+  final int? reportId;
 
   @override
   ConsumerState<PostReportScreen> createState() => _PostReportScreenState();
@@ -75,10 +75,10 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
       (previous, next) {
         if (next != null && context.mounted) {
           showSnackbar(context, message: next, type: SnackbarType.error);
+          ref
+              .read(postReportControllerProvider(widget.formType).notifier)
+              .setErrorMessage(null);
         }
-        ref
-            .read(postReportControllerProvider(widget.formType).notifier)
-            .setErrorMessage(null);
       },
     );
 
@@ -88,11 +88,11 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
       (previous, next) {
         if (next != null && context.mounted) {
           showSnackbar(context, message: next);
+          ref
+              .read(postReportControllerProvider(widget.formType).notifier)
+              .setSuccessMessage(null);
           context.pop();
         }
-        ref
-            .read(postReportControllerProvider(widget.formType).notifier)
-            .setSuccessMessage(null);
       },
     );
 

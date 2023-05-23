@@ -10,7 +10,7 @@ part 'comment.g.dart';
 @freezed
 class Comment with _$Comment {
   const factory Comment({
-    required String id,
+    required int id,
     required String comment,
     required Author author,
     @JsonKey(name: 'created_at') @TimestampSerializer() required DateTime createdAt,

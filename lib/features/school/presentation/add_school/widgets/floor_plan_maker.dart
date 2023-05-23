@@ -212,7 +212,7 @@ class _FloorPlanMakerState extends State<FloorPlanMaker> {
               }
               context.pop(
                 RoomUiModel(
-                  id: '',
+                  id: null,
                   label: _polygons.first.label ?? '',
                   polygon: _polygons.first,
                   color: _polygons.first.color,
