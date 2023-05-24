@@ -200,7 +200,9 @@ class _SchoolMapScreenState extends ConsumerState<SchoolMapScreen> {
                                 setState(() {
                                   _selectedSchool = index;
                                 });
-                                _pageController.jumpToPage(index);
+                                WidgetsBinding.instance.addPostFrameCallback((_){
+                                    _pageController.jumpToPage(index);
+                                });
                               },
                               child: CircleAvatar(
                                 backgroundColor: _selectedSchool == index
