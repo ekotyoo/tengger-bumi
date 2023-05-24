@@ -86,7 +86,7 @@ class _SchoolDataFormState extends ConsumerState<SchoolDataForm> {
         ClipRRect(
           borderRadius: BorderRadius.circular(SWSizes.s8),
           child: SizedBox(
-            height: 100,
+            height: 200,
             width: double.infinity,
             child: Image.file(image, fit: BoxFit.cover),
           ),
@@ -181,7 +181,7 @@ class _SchoolDataFormState extends ConsumerState<SchoolDataForm> {
         strokeCap: StrokeCap.round,
         color: kColorNeutral200,
         child: SizedBox(
-          height: 100,
+          height: 200,
           child: Center(
             child: Text(
               'Belum ada gambar cover',

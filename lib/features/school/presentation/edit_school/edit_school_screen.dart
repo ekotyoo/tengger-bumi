@@ -72,12 +72,10 @@ class _EditSchoolScreenState extends ConsumerState<EditSchoolScreen> {
   Widget _buildSelectedImage(String? cover, XFile? newCover) {
     Widget? image;
     if (newCover != null) {
-      print("new cover != null: $newCover");
       image = Image.file(File(newCover.path), fit: BoxFit.cover);
     }
 
     if (cover != null) {
-      print("cover != null: $cover");
       image = Image.network(cover, fit: BoxFit.cover);
     }
 
@@ -143,7 +141,7 @@ class _EditSchoolScreenState extends ConsumerState<EditSchoolScreen> {
         strokeCap: StrokeCap.round,
         color: kColorNeutral200,
         child: SizedBox(
-          height: 100,
+          height: 200,
           child: Center(
             child: Text(
               'Belum ada gambar cover terpilih',
@@ -164,7 +162,7 @@ class _EditSchoolScreenState extends ConsumerState<EditSchoolScreen> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(SWSizes.s8),
                 child: SizedBox(
-                  height: 100,
+                  height: 200,
                   width: double.infinity,
                   child: image,
                 ),
