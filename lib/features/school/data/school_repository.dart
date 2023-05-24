@@ -54,7 +54,8 @@ class FakeSchoolRepository implements ISchoolRepository {
     try {
       final response = await _client.get('/school/$schoolId');
       var school = SchoolDetail.fromJson(response['data']);
-      school = school.copyWith(image: '${school.image}'.replaceAll('public', kBaseUrl));
+      school = school.copyWith(
+          image: '${school.image}'.replaceAll('public', kBaseUrl));
 
       return right(school);
     } catch (e, stackTrace) {
@@ -104,27 +105,51 @@ class FakeSchoolRepository implements ISchoolRepository {
       return left(Failure(exceptions.getErrorMessage()));
     }
   }
-}
-
-class SchoolRepository implements ISchoolRepository {
-  @override
-  Future<Either<Failure, List<School>>> getSchools(
-      {String? query, CancelToken? cancelToken}) {
-    // TODO: implement getSchools
-    throw UnimplementedError();
-  }
 
   @override
-  Future<Either<Failure, SchoolDetail>> getSchool(
-      {required int schoolId, CancelToken? cancelToken}) {
-    // TODO: implement getSchool
-    throw UnimplementedError();
-  }
+  Future<Either<Failure, Unit>> updateSchool({
+    required int schoolId,
+    required String name,
+    required String address,
+    File? cover,
+  }) async {
+    try {
+      final schoolMap = {
+        'name': name,
+        'address': address
+      };
+      final formData = FormData.fromMap(schoolMap);
 
-  @override
-  Future<Either<Failure, Unit>> postSchool(
-      {required SchoolRequest school, File? coverImage}) {
-    // TODO: implement postSchool
-    throw UnimplementedError();
+      if (cover != null) {
+        final path = cover.path;
+        final fileName = path.split('/').last;
+        final extension = fileName.split('.').last;
+
+        formData.files.add(
+          MapEntry(
+            'image',
+            await MultipartFile.fromFile(
+              path,
+              filename: fileName,
+              contentType:
+              MediaType('image', extension == 'jpg' ? 'jpeg' : extension),
+            ),
+          ),
+        );
+      }
+      final response = await _client.put(
+        '/school/$schoolId',
+        data: formData,
+      );
+
+      if (response['status'] == 'success') {
+        return right(unit);
+      }
+
+      return left(const Failure('Terjadi kesalahan, coba lagi nanti.'));
+    } catch (e) {
+      final exceptions = NetworkExceptions.getDioException(e);
+      return left(Failure(exceptions.getErrorMessage()));
+    }
   }
 }

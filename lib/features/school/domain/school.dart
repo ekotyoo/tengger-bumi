@@ -15,6 +15,7 @@ class School with _$School {
     required SchoolAnalysis analysis,
     required Position centroid,
     String? cover,
+    @JsonKey(name: 'allow_edit', defaultValue: false) required bool allowEdit,
   }) = _School;
 
   factory School.fromJson(Map<String, Object?> json) => _$SchoolFromJson(json);

@@ -21,4 +21,5 @@ class Routes {
   static const floorPlanMaker = 'floorplanmaker';
   static const schoolDetail = 'schooldetail';
   static const schoolFloorPlan = 'schoolfloorplan';
+  static const editSchool = 'editschool';
 }

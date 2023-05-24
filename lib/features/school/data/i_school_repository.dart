@@ -22,4 +22,11 @@ abstract class ISchoolRepository {
     required SchoolRequest school,
     File? coverImage,
   });
+
+  Future<Either<Failure, Unit>> updateSchool({
+    required int schoolId,
+    required String name,
+    required String address,
+    File? cover,
+  });
 }

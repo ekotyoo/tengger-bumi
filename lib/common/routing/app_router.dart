@@ -4,6 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:school_watch_semeru/features/auth/domain/auth_user.dart';
 import 'package:school_watch_semeru/features/auth/presentation/edit_profile/edit_profile_screen.dart';
 import 'package:school_watch_semeru/features/auth/presentation/email_verification/email_verification_screen.dart';
+import 'package:school_watch_semeru/features/school/presentation/edit_school/edit_school_screen.dart';
 
 import '../../features/report/presentation/models/location_pick_nav_arg.dart';
 import '../../features/report/presentation/report_detail/report_detail_screen.dart';
@@ -206,7 +207,7 @@ class AppRouter extends _$AppRouter implements Listenable {
           pageBuilder: (context, state) {
             final params = state.params['reportId'];
             if (params == null) throw Exception();
-            final reportId  = int.parse(params);
+            final reportId = int.parse(params);
 
             return MaterialPage(
               child: ReportDetailScreen(
@@ -271,6 +272,20 @@ class AppRouter extends _$AppRouter implements Listenable {
               },
             ),
           ],
+        ),
+        GoRoute(
+          path: '/school/:schoolId/edit',
+          name: Routes.editSchool,
+          parentNavigatorKey: navigatorKey,
+          pageBuilder: (context, state) {
+            final params = state.params['schoolId'];
+            if (params == null) throw Exception();
+
+            final schoolId = int.parse(params);
+            return MaterialPage(
+              child: EditSchoolScreen(schoolId: schoolId),
+            );
+          },
         ),
         GoRoute(
           path: '/editprofile',

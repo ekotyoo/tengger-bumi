@@ -8,7 +8,6 @@ import '../../../../common/constants/constant.dart';
 import '../../../../common/widgets/app_logo.dart';
 import '../../../../common/widgets/category_chip.dart';
 import '../../domain/report_status.dart';
-import '../../domain/report_time.dart';
 import '../../domain/report_type.dart';
 import '../widgets/report_card.dart';
 import 'report_feed_controller.dart';
@@ -85,7 +84,8 @@ class ReportList extends ConsumerWidget {
       loading: () {
         return ListView.separated(
           padding: const EdgeInsets.symmetric(horizontal: SWSizes.s16),
-          separatorBuilder: (context, index) => const SizedBox(height: SWSizes.s16),
+          separatorBuilder: (context, index) =>
+              const SizedBox(height: SWSizes.s16),
           itemCount: 4,
           itemBuilder: (context, index) => const ReportCardShimmer(),
         );
@@ -102,7 +102,8 @@ class ReportList extends ConsumerWidget {
           child: ListView.separated(
             padding: const EdgeInsets.symmetric(horizontal: SWSizes.s16),
             itemCount: reports.length,
-            separatorBuilder: (context, index) => const SizedBox(height: SWSizes.s16),
+            separatorBuilder: (context, index) =>
+                const SizedBox(height: SWSizes.s16),
             itemBuilder: (context, index) {
               final report = reports[index];
               return ReportCard(
@@ -230,102 +231,110 @@ class ReportFilter extends ConsumerWidget {
         .titleMedium
         ?.copyWith(fontWeight: FontWeight.bold);
 
-    return Padding(
-      padding: const EdgeInsets.all(SWSizes.s16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Text(
-              'Filter',
-              textAlign: TextAlign.center,
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineSmall
-                  ?.copyWith(fontWeight: FontWeight.bold),
-            ),
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(SWSizes.s16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Text(
+                  'Filter',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineSmall
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(height: SWSizes.s16),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    SWStrings.labelReportStatus,
+                    style: titleStyle,
+                  ),
+                  const SizedBox(height: SWSizes.s8),
+                  Wrap(
+                    runSpacing: SWSizes.s8,
+                    spacing: SWSizes.s8,
+                    children: [
+                      SelectChip(
+                        label: 'Semua',
+                        selected: reportQuery.reportStatus == null,
+                        onTap: () {
+                          ref
+                              .read(reportFilterStateProvider.notifier)
+                              .updateFilterState(
+                                reportQuery.copyWith(reportType: null),
+                              );
+                        },
+                      ),
+                      ...ReportStatus.values
+                          .map(
+                            (status) => SelectChip(
+                              label: status.name,
+                              selected: reportQuery.reportStatus == status,
+                              onTap: () {
+                                ref
+                                    .read(reportFilterStateProvider.notifier)
+                                    .updateFilterState(
+                                      reportQuery.copyWith(
+                                        reportStatus: status,
+                                      ),
+                                    );
+                              },
+                            ),
+                          )
+                          .toList()
+                    ],
+                  ),
+                  const SizedBox(height: SWSizes.s16),
+                  Text(
+                    SWStrings.labelReportType,
+                    style: titleStyle,
+                  ),
+                  const SizedBox(height: SWSizes.s8),
+                  Wrap(
+                    runSpacing: SWSizes.s8,
+                    spacing: SWSizes.s8,
+                    children: [
+                      SelectChip(
+                        label: 'Semua',
+                        selected: reportQuery.reportType == null,
+                        onTap: () {
+                          ref
+                              .read(reportFilterStateProvider.notifier)
+                              .updateFilterState(
+                                reportQuery.copyWith(reportType: null),
+                              );
+                        },
+                      ),
+                      ...ReportType.values
+                          .map(
+                            (type) => SelectChip(
+                                label: type.name,
+                                selected: reportQuery.reportType == type,
+                                onTap: () {
+                                  ref
+                                      .read(reportFilterStateProvider.notifier)
+                                      .updateFilterState(
+                                        reportQuery.copyWith(reportType: type),
+                                      );
+                                }),
+                          )
+                          .toList()
+                    ],
+                  ),
+                ],
+              ),
+            ],
           ),
-          const SizedBox(height: SWSizes.s16),
-          Expanded(
-            child: ListView(
-              children: [
-                Text(
-                  SWStrings.labelReportStatus,
-                  style: titleStyle,
-                ),
-                const SizedBox(height: SWSizes.s8),
-                Wrap(
-                  runSpacing: SWSizes.s8,
-                  spacing: SWSizes.s8,
-                  children: ReportStatus.values
-                      .map(
-                        (status) => SelectChip(
-                          label: status.name,
-                          selected: reportQuery.reportStatus == status,
-                          onTap: () {
-                            ref
-                                .read(reportFilterStateProvider.notifier)
-                                .updateFilterState(
-                                  reportQuery.copyWith(reportStatus: status),
-                                );
-                          },
-                        ),
-                      )
-                      .toList(),
-                ),
-                const SizedBox(height: SWSizes.s16),
-                Text(
-                  SWStrings.labelReportType,
-                  style: titleStyle,
-                ),
-                const SizedBox(height: SWSizes.s8),
-                Wrap(
-                  runSpacing: SWSizes.s8,
-                  spacing: SWSizes.s8,
-                  children: ReportType.values
-                      .map(
-                        (type) => SelectChip(
-                            label: type.name,
-                            selected: reportQuery.reportType == type,
-                            onTap: () {
-                              ref
-                                  .read(reportFilterStateProvider.notifier)
-                                  .updateFilterState(
-                                    reportQuery.copyWith(reportType: type),
-                                  );
-                            }),
-                      )
-                      .toList(),
-                ),
-                const SizedBox(height: SWSizes.s16),
-                Text(
-                  SWStrings.labelReportPostTime,
-                  style: titleStyle,
-                ),
-                const SizedBox(height: SWSizes.s8),
-                Wrap(
-                  spacing: SWSizes.s8,
-                  children: ReportTime.values
-                      .map(
-                        (time) => SelectChip(
-                          label: time.name,
-                          onTap: () {
-                            ref
-                                .read(reportFilterStateProvider.notifier)
-                                .updateFilterState(reportQuery.copyWith(
-                                  reportTime: time,
-                                ));
-                          },
-                          selected: reportQuery.reportTime == time,
-                        ),
-                      )
-                      .toList(),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

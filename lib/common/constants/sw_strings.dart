@@ -90,4 +90,5 @@ class SWStrings {
   static const descRoomNameCannotBeEmpty = 'Nama ruang tidak boleh kosong';
   static const descRoomFloorPlanInvalid = 'Denah ruang belum terbentuk';
   static const labelSchoolDetail = 'Detail Sekolah';
+  static const labelEditSchool = 'Edit Sekolah';
 }

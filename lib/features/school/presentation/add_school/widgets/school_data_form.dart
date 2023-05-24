@@ -32,8 +32,7 @@ class _SchoolDataFormState extends ConsumerState<SchoolDataForm> {
     super.initState();
     _imagePicker = ImagePicker();
     _nameController = TextEditingController(text: widget.schoolName ?? '');
-    _addressController =
-        TextEditingController(text: widget.schoolAddress ?? '');
+    _addressController = TextEditingController(text: widget.schoolAddress ?? '');
   }
 
   @override
