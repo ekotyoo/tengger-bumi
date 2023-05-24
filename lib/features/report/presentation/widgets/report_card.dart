@@ -70,48 +70,52 @@ class ReportCard extends StatelessWidget {
           child: const Icon(Icons.person, color: kColorPrimary100),
         ),
         const SizedBox(width: SWSizes.s8),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  author.name,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(width: SWSizes.s8),
-                Container(
-                  width: SWSizes.s4,
-                  height: SWSizes.s4,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(SWSizes.s2),
-                    color: kColorNeutral900,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    author.name,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
-                ),
-                const SizedBox(width: SWSizes.s8),
-                Text(
-                  report.createdAt.toString(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall
-                      ?.copyWith(color: kColorNeutral200),
-                )
-              ],
-            ),
-            Text(
-              '${report.school} - ${report.room}',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall
-                  ?.copyWith(color: kColorNeutral200),
-            ),
-          ],
+                  const SizedBox(width: SWSizes.s8),
+                  Container(
+                    width: SWSizes.s4,
+                    height: SWSizes.s4,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(SWSizes.s2),
+                      color: kColorNeutral900,
+                    ),
+                  ),
+                  const SizedBox(width: SWSizes.s8),
+                  Text(
+                    report.createdAt.toString(),
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith(color: kColorNeutral200),
+                  )
+                ],
+              ),
+              Text(
+                '${report.school} - ${report.room}',
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall
+                    ?.copyWith(color: kColorNeutral200),
+              ),
+            ],
+          ),
         ),
-        const Spacer(),
         if (showMenu && !deleting)
           PopupMenuButton(
             icon: const Icon(Icons.more_vert),

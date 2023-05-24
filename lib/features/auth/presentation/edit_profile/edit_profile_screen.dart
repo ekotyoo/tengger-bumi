@@ -106,7 +106,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           padding: const EdgeInsets.all(SWSizes.s16),
           child: Column(
             children: [
-              const SizedBox(height: SWSizes.s16),
               EditableAvatar(
                 avatar: state.avatar,
                 newAvatar: state.newAvatar,

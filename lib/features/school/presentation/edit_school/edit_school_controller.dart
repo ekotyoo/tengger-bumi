@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:school_watch_semeru/common/services/http_client.dart';
 import '../models/school_address_text_input.dart';
 import '../models/school_name_text_input.dart';
 import '../../data/school_repository.dart';
@@ -33,8 +34,7 @@ class EditSchoolController extends _$EditSchoolController {
       cover: school.image,
       newCover: null,
       schoolNameInput: SchoolNameInput.dirty(value: school.name),
-      schoolAddressInput:
-          SchoolAddressInput.dirty(value: school.address),
+      schoolAddressInput: SchoolAddressInput.dirty(value: school.address),
     );
   }
 
@@ -48,6 +48,17 @@ class EditSchoolController extends _$EditSchoolController {
 
   void onDeleteImage() {
     final oldState = state.requireValue;
+    if (oldState.cover != null) {
+      state = AsyncValue.data(
+        oldState.copyWith(
+          deletedImage: oldState.cover!.replaceAll(
+            kBaseUrl,
+            'public',
+          ),
+        ),
+      );
+    }
+
     state = AsyncValue.data(oldState.copyWith(newCover: null, cover: null));
     _validateForm();
   }

@@ -90,16 +90,16 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
           title: const Text('Detail Laporan'),
           centerTitle: true,
           actions: [
-            reportAsync.when(
-              data: (data) => PopupMenuButton(
-                icon: const Icon(Icons.more_vert),
-                iconSize: SWSizes.s24,
-                splashRadius: SWSizes.s16,
-                padding: EdgeInsets.zero,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(SWSizes.s8),
-                ),
-                itemBuilder: (context) => [
+            PopupMenuButton(
+              icon: const Icon(Icons.more_vert),
+              iconSize: SWSizes.s24,
+              splashRadius: SWSizes.s16,
+              padding: EdgeInsets.zero,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(SWSizes.s8),
+              ),
+              itemBuilder: (context) => reportAsync.when(
+                data: (data) => [
                   PopupMenuItem(
                     onTap: () {
                       final report = data.report;
@@ -117,20 +117,16 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
                       if (report == null) return;
                       ref
                           .read(reportDetailControllerProvider(widget.reportId)
-                          .notifier)
+                              .notifier)
                           .deleteReport(report);
                     },
                     child: const Text(SWStrings.labelDeleteReport),
                   ),
                 ],
+                error: (error, stackTrace) => [],
+                loading: () => [],
               ),
-              error: (error, stackTrace) => Container(),
-              loading: () => const SizedBox(
-                height: SWSizes.s24,
-                width: SWSizes.s24,
-                child: CircularProgressIndicator(strokeWidth: SWSizes.s2),
-              ),
-            ),
+            )
           ],
         ),
         body: reportAsync.when(
@@ -364,6 +360,7 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
     required IconData icon,
   }) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           padding: const EdgeInsets.all(SWSizes.s8),
@@ -374,22 +371,24 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
           child: Icon(icon, color: kColorNeutral900),
         ),
         const SizedBox(width: SWSizes.s8),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label,
-              style: Theme.of(context).textTheme.labelMedium,
-            ),
-            const SizedBox(height: SWSizes.s4),
-            Text(
-              value,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(fontWeight: FontWeight.bold),
-            )
-          ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
+              const SizedBox(height: SWSizes.s4),
+              Text(
+                value,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              )
+            ],
+          ),
         ),
       ],
     );

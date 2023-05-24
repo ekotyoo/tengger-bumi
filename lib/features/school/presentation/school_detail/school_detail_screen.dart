@@ -109,6 +109,7 @@ class SchoolDetailScreen extends ConsumerWidget {
             child: SizedBox(
               width: MediaQuery.of(context).size.width - 2 * SWSizes.s16,
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Icon(
                     Icons.home_work_outlined,
@@ -116,25 +117,27 @@ class SchoolDetailScreen extends ConsumerWidget {
                     color: kColorNeutral0,
                   ),
                   const SizedBox(width: SWSizes.s8),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        reportDetail.name,
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: kColorNeutral0,
-                            ),
-                      ),
-                      Text(
-                        reportDetail.address,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall
-                            ?.copyWith(color: kColorNeutral0),
-                      )
-                    ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          reportDetail.name,
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: kColorNeutral0,
+                              ),
+                        ),
+                        Text(
+                          reportDetail.address,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(color: kColorNeutral0),
+                        )
+                      ],
+                    ),
                   ),
                 ],
               ),

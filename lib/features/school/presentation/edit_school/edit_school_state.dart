@@ -15,6 +15,7 @@ class EditSchoolState with _$EditSchoolState {
     @Default(SchoolAddressInput.pure()) SchoolAddressInput schoolAddressInput,
     @Default(false) bool validated,
     String? successMessage,
+    String? deletedImage,
     String? errorMessage,
     String? cover,
     XFile? newCover,

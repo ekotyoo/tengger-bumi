@@ -115,9 +115,14 @@ class FakeSchoolRepository implements ISchoolRepository {
     required String name,
     required String address,
     File? cover,
+    String? deletedCover,
   }) async {
     try {
-      final schoolMap = {'name': name, 'address': address};
+      final schoolMap = {
+        'name': name,
+        'address': address,
+        'deleted_cover': deletedCover,
+      };
       final formData = FormData.fromMap(schoolMap);
 
       if (cover != null) {

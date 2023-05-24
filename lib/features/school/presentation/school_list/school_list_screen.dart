@@ -108,78 +108,73 @@ class SchoolCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        InkWell(
-          onTap: onTap,
-          child: Container(
-            padding: const EdgeInsets.all(SWSizes.s16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(SWSizes.s8),
-              color: kColorPrimary50,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.translucent,
+      child: Container(
+        padding: const EdgeInsets.all(SWSizes.s16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(SWSizes.s8),
+          color: kColorPrimary50,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
               children: [
-                Row(
-                  children: [
-                    const Icon(Icons.home_work_outlined),
-                    const SizedBox(width: SWSizes.s8),
-                    Text(
-                      school.name,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                  ],
+                const Icon(Icons.home_work_outlined),
+                const SizedBox(width: SWSizes.s8),
+                Expanded(
+                  child: Text(
+                    school.name,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
                 ),
-                const SizedBox(height: SWSizes.s16),
-                Text(
-                  'Analisis Sekolah:',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.bold),
+                if (showEditButton)
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: onEdit,
+                    child: const Icon(Icons.edit),
+                  ),
+              ],
+            ),
+            const SizedBox(height: SWSizes.s16),
+            Text(
+              'Analisis Sekolah:',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: SWSizes.s4),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildSchoolAnalysisInfo(
+                  context,
+                  label: 'Pencegahan',
+                  value: school.analysis.preventionLevel?.toString() ?? '-',
                 ),
-                const SizedBox(height: SWSizes.s4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildSchoolAnalysisInfo(
-                      context,
-                      label: 'Pencegahan',
-                      value: school.analysis.preventionLevel?.toString() ?? '-',
-                    ),
-                    _buildSchoolAnalysisInfo(
-                      context,
-                      label: 'Tanggap Darurat',
-                      value:
-                          school.analysis.emergencyResponseLevel?.toString() ??
-                              '-',
-                    ),
-                    _buildSchoolAnalysisInfo(
-                      context,
-                      label: 'Pemulihan',
-                      value: school.analysis.recoveryLevel?.toString() ?? '-',
-                    ),
-                  ],
+                _buildSchoolAnalysisInfo(
+                  context,
+                  label: 'Tanggap Darurat',
+                  value:
+                      school.analysis.emergencyResponseLevel?.toString() ?? '-',
+                ),
+                _buildSchoolAnalysisInfo(
+                  context,
+                  label: 'Pemulihan',
+                  value: school.analysis.recoveryLevel?.toString() ?? '-',
                 ),
               ],
             ),
-          ),
+          ],
         ),
-        if (showEditButton)
-          Positioned(
-            top: SWSizes.s16,
-            right: SWSizes.s16,
-            child: GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: onEdit,
-              child: const Icon(Icons.edit),
-            ),
-          )
-      ],
+      ),
     );
   }
 

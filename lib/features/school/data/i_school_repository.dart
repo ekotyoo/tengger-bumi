@@ -28,5 +28,6 @@ abstract class ISchoolRepository {
     required String name,
     required String address,
     File? cover,
+    String? deletedCover,
   });
 }
