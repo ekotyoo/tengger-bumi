@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_map_line_editor/polyeditor.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:polylabel/polylabel.dart';
 
 import '../../../../../common/widgets/open_street_map_attribution.dart';
 import '../../../../../common/widgets/sw_text_field.dart';
@@ -44,6 +46,8 @@ class _FloorPlanMakerState extends State<FloorPlanMaker> {
     Color(0xFFEE82EE),
   ];
 
+  late LatLng _centroid;
+
   final List<Polygon> _polygons = [];
   var _selectedColor = 0;
   var _polygon = Polygon(
@@ -68,12 +72,29 @@ class _FloorPlanMakerState extends State<FloorPlanMaker> {
   @override
   void initState() {
     super.initState();
+    _initSchoolCentroid();
     _mapController = MapController();
     _labelController = TextEditingController();
     _followOnLocationUpdate = FollowOnLocationUpdate.never;
     _followCurrentLocationStreamController = StreamController();
     _resetPolyEditor();
     _addPolygon(_polygon);
+  }
+
+  void _initSchoolCentroid() {
+    final points = widget.rooms
+        .map((e) => e.polygon.points
+        .map((p) => Point(p.latitude, p.longitude))
+        .toList())
+        .toList();
+
+    if (points.isEmpty) {
+      _centroid = LatLng(-8.069379, 111.705143);
+      return;
+    }
+
+    final result = polylabel(points).point;
+    _centroid = LatLng(result.x.toDouble(), result.y.toDouble());
   }
 
   _addPolygon(Polygon polygon) {
@@ -234,8 +255,8 @@ class _FloorPlanMakerState extends State<FloorPlanMaker> {
                 FlutterMap(
                   mapController: _mapController,
                   options: MapOptions(
-                    center: LatLng(-8.069379, 111.705143),
-                    zoom: 10,
+                    center: _centroid,
+                    zoom: 20,
                     minZoom: 1,
                     absorbPanEventsOnScrollables: false,
                     onTap: (_, point) {

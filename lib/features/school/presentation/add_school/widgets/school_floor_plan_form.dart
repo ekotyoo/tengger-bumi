@@ -1,8 +1,12 @@
+import 'dart:math';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:polylabel/polylabel.dart';
 import 'package:school_watch_semeru/features/school/presentation/models/floor_plan_nav_arg.dart';
 
 import '../../../../../common/widgets/open_street_map_attribution.dart';
@@ -112,10 +116,12 @@ class FloorPlanViewer extends StatefulWidget {
 
 class _FloorPlanViewerState extends State<FloorPlanViewer> {
   late MapController _mapController;
+  late LatLng _centroid;
 
   @override
   void initState() {
     super.initState();
+    _initSchoolCentroid();
     _mapController = MapController();
   }
 
@@ -123,6 +129,22 @@ class _FloorPlanViewerState extends State<FloorPlanViewer> {
   void dispose() {
     super.dispose();
     _mapController.dispose();
+  }
+
+  void _initSchoolCentroid() {
+    final points = widget.rooms
+        .map((e) => e.polygon.points
+        .map((p) => Point(p.latitude, p.longitude))
+        .toList())
+        .toList();
+
+    if (points.isEmpty) {
+      _centroid = LatLng(-8.069379, 111.705143);
+      return;
+    }
+
+    final result = polylabel(points).point;
+    _centroid = LatLng(result.x.toDouble(), result.y.toDouble());
   }
 
   @override
@@ -136,7 +158,7 @@ class _FloorPlanViewerState extends State<FloorPlanViewer> {
           child: FlutterMap(
             options: MapOptions(
               minZoom: 20,
-              center: rooms.first.polygon.points.first,
+              center: _centroid,
               zoom: 20,
             ),
             nonRotatedChildren: const [OpenStreetMapAttribution()],
