@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:school_watch_semeru/common/constants/constant.dart';
 
 class LoadingImage extends StatelessWidget {
   const LoadingImage({
@@ -27,7 +28,17 @@ class LoadingImage extends StatelessWidget {
         return const Center(child: CircularProgressIndicator());
       },
       errorBuilder: (context, error, stackTrace) {
-        return const Center(child: Text('Failed to load image'));
+        return SizedBox(
+          height: height,
+          width: width,
+          child: const Center(
+            child: Icon(
+              Icons.broken_image,
+              size: SWSizes.s40,
+              color: kColorNeutral300,
+            ),
+          ),
+        );
       },
     );
   }
