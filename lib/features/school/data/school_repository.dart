@@ -54,8 +54,11 @@ class FakeSchoolRepository implements ISchoolRepository {
     try {
       final response = await _client.get('/school/$schoolId');
       var school = SchoolDetail.fromJson(response['data']);
-      school = school.copyWith(
-          image: '${school.image}'.replaceAll('public', kBaseUrl));
+      if (school.image != null) {
+        school = school.copyWith(
+          image: '${school.image}'.replaceAll('public', kBaseUrl),
+        );
+      }
 
       return right(school);
     } catch (e, stackTrace) {
@@ -114,10 +117,7 @@ class FakeSchoolRepository implements ISchoolRepository {
     File? cover,
   }) async {
     try {
-      final schoolMap = {
-        'name': name,
-        'address': address
-      };
+      final schoolMap = {'name': name, 'address': address};
       final formData = FormData.fromMap(schoolMap);
 
       if (cover != null) {
@@ -132,7 +132,7 @@ class FakeSchoolRepository implements ISchoolRepository {
               path,
               filename: fileName,
               contentType:
-              MediaType('image', extension == 'jpg' ? 'jpeg' : extension),
+                  MediaType('image', extension == 'jpg' ? 'jpeg' : extension),
             ),
           ),
         );

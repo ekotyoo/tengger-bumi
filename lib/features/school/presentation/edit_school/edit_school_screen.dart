@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:school_watch_semeru/common/widgets/sw_button.dart';
-import 'package:school_watch_semeru/features/school/presentation/edit_school/edit_school_controller.dart';
 
+import '../../../../common/widgets/sw_button.dart';
+import 'edit_school_controller.dart';
 import '../../../../../common/constants/constant.dart';
 import '../../../../../common/widgets/sw_text_field.dart';
 import '../../../../../common/widgets/title_with_caption.dart';
@@ -70,11 +70,15 @@ class _EditSchoolScreenState extends ConsumerState<EditSchoolScreen> {
   }
 
   Widget _buildSelectedImage(String? cover, XFile? newCover) {
-    Image? imageProvider;
+    Widget? image;
     if (newCover != null) {
-      imageProvider = Image.file(File(newCover.path), fit: BoxFit.cover);
-    } else if (cover != null) {
-      imageProvider = Image.network(cover, fit: BoxFit.cover);
+      print("new cover != null: $newCover");
+      image = Image.file(File(newCover.path), fit: BoxFit.cover);
+    }
+
+    if (cover != null) {
+      print("cover != null: $cover");
+      image = Image.network(cover, fit: BoxFit.cover);
     }
 
     final emptyImagePlaceholder = GestureDetector(
@@ -162,7 +166,7 @@ class _EditSchoolScreenState extends ConsumerState<EditSchoolScreen> {
                 child: SizedBox(
                   height: 100,
                   width: double.infinity,
-                  child: imageProvider,
+                  child: image,
                 ),
               ),
               Positioned(
@@ -242,8 +246,7 @@ class _EditSchoolScreenState extends ConsumerState<EditSchoolScreen> {
         body: stateAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (error, stackTrace) => Center(child: Text(error.toString())),
-          data: (state) {
-            return Padding(
+          data: (state) => Padding(
               padding: const EdgeInsets.all(SWSizes.s16),
               child: Column(
                 children: [
@@ -252,7 +255,7 @@ class _EditSchoolScreenState extends ConsumerState<EditSchoolScreen> {
                   SWTextField(
                     hint: SWStrings.labelSchoolName,
                     maxLines: 1,
-                    initialText: state.school?.name ?? '',
+                    initialText: state.school.name,
                     errorText: state.schoolNameInput.isPure
                         ? null
                         : state.schoolNameInput.error?.getErrorMessage(),
@@ -268,7 +271,7 @@ class _EditSchoolScreenState extends ConsumerState<EditSchoolScreen> {
                   SWTextField(
                     hint: SWStrings.labelSchoolAddress,
                     maxLines: 1,
-                    initialText: state.school?.address ?? '',
+                    initialText: state.school.address,
                     errorText: state.schoolAddressInput.isPure
                         ? null
                         : state.schoolAddressInput.error?.getErrorMessage(),
@@ -292,8 +295,7 @@ class _EditSchoolScreenState extends ConsumerState<EditSchoolScreen> {
                   ),
                 ],
               ),
-            );
-          },
+            ),
         ),
       ),
     );

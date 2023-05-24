@@ -14,7 +14,7 @@ part 'edit_school_controller.g.dart';
 @riverpod
 class EditSchoolController extends _$EditSchoolController {
   @override
-  FutureOr<EditSchoolState> build(int schoolId) async {
+  Future<EditSchoolState> build(int schoolId) async {
     final repo = ref.read(schoolRepositoryProvider);
     final result = await repo.getSchool(schoolId: schoolId);
 
@@ -23,17 +23,18 @@ class EditSchoolController extends _$EditSchoolController {
         setErrorMessage(l.message);
         return null;
       },
-      (r) {
-        return r;
-      },
+      (r) => r,
     );
+
+    if (school == null) throw Exception('Tidak dapat mendapatkan data sekolah');
 
     return EditSchoolState(
       school: school,
+      cover: school.image,
       newCover: null,
-      schoolNameInput: SchoolNameInput.dirty(value: school?.name ?? ''),
+      schoolNameInput: SchoolNameInput.dirty(value: school.name),
       schoolAddressInput:
-          SchoolAddressInput.dirty(value: school?.address ?? ''),
+          SchoolAddressInput.dirty(value: school.address),
     );
   }
 
@@ -76,7 +77,6 @@ class EditSchoolController extends _$EditSchoolController {
   bool _validateCover(String? cover, XFile? newCover) {
     final oldState = state.requireValue;
     final school = oldState.school;
-    if (school == null) return false;
 
     return school.image != cover || newCover != null;
   }
@@ -96,9 +96,9 @@ class EditSchoolController extends _$EditSchoolController {
     state = AsyncValue.data(
       currentState.copyWith(
         validated: ((currentState.schoolNameInput.value !=
-                    currentState.school?.name) ||
+                    currentState.school.name) ||
                 (currentState.schoolAddressInput.value !=
-                    currentState.school?.address) ||
+                    currentState.school.address) ||
                 _validateCover(currentState.cover, currentState.newCover)) &&
             Formz.validate([
               currentState.schoolNameInput,

@@ -10,7 +10,7 @@ part 'edit_school_state.freezed.dart';
 @freezed
 class EditSchoolState with _$EditSchoolState {
   const factory EditSchoolState({
-    SchoolDetail? school,
+    required SchoolDetail school,
     @Default(SchoolNameInput.pure()) SchoolNameInput schoolNameInput,
     @Default(SchoolAddressInput.pure()) SchoolAddressInput schoolAddressInput,
     @Default(false) bool validated,

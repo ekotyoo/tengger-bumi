@@ -169,15 +169,16 @@ class SchoolCard extends StatelessWidget {
             ),
           ),
         ),
-        Positioned(
-          top: SWSizes.s16,
-          right: SWSizes.s16,
-          child: GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: onEdit,
-            child: const Icon(Icons.edit),
-          ),
-        )
+        if (showEditButton)
+          Positioned(
+            top: SWSizes.s16,
+            right: SWSizes.s16,
+            child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: onEdit,
+              child: const Icon(Icons.edit),
+            ),
+          )
       ],
     );
   }
