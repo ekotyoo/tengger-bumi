@@ -17,7 +17,7 @@ Dio dio(DioRef ref) {
 const _defaultConnectTimeout = Duration(seconds: 20);
 const _defaultReceiveTimeout = Duration(seconds: 20);
 
-const kBaseUrl = 'http://sw.guyub.net';
+const kBaseUrl = 'http://192.168.100.21:3000';
 
 @Riverpod(keepAlive: true)
 HttpClient httpClient(HttpClientRef ref) {

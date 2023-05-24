@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:go_router/go_router.dart';
 import 'package:school_watch_semeru/utils/string_extension.dart';
 
+import '../../../../common/routing/routes.dart';
 import '../../../../utils/snackbar_utils.dart';
 import '../../domain/additional_info.dart';
 import '../../domain/report_detail.dart';
@@ -53,7 +55,8 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
       (previous, next) async {
         final errorMessage = await next;
         if (errorMessage != null && context.mounted) {
-          showSnackbar(context, message: errorMessage, type: SnackbarType.error);
+          showSnackbar(context,
+              message: errorMessage, type: SnackbarType.error);
           ref
               .read(reportDetailControllerProvider(widget.reportId).notifier)
               .setErrorMessage(null);
@@ -73,6 +76,7 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
             message: successMessage,
             type: SnackbarType.success,
           );
+          if (successMessage == 'Laporan berhasil dihapus') context.pop();
           ref
               .read(reportDetailControllerProvider(widget.reportId).notifier)
               .setSuccessMessage(null);
@@ -85,6 +89,49 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
         appBar: AppBar(
           title: const Text('Detail Laporan'),
           centerTitle: true,
+          actions: [
+            reportAsync.when(
+              data: (data) => PopupMenuButton(
+                icon: const Icon(Icons.more_vert),
+                iconSize: SWSizes.s24,
+                splashRadius: SWSizes.s16,
+                padding: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(SWSizes.s8),
+                ),
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    onTap: () {
+                      final report = data.report;
+                      if (report == null) return;
+                      context.pushNamed(
+                        Routes.editReport,
+                        params: {'reportId': report.id.toString()},
+                      );
+                    },
+                    child: const Text(SWStrings.labelEditReport),
+                  ),
+                  PopupMenuItem(
+                    onTap: () {
+                      final report = data.report;
+                      if (report == null) return;
+                      ref
+                          .read(reportDetailControllerProvider(widget.reportId)
+                          .notifier)
+                          .deleteReport(report);
+                    },
+                    child: const Text(SWStrings.labelDeleteReport),
+                  ),
+                ],
+              ),
+              error: (error, stackTrace) => Container(),
+              loading: () => const SizedBox(
+                height: SWSizes.s24,
+                width: SWSizes.s24,
+                child: CircularProgressIndicator(strokeWidth: SWSizes.s2),
+              ),
+            ),
+          ],
         ),
         body: reportAsync.when(
           loading: () => const Center(
@@ -102,7 +149,8 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
               key: _refreshIndicatorKey,
               onRefresh: () {
                 ref.invalidate(reportDetailControllerProvider(widget.reportId));
-                return ref.read(reportDetailControllerProvider(widget.reportId).future);
+                return ref.read(
+                    reportDetailControllerProvider(widget.reportId).future);
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: SWSizes.s16),
@@ -142,7 +190,8 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: SWSizes.s16),
+                      padding:
+                          const EdgeInsets.symmetric(vertical: SWSizes.s16),
                       child: CommentInput(
                         isLoading: state.commentLoading,
                         onSubmit: (value) {

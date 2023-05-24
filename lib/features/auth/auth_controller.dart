@@ -32,8 +32,10 @@ class AuthController extends _$AuthController {
 
     return result.fold(
       (l) {
-        if (l.cause is UnauthorisedRequest) return const AuthUser.signedOut();
-        throw Exception('Something went wrong, try again later.');
+        if (l.cause is UnauthorisedRequest) {
+          return const AuthUser.signedOut();
+        }
+        return const AuthUser.signedOut();
       },
       (r) => r as SignedIn,
     );
@@ -58,7 +60,6 @@ class AuthController extends _$AuthController {
       if (next.isLoading) return;
       if (next.hasError) {
         ref.read(authStateProvider.notifier).state = const AuthUser.signedOut();
-        prefs.remove(kAccessToken);
         return;
       }
 

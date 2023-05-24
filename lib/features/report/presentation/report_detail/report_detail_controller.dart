@@ -1,4 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:school_watch_semeru/features/report/domain/report_detail.dart';
 
 import '../../domain/comment.dart';
 import '../../data/report_repository.dart';
@@ -95,6 +96,21 @@ class ReportDetailController extends _$ReportDetailController {
         setSuccessMessage('Komentar berhasil dihapus');
       },
     );
+  }
+
+  void deleteReport(ReportDetail report) async {
+    final reportRepo = ref.read(reportRepositoryProvider);
+
+    final oldState = state.requireValue;
+    state = AsyncValue.data(oldState.copyWith(reportDeleting: true));
+
+    final result = await reportRepo.deleteReport(reportId: report.id);
+    result.fold(
+      (l) => setErrorMessage(l.message),
+      (r) => setSuccessMessage('Laporan berhasil dihapus'),
+    );
+
+    state = AsyncValue.data(oldState.copyWith(reportDeleting: false));
   }
 
   void toggleLike() async {

@@ -9,6 +9,7 @@ class ReportDetailState with _$ReportDetailState {
   const factory ReportDetailState({
     ReportDetail? report,
     @Default(false) bool commentLoading,
+    @Default(false) bool reportDeleting,
     String? successMessage,
     String? errorMessage,
   }) = _ReportDetailState;
