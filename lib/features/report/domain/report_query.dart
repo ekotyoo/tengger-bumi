@@ -9,7 +9,7 @@ part 'report_query.freezed.dart';
 class ReportQuery with _$ReportQuery {
   const factory ReportQuery({
     @Default(1) int page,
-    @Default(20) int take,
+    @Default(200) int take,
     ReportType? reportType,
     ReportStatus? reportStatus,
     @Default(ReportTime.all) ReportTime reportTime,

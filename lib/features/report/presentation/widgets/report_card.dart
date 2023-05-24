@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:school_watch_semeru/common/widgets/shimmer_container.dart';
 
 import '../../../../utils/string_extension.dart';
 import '../../domain/report.dart';
@@ -252,6 +253,77 @@ class ReportCard extends StatelessWidget {
           icon: Icons.comment_rounded,
           count: report.commentsCount,
           color: kColorNeutral200,
+        ),
+      ],
+    );
+  }
+}
+
+class ReportCardShimmer extends StatelessWidget {
+  const ReportCardShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            ShimmerContainer(
+              height: 40,
+              width: 40,
+              borderRadius: 20,
+            ),
+            SizedBox(width: SWSizes.s8),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ShimmerContainer(
+                  height: SWSizes.s16,
+                  width: 100,
+                ),
+                SizedBox(height: SWSizes.s4),
+                ShimmerContainer(
+                  height: SWSizes.s16 - 2,
+                  width: 150,
+                ),
+              ],
+            ),
+            Spacer(),
+            ShimmerContainer(
+              height: 40,
+              width: SWSizes.s16,
+            ),
+          ],
+        ),
+        SizedBox(height: SWSizes.s8),
+        ShimmerContainer(
+          height: 1.5 * SWSizes.s160,
+          width: double.infinity,
+        ),
+        SizedBox(height: SWSizes.s8),
+        Row(
+          children: [
+            ShimmerContainer(
+              height: SWSizes.s24,
+              width: SWSizes.s64,
+            ),
+            SizedBox(width: SWSizes.s8),
+            ShimmerContainer(
+              height: SWSizes.s24,
+              width: SWSizes.s64,
+            ),
+            Spacer(),
+            ShimmerContainer(
+              height: SWSizes.s24,
+              width: SWSizes.s64,
+            ),
+          ],
+        ),
+        SizedBox(height: SWSizes.s8),
+        ShimmerContainer(
+          height: SWSizes.s16 - 2,
+          width: 150,
         ),
       ],
     );

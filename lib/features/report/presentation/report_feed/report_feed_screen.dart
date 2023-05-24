@@ -82,7 +82,14 @@ class ReportList extends ConsumerWidget {
     );
 
     return reports.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () {
+        return ListView.separated(
+          padding: const EdgeInsets.symmetric(horizontal: SWSizes.s16),
+          separatorBuilder: (context, index) => const SizedBox(height: SWSizes.s16),
+          itemCount: 4,
+          itemBuilder: (context, index) => const ReportCardShimmer(),
+        );
+      },
       error: (error, stackTrace) => Text('$error'),
       data: (state) {
         final reports = state.reports;
@@ -95,9 +102,7 @@ class ReportList extends ConsumerWidget {
           child: ListView.separated(
             padding: const EdgeInsets.symmetric(horizontal: SWSizes.s16),
             itemCount: reports.length,
-            separatorBuilder: (context, index) {
-              return const SizedBox(height: SWSizes.s16);
-            },
+            separatorBuilder: (context, index) => const SizedBox(height: SWSizes.s16),
             itemBuilder: (context, index) {
               final report = reports[index];
               return ReportCard(
