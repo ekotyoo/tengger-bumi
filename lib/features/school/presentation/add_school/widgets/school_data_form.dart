@@ -23,23 +23,17 @@ class SchoolDataForm extends ConsumerStatefulWidget {
 }
 
 class _SchoolDataFormState extends ConsumerState<SchoolDataForm> {
-  late TextEditingController _nameController;
-  late TextEditingController _addressController;
   late ImagePicker _imagePicker;
 
   @override
   void initState() {
     super.initState();
     _imagePicker = ImagePicker();
-    _nameController = TextEditingController(text: widget.schoolName ?? '');
-    _addressController = TextEditingController(text: widget.schoolAddress ?? '');
   }
 
   @override
   void dispose() {
     super.dispose();
-    _nameController.dispose();
-    _addressController.dispose();
   }
 
   void _pickImageFromGallery(WidgetRef ref) async {
@@ -207,7 +201,7 @@ class _SchoolDataFormState extends ConsumerState<SchoolDataForm> {
             : emptyImagePlaceholder,
         const SizedBox(height: SWSizes.s16),
         SWTextField(
-          controller: _nameController,
+          initialText: widget.schoolName,
           hint: SWStrings.labelSchoolName,
           maxLines: 1,
           errorText: state.schoolNameInput.isPure
@@ -220,7 +214,7 @@ class _SchoolDataFormState extends ConsumerState<SchoolDataForm> {
         ),
         const SizedBox(height: SWSizes.s16),
         SWTextField(
-          controller: _addressController,
+          initialText: widget.schoolAddress,
           hint: SWStrings.labelSchoolAddress,
           maxLines: 1,
           errorText: state.schoolAddressInput.isPure
