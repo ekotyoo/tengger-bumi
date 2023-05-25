@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -15,6 +15,7 @@ import '../domain/report_detail.dart';
 import '../../../common/services/http_client.dart';
 import '../domain/report_query.dart';
 import '../domain/report.dart';
+import '../domain/report_status.dart';
 import 'i_report_repository.dart';
 
 part 'report_repository.g.dart';
@@ -35,15 +36,22 @@ class FakeReportRepository implements IReportRepository {
     required ReportQuery query,
     CancelToken? cancelToken,
   }) async {
+    debugPrint(query.toString());
     try {
-      // TODO: Handle date time filter
+      bool? isActive;
+
+      if (query.reportStatus == ReportStatus.active) {
+        isActive = true;
+      } else if (query.reportStatus == ReportStatus.inactive) {
+        isActive = false;
+      }
 
       final response = await _client.get(
         '/report',
         queryParameters: {'page': query.page, 'take': query.take},
         data: {
           'type': query.reportType?.name.toLowerCase(),
-          'is_active': query.isActive,
+          'is_active': isActive,
           'school_id': query.schoolId,
           'author_id': query.authorId
         },

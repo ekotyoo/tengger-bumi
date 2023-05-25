@@ -45,6 +45,8 @@ class PostReportController extends StateNotifier<PostReportState> {
 
   void onPageChange(int page) => state = state.copyWith(currentPage: page);
 
+  void onActiveInactiveChange(bool value) => state = state.copyWith(isActive: value);
+
   void onSchoolChange(SchoolOption school) =>
       state = state.copyWith(selectedSchool: school);
 
@@ -243,6 +245,7 @@ class PostReportController extends StateNotifier<PostReportState> {
       selectedReportType: selectedReportType,
       locationInput: LocationPickInput.dirty(value: selectedLocation),
       descriptionInput: DescriptionTextInput.dirty(value: report.description),
+      isActive: report.isActive,
       imageInput: ImagePickInput.dirty(value: images),
       additionalInfoInputs: additionalInfos
               ?.map(
@@ -334,6 +337,7 @@ class PostReportController extends StateNotifier<PostReportState> {
         latitude: position.latitude,
         longitude: position.longitude,
         roomId: state.selectedRoom!.id!,
+        isActive: state.isActive,
         additionalInfos: state.additionalInfoInputs
             .map((e) => AdditionalInfo(
                   label: e.labelInput.value,

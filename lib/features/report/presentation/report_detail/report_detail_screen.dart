@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:school_watch_semeru/utils/string_extension.dart';
 
 import '../../../../common/routing/routes.dart';
@@ -89,45 +90,47 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
         appBar: AppBar(
           title: const Text('Detail Laporan'),
           centerTitle: true,
-          actions: [
-            PopupMenuButton(
-              icon: const Icon(Icons.more_vert),
-              iconSize: SWSizes.s24,
-              splashRadius: SWSizes.s16,
-              padding: EdgeInsets.zero,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(SWSizes.s8),
-              ),
-              itemBuilder: (context) => reportAsync.when(
-                data: (data) => [
-                  PopupMenuItem(
-                    onTap: () {
-                      final report = data.report;
-                      if (report == null) return;
-                      context.pushNamed(
-                        Routes.editReport,
-                        params: {'reportId': report.id.toString()},
-                      );
-                    },
-                    child: const Text(SWStrings.labelEditReport),
+          actions: reportAsync.when(
+            data: (data) => [
+              if (data.report?.allowEdit ?? false)
+                PopupMenuButton(
+                  icon: const Icon(Icons.more_vert),
+                  iconSize: SWSizes.s24,
+                  splashRadius: SWSizes.s16,
+                  padding: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(SWSizes.s8),
                   ),
-                  PopupMenuItem(
-                    onTap: () {
-                      final report = data.report;
-                      if (report == null) return;
-                      ref
-                          .read(reportDetailControllerProvider(widget.reportId)
-                              .notifier)
-                          .deleteReport(report);
-                    },
-                    child: const Text(SWStrings.labelDeleteReport),
-                  ),
-                ],
-                error: (error, stackTrace) => [],
-                loading: () => [],
-              ),
-            )
-          ],
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      onTap: () {
+                        final report = data.report;
+                        if (report == null) return;
+                        context.pushNamed(
+                          Routes.editReport,
+                          params: {'reportId': report.id.toString()},
+                        );
+                      },
+                      child: const Text(SWStrings.labelEditReport),
+                    ),
+                    PopupMenuItem(
+                      onTap: () {
+                        final report = data.report;
+                        if (report == null) return;
+                        ref
+                            .read(
+                                reportDetailControllerProvider(widget.reportId)
+                                    .notifier)
+                            .deleteReport(report);
+                      },
+                      child: const Text(SWStrings.labelDeleteReport),
+                    ),
+                  ],
+                )
+            ],
+            error: (error, stackTrace) => [],
+            loading: () => [],
+          ),
         ),
         body: reportAsync.when(
           loading: () => const Center(
@@ -281,9 +284,9 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
             borderRadius: BorderRadius.circular(SWSizes.s8),
             child: GestureDetector(
               onTap: () => context.pushNamed(
-                  Routes.photoViewer,
-                  extra: images[index],
-                ),
+                Routes.photoViewer,
+                extra: images[index],
+              ),
               child: LoadingImage(
                 url: images[index],
                 fit: BoxFit.cover,
@@ -305,14 +308,14 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
       children: [
         AuthorSection(
           name: author.name,
-          subtitle: createdAt.toString(),
+          subtitle: DateFormat("HH:mm - EE, d MMMM yyyy", "id_ID").format(createdAt),
           avatar: author.avatar,
         ),
         const Spacer(),
         CategoryChip(
           label: isActive ? 'Aktif' : 'Tidak Aktif',
-          backgroundColor: kColorSuccess300,
-          foregroundColor: kColorNeutral0,
+          backgroundColor: isActive ? kColorSuccess300 : kColorNeutral40,
+          foregroundColor: isActive ? kColorNeutral0 : kColorNeutral600,
         ),
       ],
     );

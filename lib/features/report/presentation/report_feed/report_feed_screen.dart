@@ -269,7 +269,7 @@ class ReportFilter extends ConsumerWidget {
                           ref
                               .read(reportFilterStateProvider.notifier)
                               .updateFilterState(
-                                reportQuery.copyWith(reportType: null),
+                                reportQuery.copyWith(reportStatus: null),
                               );
                         },
                       ),

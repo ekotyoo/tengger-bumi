@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:school_watch_semeru/common/widgets/shimmer_container.dart';
 
 import '../../../../utils/string_extension.dart';
@@ -95,18 +96,21 @@ class ReportCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: SWSizes.s8),
-                  Text(
-                    report.createdAt.toString(),
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith(color: kColorNeutral200),
+                  Expanded(
+                    child: Text(
+                      '${report.school} - ${report.room}',
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall
+                          ?.copyWith(color: kColorNeutral200),
+                    ),
                   )
                 ],
               ),
               Text(
-                '${report.school} - ${report.room}',
+                DateFormat("HH:mm - EE, d MMMM yyyy", "id_ID")
+                    .format(report.createdAt),
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context)
                     .textTheme
@@ -152,23 +156,35 @@ class ReportCard extends StatelessWidget {
   final _pageController = PageController(viewportFraction: 1.1);
 
   _buildImage(BuildContext context, Report report) {
-    return SizedBox(
-      height: 1.5 * SWSizes.s160,
-      width: double.infinity,
-      child: PageView.builder(
-        controller: _pageController,
-        itemBuilder: (context, index) => FractionallySizedBox(
-          key: ValueKey(report.images[index]),
-          widthFactor: 1 / _pageController.viewportFraction,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(SWSizes.s8),
-            child: LoadingImage(
-              url: report.images[index],
-              fit: BoxFit.cover,
+    return AspectRatio(
+      aspectRatio: 5 / 4,
+      child: Stack(
+        children: [
+          PageView.builder(
+            controller: _pageController,
+            itemBuilder: (context, index) => FractionallySizedBox(
+              key: ValueKey(report.images[index]),
+              widthFactor: 1 / _pageController.viewportFraction,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(SWSizes.s8),
+                child: LoadingImage(
+                  url: report.images[index],
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            itemCount: report.images.length,
+          ),
+          Positioned(
+            top: SWSizes.s8,
+            right: SWSizes.s16,
+            child: CategoryChip(
+              label: report.isActive ? 'Aktif' : 'Tidak Aktif',
+              backgroundColor: report.isActive ? kColorSuccess300 : kColorNeutral40,
+              foregroundColor: report.isActive ? kColorNeutral0 : kColorNeutral600,
             ),
           ),
-        ),
-        itemCount: report.images.length,
+        ],
       ),
     );
   }
@@ -301,9 +317,9 @@ class ReportCardShimmer extends StatelessWidget {
           ],
         ),
         SizedBox(height: SWSizes.s8),
-        ShimmerContainer(
-          height: 1.5 * SWSizes.s160,
-          width: double.infinity,
+        AspectRatio(
+          aspectRatio: 5 / 4,
+          child: ShimmerContainer(),
         ),
         SizedBox(height: SWSizes.s8),
         Row(

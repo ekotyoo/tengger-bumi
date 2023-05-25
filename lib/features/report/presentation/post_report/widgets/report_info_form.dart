@@ -143,6 +143,22 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
             ..onSelectedRoomChange(room);
         },
       ),
+      if (widget.formType == FormType.edit)
+        Row(
+          children: [
+            const Text('Aktif/Tidak Aktif'),
+            const Spacer(),
+            Switch(
+              value: state.isActive ?? false,
+              onChanged: (value) {
+                ref
+                    .read(
+                        postReportControllerProvider(widget.formType).notifier)
+                    .onActiveInactiveChange(value);
+              },
+            ),
+          ],
+        ),
       const Divider(height: SWSizes.s16),
       for (var i = 0; i < state.additionalInfoInputs.length; i++) ...[
         _AdditionalInfoTextField(

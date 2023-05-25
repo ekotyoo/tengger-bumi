@@ -29,6 +29,7 @@ class PostReportState with _$PostReportState {
     @Default(true) bool infoFormLoading,
     @Default(false) bool finalFormSubmitting,
     ReportType? selectedReportType,
+    bool? isActive,
     @Default([]) List<Category> categories,
     @Default(DescriptionTextInput.pure()) DescriptionTextInput descriptionInput,
     @Default(CategoryOptionInput.pure()) CategoryOptionInput categoryInput,
