@@ -202,9 +202,9 @@ class ImagePickerInput extends ConsumerWidget {
   void _pickImageFromGallery(WidgetRef ref) async {
     try {
       final images = await _imagePicker.pickMultiImage(
-        maxWidth: 600,
-        maxHeight: 600,
-        imageQuality: 70,
+        maxWidth: 1080,
+        maxHeight: 1920,
+        imageQuality: 80,
       );
       onImageFromGalleryPicked?.call(images);
     } catch (e) {
@@ -216,9 +216,9 @@ class ImagePickerInput extends ConsumerWidget {
     try {
       final image = await _imagePicker.pickImage(
         source: ImageSource.camera,
-        maxWidth: 600,
-        maxHeight: 600,
-        imageQuality: 70,
+        maxWidth: 1080,
+        maxHeight: 1920,
+        imageQuality: 80,
       );
       if (image != null) {
         onImageFroCameraPicked?.call(image);

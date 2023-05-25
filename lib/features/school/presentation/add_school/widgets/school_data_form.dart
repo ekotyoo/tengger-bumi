@@ -40,9 +40,9 @@ class _SchoolDataFormState extends ConsumerState<SchoolDataForm> {
     try {
       final image = await _imagePicker.pickImage(
         source: ImageSource.gallery,
-        maxWidth: 600,
-        maxHeight: 600,
-        imageQuality: 70,
+        maxWidth: 1080,
+        maxHeight: 1920,
+        imageQuality: 80,
       );
       if (image != null) {
         ref
@@ -59,9 +59,9 @@ class _SchoolDataFormState extends ConsumerState<SchoolDataForm> {
     try {
       final image = await _imagePicker.pickImage(
         source: ImageSource.camera,
-        maxWidth: 600,
-        maxHeight: 600,
-        imageQuality: 70,
+        maxWidth: 1080,
+        maxHeight: 1920,
+        imageQuality: 80,
       );
       if (image != null) {
         ref

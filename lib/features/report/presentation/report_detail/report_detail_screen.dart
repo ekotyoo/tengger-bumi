@@ -279,9 +279,15 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
           widthFactor: 1 / _pageController.viewportFraction,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(SWSizes.s8),
-            child: LoadingImage(
-              url: images[index],
-              fit: BoxFit.cover,
+            child: GestureDetector(
+              onTap: () => context.pushNamed(
+                  Routes.photoViewer,
+                  extra: images[index],
+                ),
+              child: LoadingImage(
+                url: images[index],
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ),

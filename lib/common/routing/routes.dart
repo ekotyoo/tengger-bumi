@@ -22,4 +22,6 @@ class Routes {
   static const schoolDetail = 'schooldetail';
   static const schoolFloorPlan = 'schoolfloorplan';
   static const editSchool = 'editschool';
+
+  static const photoViewer = 'photoviewer';
 }

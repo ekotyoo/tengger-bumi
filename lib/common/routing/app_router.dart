@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:school_watch_semeru/common/widgets/image_viewer.dart';
 import 'package:school_watch_semeru/features/auth/domain/auth_user.dart';
 import 'package:school_watch_semeru/features/auth/presentation/edit_profile/edit_profile_screen.dart';
 import 'package:school_watch_semeru/features/auth/presentation/email_verification/email_verification_screen.dart';
@@ -295,6 +296,17 @@ class AppRouter extends _$AppRouter implements Listenable {
             final user = state.extra as SignedIn;
             return MaterialPage(
               child: EditProfileScreen(user: user),
+            );
+          },
+        ),
+        GoRoute(
+          path: '/photoviewer',
+          name: Routes.photoViewer,
+          parentNavigatorKey: navigatorKey,
+          pageBuilder: (context, state) {
+            final url = state.extra as String;
+            return MaterialPage(
+              child: ImageViewer(url: url),
             );
           },
         ),
