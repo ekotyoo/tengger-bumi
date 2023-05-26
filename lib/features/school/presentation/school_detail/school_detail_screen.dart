@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart' as fp;
 import 'package:go_router/go_router.dart';
+import 'package:rainbow_color/rainbow_color.dart';
 import 'package:school_watch_semeru/features/school/domain/school_analysis.dart';
 import 'package:school_watch_semeru/features/school/domain/school_detail.dart';
 import '../models/floor_plan_ui_model.dart';
@@ -23,6 +24,31 @@ class SchoolDetailScreen extends ConsumerWidget {
   }) : super(key: key);
 
   final int schoolId;
+
+  Color getColorFromDouble(double? value) {
+    if (value == null) return kColorNeutral200;
+    final colors = Rainbow(
+      spectrum: [Colors.red, Colors.yellow, Colors.green],
+      rangeStart: 0.0,
+      rangeEnd: 1.0,
+    );
+
+    final color = colors[value];
+    return color;
+  }
+
+  String getAnalysisLevelFromDouble(double? value) {
+    if (value == null) return '-';
+    final score = (value * 100).toInt();
+
+    if (score >= 61 && score <= 100) {
+      return 'Baik';
+    } else if (score >= 34 && score <= 66) {
+      return 'Cukup';
+    }
+
+    return 'Rendah';
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -179,17 +205,20 @@ class SchoolDetailScreen extends ConsumerWidget {
               _buildSchoolAnalysisInfo(
                 context,
                 label: 'Pencegahan',
-                value: analysis.preventionLevel?.toString() ?? '-',
+                color: getColorFromDouble(analysis.preventionLevel),
+                value: getAnalysisLevelFromDouble(analysis.preventionLevel),
               ),
               _buildSchoolAnalysisInfo(
                 context,
                 label: 'Tanggap Darurat',
-                value: analysis.emergencyResponseLevel?.toString() ?? '-',
+                color: getColorFromDouble(analysis.emergencyResponseLevel),
+                value: getAnalysisLevelFromDouble(analysis.emergencyResponseLevel),
               ),
               _buildSchoolAnalysisInfo(
                 context,
                 label: 'Pemulihan',
-                value: analysis.recoveryLevel?.toString() ?? '-',
+                color: getColorFromDouble(analysis.recoveryLevel),
+                value: getAnalysisLevelFromDouble(analysis.recoveryLevel),
               ),
             ],
           ),
@@ -199,10 +228,11 @@ class SchoolDetailScreen extends ConsumerWidget {
   }
 
   _buildSchoolAnalysisInfo(
-    BuildContext context, {
-    required String label,
-    required String value,
-  }) {
+      BuildContext context, {
+        required String label,
+        required String value,
+        required Color color,
+      }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -210,6 +240,16 @@ class SchoolDetailScreen extends ConsumerWidget {
           label,
           style: Theme.of(context).textTheme.labelMedium,
         ),
+        const SizedBox(height: SWSizes.s8),
+        CircleAvatar(
+          radius: 12,
+          backgroundColor: kColorNeutral0,
+          child: CircleAvatar(
+            radius: 10,
+            backgroundColor: color,
+          ),
+        ),
+        const SizedBox(height: SWSizes.s8),
         Text(
           value,
           style: Theme.of(context)

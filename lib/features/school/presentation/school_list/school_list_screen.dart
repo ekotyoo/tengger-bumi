@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:rainbow_color/rainbow_color.dart';
 
 import '../../../auth/data/auth_repository.dart';
 import 'schools_provider.dart';
@@ -106,6 +107,31 @@ class SchoolCard extends StatelessWidget {
   final bool showEditButton;
   final VoidCallback? onEdit;
 
+  Color getColorFromDouble(double? value) {
+    if (value == null) return kColorNeutral200;
+    final colors = Rainbow(
+      spectrum: [Colors.red, Colors.yellow, Colors.green],
+      rangeStart: 0.0,
+      rangeEnd: 1.0,
+    );
+
+    final color = colors[value];
+    return color;
+  }
+
+  String getAnalysisLevelFromDouble(double? value) {
+    if (value == null) return '-';
+    final score = (value * 100).toInt();
+
+    if (score >= 61 && score <= 100) {
+      return 'Baik';
+    } else if (score >= 34 && score <= 66) {
+      return 'Cukup';
+    }
+
+    return 'Rendah';
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -157,18 +183,24 @@ class SchoolCard extends StatelessWidget {
                 _buildSchoolAnalysisInfo(
                   context,
                   label: 'Pencegahan',
-                  value: school.analysis.preventionLevel?.toString() ?? '-',
+                  color: getColorFromDouble(school.analysis.preventionLevel),
+                  value: getAnalysisLevelFromDouble(
+                      school.analysis.preventionLevel),
                 ),
                 _buildSchoolAnalysisInfo(
                   context,
                   label: 'Tanggap Darurat',
-                  value:
-                      school.analysis.emergencyResponseLevel?.toString() ?? '-',
+                  color: getColorFromDouble(
+                      school.analysis.emergencyResponseLevel),
+                  value: getAnalysisLevelFromDouble(
+                      school.analysis.emergencyResponseLevel),
                 ),
                 _buildSchoolAnalysisInfo(
                   context,
                   label: 'Pemulihan',
-                  value: school.analysis.recoveryLevel?.toString() ?? '-',
+                  color: getColorFromDouble(school.analysis.recoveryLevel),
+                  value:
+                      getAnalysisLevelFromDouble(school.analysis.recoveryLevel),
                 ),
               ],
             ),
@@ -182,6 +214,7 @@ class SchoolCard extends StatelessWidget {
     BuildContext context, {
     required String label,
     required String value,
+    required Color color,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -190,6 +223,16 @@ class SchoolCard extends StatelessWidget {
           label,
           style: Theme.of(context).textTheme.labelMedium,
         ),
+        const SizedBox(height: SWSizes.s8),
+        CircleAvatar(
+          radius: 12,
+          backgroundColor: kColorNeutral0,
+          child: CircleAvatar(
+            radius: 10,
+            backgroundColor: color,
+          ),
+        ),
+        const SizedBox(height: SWSizes.s8),
         Text(
           value,
           style: Theme.of(context)

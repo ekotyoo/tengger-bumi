@@ -129,6 +129,15 @@ class _SchoolMapScreenState extends ConsumerState<SchoolMapScreen> {
       zoom: 10,
       minZoom: 1,
       absorbPanEventsOnScrollables: false,
+      onPositionChanged: (MapPosition position, bool hasGesture) {
+        if (hasGesture &&
+            _followOnLocationUpdate != FollowOnLocationUpdate.never) {
+          setState(
+                () => _followOnLocationUpdate =
+                FollowOnLocationUpdate.never,
+          );
+        }
+      },
     );
 
     return SafeArea(
@@ -149,6 +158,15 @@ class _SchoolMapScreenState extends ConsumerState<SchoolMapScreen> {
                     zoom: 10,
                     minZoom: 1,
                     absorbPanEventsOnScrollables: false,
+                    onPositionChanged: (MapPosition position, bool hasGesture) {
+                      if (hasGesture &&
+                          _followOnLocationUpdate != FollowOnLocationUpdate.never) {
+                        setState(
+                              () => _followOnLocationUpdate =
+                              FollowOnLocationUpdate.never,
+                        );
+                      }
+                    },
                   );
                 },
                 error: (error, stackTrace) =>  defaultMapOption,
