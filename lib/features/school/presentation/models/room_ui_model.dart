@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_color_utils/flutter_color_utils.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -29,6 +30,7 @@ class RoomUiModel extends Equatable {
               )
               .toList(),
         ),
+        color: HexColor(room.color),
       );
 
   Room toDomain() => Room(
@@ -40,9 +42,18 @@ class RoomUiModel extends Equatable {
                   longitude: e.longitude,
                 ))
             .toList(),
-        color: color.toString(),
+        color: color.toHex(),
       );
 
   @override
   List<Object?> get props => [id, label, polygon, color];
+}
+
+extension ColorX on Color {
+  String toHex({bool leadingHashSign = true}) =>
+      ('${leadingHashSign ? '#' : ''}'
+              '${red.toRadixString(16).padLeft(2, '0')}'
+              '${green.toRadixString(16).padLeft(2, '0')}'
+              '${blue.toRadixString(16).padLeft(2, '0')}')
+          .toUpperCase();
 }

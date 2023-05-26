@@ -52,8 +52,8 @@ class _AddSchoolScreenState extends ConsumerState<AddSchoolScreen> {
           (previous, next) {
         if (next != null && context.mounted) {
           showSnackbar(context, message: next, type: SnackbarType.error);
+          ref.read(addSchoolControllerProvider.notifier).setErrorMessage(null);
         }
-        ref.read(addSchoolControllerProvider.notifier).setErrorMessage(null);
       },
     );
 
@@ -63,8 +63,8 @@ class _AddSchoolScreenState extends ConsumerState<AddSchoolScreen> {
         if (next != null && context.mounted) {
           showSnackbar(context, message: next);
           context.pop();
+          ref.read(addSchoolControllerProvider.notifier).setSuccessMessage(null);
         }
-        ref.read(addSchoolControllerProvider.notifier).setSuccessMessage(null);
       },
     );
 
