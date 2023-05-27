@@ -116,7 +116,7 @@ class _SchoolFloorPlanScreenState extends State<SchoolFloorPlanScreen> {
               onPressed: () {
                 setState(() =>
                     _followOnLocationUpdate = FollowOnLocationUpdate.never);
-                _mapController.move(_schoolCentroid, 21);
+                _mapController.move(_schoolCentroid, _mapController.zoom);
               },
               icon: const CircleAvatar(
                 child: Icon(Icons.home_work_outlined),

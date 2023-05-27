@@ -272,24 +272,26 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
   }
 
   _buildImage(BuildContext context, List<String> images) {
-    return SizedBox(
-      height: 1.5 * SWSizes.s160,
-      width: double.infinity,
-      child: PageView.builder(
-        itemCount: images.length,
-        controller: _pageController,
-        itemBuilder: (context, index) => FractionallySizedBox(
-          widthFactor: 1 / _pageController.viewportFraction,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(SWSizes.s8),
-            child: GestureDetector(
-              onTap: () => context.pushNamed(
-                Routes.photoViewer,
-                extra: images[index],
-              ),
-              child: LoadingImage(
-                url: images[index],
-                fit: BoxFit.cover,
+    return AspectRatio(
+      aspectRatio: 5 / 4,
+      child: SizedBox(
+        width: double.infinity,
+        child: PageView.builder(
+          itemCount: images.length,
+          controller: _pageController,
+          itemBuilder: (context, index) => FractionallySizedBox(
+            widthFactor: 1 / _pageController.viewportFraction,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(SWSizes.s8),
+              child: GestureDetector(
+                onTap: () => context.pushNamed(
+                  Routes.photoViewer,
+                  extra: images[index],
+                ),
+                child: LoadingImage(
+                  url: images[index],
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),

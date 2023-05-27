@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart' as fp;
 import 'package:go_router/go_router.dart';
-import 'package:rainbow_color/rainbow_color.dart';
 import 'package:school_watch_semeru/features/school/domain/school_analysis.dart';
 import 'package:school_watch_semeru/features/school/domain/school_detail.dart';
+import '../../../../utils/analysis_utils.dart';
 import '../models/floor_plan_ui_model.dart';
 import '../models/school_detail_floor_plan_nav_arg.dart';
 
@@ -18,37 +18,13 @@ import '../../../../common/widgets/loading_image.dart';
 import '../../../../common/constants/constant.dart';
 
 class SchoolDetailScreen extends ConsumerWidget {
-  const SchoolDetailScreen({
+  SchoolDetailScreen({
     Key? key,
     required this.schoolId,
   }) : super(key: key);
 
   final int schoolId;
-
-  Color getColorFromDouble(double? value) {
-    if (value == null) return kColorNeutral200;
-    final colors = Rainbow(
-      spectrum: [Colors.red, Colors.yellow, Colors.green],
-      rangeStart: 0.0,
-      rangeEnd: 1.0,
-    );
-
-    final color = colors[value];
-    return color;
-  }
-
-  String getAnalysisLevelFromDouble(double? value) {
-    if (value == null) return '-';
-    final score = (value * 100).toInt();
-
-    if (score >= 61 && score <= 100) {
-      return 'Baik';
-    } else if (score >= 34 && score <= 66) {
-      return 'Cukup';
-    }
-
-    return 'Rendah';
-  }
+  final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -91,19 +67,26 @@ class SchoolDetailScreen extends ConsumerWidget {
               return const Center(child: Text('Data sekolah tidak ditemukan'));
             }
 
-            return Padding(
-              padding: const EdgeInsets.all(SWSizes.s16),
-              child: ListView(
-                children: [
-                  _buildSchoolHeader(context, reportDetail),
-                  const SizedBox(height: SWSizes.s16),
-                  _buildSchoolAnalysis(context, reportDetail.analysis),
-                  const SizedBox(height: SWSizes.s8),
-                  const Divider(),
-                  const SizedBox(height: SWSizes.s8),
-                  ReportListWithFilter(reports: reportDetail.reports),
-                  const SizedBox(height: SWSizes.s8),
-                ],
+            return RefreshIndicator(
+              key: _refreshIndicatorKey,
+              onRefresh: () {
+                ref.invalidate(schoolDetailControllerProvider(schoolId));
+                return ref.read(schoolDetailControllerProvider(schoolId).future);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(SWSizes.s16),
+                child: ListView(
+                  children: [
+                    _buildSchoolHeader(context, reportDetail),
+                    const SizedBox(height: SWSizes.s16),
+                    _buildSchoolAnalysis(context, reportDetail.analysis),
+                    const SizedBox(height: SWSizes.s8),
+                    const Divider(),
+                    const SizedBox(height: SWSizes.s8),
+                    ReportListWithFilter(reports: reportDetail.reports),
+                    const SizedBox(height: SWSizes.s8),
+                  ],
+                ),
               ),
             );
           },
@@ -119,13 +102,13 @@ class SchoolDetailScreen extends ConsumerWidget {
         children: [
           LoadingImage(
             url: reportDetail.image ?? '',
-            height: 160,
+            height: 200,
             width: double.infinity,
             fit: BoxFit.cover,
           ),
           Container(
             color: kColorNeutral900.withOpacity(0.4),
-            height: 160,
+            height: 200,
             width: double.infinity,
           ),
           Positioned(
@@ -205,20 +188,20 @@ class SchoolDetailScreen extends ConsumerWidget {
               _buildSchoolAnalysisInfo(
                 context,
                 label: 'Pencegahan',
-                color: getColorFromDouble(analysis.preventionLevel),
-                value: getAnalysisLevelFromDouble(analysis.preventionLevel),
+                color: getColorFromAnalysisScore(analysis.preventionLevel),
+                value: getLabelFromAnalysisScore(analysis.preventionLevel),
               ),
               _buildSchoolAnalysisInfo(
                 context,
                 label: 'Tanggap Darurat',
-                color: getColorFromDouble(analysis.emergencyResponseLevel),
-                value: getAnalysisLevelFromDouble(analysis.emergencyResponseLevel),
+                color: getColorFromAnalysisScore(analysis.emergencyResponseLevel),
+                value: getLabelFromAnalysisScore(analysis.emergencyResponseLevel),
               ),
               _buildSchoolAnalysisInfo(
                 context,
                 label: 'Pemulihan',
-                color: getColorFromDouble(analysis.recoveryLevel),
-                value: getAnalysisLevelFromDouble(analysis.recoveryLevel),
+                color: getColorFromAnalysisScore(analysis.recoveryLevel),
+                value: getLabelFromAnalysisScore(analysis.recoveryLevel),
               ),
             ],
           ),

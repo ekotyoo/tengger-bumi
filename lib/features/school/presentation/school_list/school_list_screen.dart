@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:rainbow_color/rainbow_color.dart';
 
+import '../../../../utils/analysis_utils.dart';
 import '../../../auth/data/auth_repository.dart';
 import 'schools_provider.dart';
 import '../../../../common/constants/constant.dart';
@@ -107,31 +107,6 @@ class SchoolCard extends StatelessWidget {
   final bool showEditButton;
   final VoidCallback? onEdit;
 
-  Color getColorFromDouble(double? value) {
-    if (value == null) return kColorNeutral200;
-    final colors = Rainbow(
-      spectrum: [Colors.red, Colors.yellow, Colors.green],
-      rangeStart: 0.0,
-      rangeEnd: 1.0,
-    );
-
-    final color = colors[value];
-    return color;
-  }
-
-  String getAnalysisLevelFromDouble(double? value) {
-    if (value == null) return '-';
-    final score = (value * 100).toInt();
-
-    if (score >= 61 && score <= 100) {
-      return 'Baik';
-    } else if (score >= 34 && score <= 66) {
-      return 'Cukup';
-    }
-
-    return 'Rendah';
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -183,24 +158,21 @@ class SchoolCard extends StatelessWidget {
                 _buildSchoolAnalysisInfo(
                   context,
                   label: 'Pencegahan',
-                  color: getColorFromDouble(school.analysis.preventionLevel),
-                  value: getAnalysisLevelFromDouble(
+                  color: getColorFromAnalysisScore(school.analysis.preventionLevel),
+                  value: getLabelFromAnalysisScore(
                       school.analysis.preventionLevel),
                 ),
                 _buildSchoolAnalysisInfo(
                   context,
                   label: 'Tanggap Darurat',
-                  color: getColorFromDouble(
-                      school.analysis.emergencyResponseLevel),
-                  value: getAnalysisLevelFromDouble(
-                      school.analysis.emergencyResponseLevel),
+                  color: getColorFromAnalysisScore(school.analysis.emergencyResponseLevel),
+                  value: getLabelFromAnalysisScore(school.analysis.emergencyResponseLevel),
                 ),
                 _buildSchoolAnalysisInfo(
                   context,
                   label: 'Pemulihan',
-                  color: getColorFromDouble(school.analysis.recoveryLevel),
-                  value:
-                      getAnalysisLevelFromDouble(school.analysis.recoveryLevel),
+                  color: getColorFromAnalysisScore(school.analysis.recoveryLevel),
+                  value: getLabelFromAnalysisScore(school.analysis.recoveryLevel),
                 ),
               ],
             ),
