@@ -19,11 +19,11 @@ part 'school_repository.g.dart';
 @riverpod
 ISchoolRepository schoolRepository(SchoolRepositoryRef ref) {
   final client = ref.watch(httpClientProvider);
-  return FakeSchoolRepository(client);
+  return SchoolRepository(client);
 }
 
-class FakeSchoolRepository implements ISchoolRepository {
-  FakeSchoolRepository(this._client);
+class SchoolRepository implements ISchoolRepository {
+  SchoolRepository(this._client);
 
   final HttpClient _client;
 

@@ -38,7 +38,7 @@ class PickReportTypeForm extends StatelessWidget {
       children: [
         const TitleWithCaption(
           title: SWStrings.labelChooseReportType,
-          caption: SWStrings.dummyText,
+          caption: 'Silahkan memilih jenis laporan yang sesuai dengan deskripsi.',
         ),
         const SizedBox(height: SWSizes.s16),
         Expanded(

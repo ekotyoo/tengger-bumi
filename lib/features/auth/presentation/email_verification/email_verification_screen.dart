@@ -112,7 +112,7 @@ class _EmailVerificationScreenState extends ConsumerState<EmailVerificationScree
           style: Theme.of(context).textTheme.headlineLarge,
         ),
         Text(
-          SWStrings.dummyText,
+          'Silahkan cek email Anda dan masukkan 5 digit kode OTP untuk memverifikasi akun.',
           style: Theme.of(context)
               .textTheme
               .bodyMedium

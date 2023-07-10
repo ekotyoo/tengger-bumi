@@ -14,8 +14,8 @@ Dio dio(DioRef ref) {
   return Dio();
 }
 
-const _defaultConnectTimeout = Duration(seconds: 20);
-const _defaultReceiveTimeout = Duration(seconds: 20);
+const _defaultConnectTimeout = Duration(seconds: 30);
+const _defaultReceiveTimeout = Duration(seconds: 30);
 
 const kBaseUrl = 'https://sw.guyub.net';
 

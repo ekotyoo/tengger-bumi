@@ -35,7 +35,9 @@ class WelcomeScreen extends StatelessWidget {
   }
 
   _buildWelcomeHeader(BuildContext context) => [
-        const Center(child: CircleAvatar(radius: SWSizes.s80)),
+        Center(
+          child: Image.asset('assets/images/sw_logo.png', width: 150, height: 150),
+        ),
         const SizedBox(height: SWSizes.s32),
         Text(
           'Semeru\nSchool Watch',

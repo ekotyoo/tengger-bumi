@@ -14,17 +14,20 @@ import 'post_report_controller.dart';
 const reportTypes = [
   ReportType(
     name: 'Pencegahan',
-    description: SWStrings.dummyText,
+    description:
+        'Upaya pencegahan untuk menghindari risiko ketika terjadinya bencana.',
     color: kColorSuccess75,
   ),
   ReportType(
     name: 'Eksisting',
-    description: SWStrings.dummyText,
+    description:
+        'Kondisi sekolah saat ini, baik fasilitas sekolah dan upaya pemeliharaannya.',
     color: kColorSecondary75,
   ),
   ReportType(
     name: 'Dampak',
-    description: SWStrings.dummyText,
+    description:
+        'Kondisi yang ditimbulkan setelah terjadinya bencana di lingkungan sekolah.',
     color: kColorPrimary75,
   ),
 ];
@@ -143,7 +146,9 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            title: const Text(SWStrings.labelPostReport),
+            title: Text(widget.formType == FormType.edit
+                ? SWStrings.labelEditReport
+                : SWStrings.labelPostReport),
             centerTitle: true,
             leading: IconButton(
               onPressed: () {

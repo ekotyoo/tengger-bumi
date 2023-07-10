@@ -23,11 +23,11 @@ part 'report_repository.g.dart';
 @riverpod
 IReportRepository reportRepository(ReportRepositoryRef ref) {
   final client = ref.watch(httpClientProvider);
-  return FakeReportRepository(client);
+  return ReportRepository(client);
 }
 
-class FakeReportRepository implements IReportRepository {
-  FakeReportRepository(this._client);
+class ReportRepository implements IReportRepository {
+  ReportRepository(this._client);
 
   final HttpClient _client;
 

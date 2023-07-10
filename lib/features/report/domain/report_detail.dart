@@ -19,6 +19,7 @@ class ReportDetail with _$ReportDetail {
     required Author author,
     required String school,
     required String room,
+    @JsonKey(name: 'room_id') required int roomId,
     required Position position,
     bool? liked,
     @JsonKey(name: 'created_at') @TimestampSerializer() required DateTime createdAt,

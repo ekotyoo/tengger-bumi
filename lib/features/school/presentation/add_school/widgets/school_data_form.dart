@@ -190,10 +190,11 @@ class _SchoolDataFormState extends ConsumerState<SchoolDataForm> {
     );
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const TitleWithCaption(
           title: SWStrings.labelSchoolData,
-          caption: SWStrings.dummyText,
+          caption: 'Silahkan lengkapi form dibawah untuk melanjutkan.',
         ),
         const SizedBox(height: SWSizes.s16),
         state.coverImage != null

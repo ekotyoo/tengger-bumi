@@ -638,12 +638,14 @@ class CommentTile extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: SWSizes.s8),
-                  Text(
-                    comment.createdAt.toString(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith(color: kColorNeutral200),
+                  Expanded(
+                    child: Text(
+                      DateFormat("HH:mm - EE, d MMMM yyyy", "id_ID").format(comment.createdAt),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall
+                          ?.copyWith(color: kColorNeutral200),
+                    ),
                   )
                 ],
               ),

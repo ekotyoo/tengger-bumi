@@ -3,7 +3,7 @@ class SWStrings {
   static const appName = 'School Watch Semeru';
   static const appNameShort = 'School Watch';
   static const appDesc =
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa mi.';
+      'Unggah laporanmu dan diskusikan untuk melancarkan mitigasi bencana di lingkungan sekolah.';
   static const dummyText =
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa mi.';
   static const dummyLongText =
@@ -20,7 +20,7 @@ class SWStrings {
   static const labelLogout = 'Logout';
   static const labelEditProfile = 'Edit Profil';
   static const labelEmailVerification = 'Verifikasi Email';
-  static const descDidNotHaveAccount = 'Tidak punya akun? Register';
+  static const descDidNotHaveAccount = 'Belum punya akun? Register';
   static const descAlreadyHaveAccount = 'Sudah punya akun? Login';
   static const labelName = 'Nama';
   static const labelEmail = 'Email';

@@ -74,7 +74,7 @@ class RegisterScreen extends ConsumerWidget {
           style: Theme.of(context).textTheme.headlineLarge,
         ),
         Text(
-          SWStrings.dummyText,
+          'Buat akun Anda untuk bergabung.',
           style: Theme.of(context)
               .textTheme
               .bodyMedium

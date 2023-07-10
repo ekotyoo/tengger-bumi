@@ -81,7 +81,7 @@ class LoginScreen extends ConsumerWidget {
           style: Theme.of(context).textTheme.headlineLarge,
         ),
         Text(
-          SWStrings.dummyText,
+          'Masukkan akun Anda yang telah didaftarkan.',
           style: Theme.of(context)
               .textTheme
               .bodyMedium

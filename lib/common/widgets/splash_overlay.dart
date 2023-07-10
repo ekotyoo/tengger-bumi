@@ -14,6 +14,7 @@ class SplashOverlay extends StatelessWidget {
           child: CircleAvatar(
             radius: SWSizes.s80,
             backgroundColor: Theme.of(context).colorScheme.onPrimary,
+            child: Image.asset('assets/images/sw_logo.png'),
           ),
         ),
       ),

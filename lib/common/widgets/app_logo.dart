@@ -9,9 +9,10 @@ class AppLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const CircleAvatar(
-          radius: SWSizes.s8,
-          backgroundColor: Colors.orange,
+        Image.asset(
+          'assets/images/sw_logo.png',
+          width: SWSizes.s16,
+          height: SWSizes.s16,
         ),
         const SizedBox(width: SWSizes.s4),
         Text(

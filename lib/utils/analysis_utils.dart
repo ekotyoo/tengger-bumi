@@ -7,12 +7,12 @@ Color getColorFromAnalysisScore(double? value) {
   final score = (value * 100).toInt();
 
   if (score >= 61 && score <= 100) {
-    return Colors.green.shade700;
+    return kColorSuccess300;
   } else if (score >= 34 && score <= 66) {
-    return Colors.yellow;
+    return const Color(0xFFFFB84C);
   }
 
-  return Colors.red.shade700;
+  return kColorError300;
 }
 
 String getLabelFromAnalysisScore(double? value) {

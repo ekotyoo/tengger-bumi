@@ -258,32 +258,35 @@ class _SchoolMapScreenState extends ConsumerState<SchoolMapScreen> {
                   ? Container()
                   : Align(
                       alignment: Alignment.bottomCenter,
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxHeight: 200),
-                        child: PageView.builder(
-                          controller: _pageController,
-                          itemCount: schools.length,
-                          onPageChanged: (index) =>
-                              setState(() => _selectedSchool = index),
-                          itemBuilder: (context, index) {
-                            final school = schools[index];
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: SWSizes.s16),
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxHeight: 200),
+                          child: PageView.builder(
+                            controller: _pageController,
+                            itemCount: schools.length,
+                            onPageChanged: (index) =>
+                                setState(() => _selectedSchool = index),
+                            itemBuilder: (context, index) {
+                              final school = schools[index];
 
-                            return FractionallySizedBox(
-                              widthFactor: 1 / _pageController.viewportFraction,
-                              child: Padding(
-                                padding: const EdgeInsets.all(SWSizes.s16),
-                                child: SchoolCard(
-                                  school: school,
-                                  onTap: () {
-                                    context.pushNamed(
-                                      Routes.schoolDetail,
-                                      params: {'schoolId': school.id.toString()},
-                                    );
-                                  },
+                              return FractionallySizedBox(
+                                widthFactor: 1 / _pageController.viewportFraction,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(SWSizes.s16),
+                                  child: SchoolCard(
+                                    school: school,
+                                    onTap: () {
+                                      context.pushNamed(
+                                        Routes.schoolDetail,
+                                        params: {'schoolId': school.id.toString()},
+                                      );
+                                    },
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),

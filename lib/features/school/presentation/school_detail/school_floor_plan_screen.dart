@@ -218,21 +218,24 @@ class _SchoolFloorPlanScreenState extends State<SchoolFloorPlanScreen> {
                                     topRight: Radius.circular(SWSizes.s32),
                                   ),
                                 ),
+                                isScrollControlled: true,
                                 builder: (context) => Padding(
                                   padding: const EdgeInsets.all(SWSizes.s16),
-                                  child: Wrap(
-                                    runSpacing: SWSizes.s16,
-                                    children: [
-                                      ReportCard(
-                                          report: report,
-                                          showInteractionBar: false),
-                                      SWButton(
-                                        label: SWStrings.labelSeeMore,
-                                        onPressed: () => context.pushNamed(
-                                            Routes.reportDetail,
-                                            params: {'reportId': report.id.toString()}),
-                                      ),
-                                    ],
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      children: [
+                                        ReportCard(
+                                            report: report,
+                                            showInteractionBar: false),
+                                        const SizedBox(height: SWSizes.s16),
+                                        SWButton(
+                                          label: SWStrings.labelSeeMore,
+                                          onPressed: () => context.pushNamed(
+                                              Routes.reportDetail,
+                                              params: {'reportId': report.id.toString()}),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               );

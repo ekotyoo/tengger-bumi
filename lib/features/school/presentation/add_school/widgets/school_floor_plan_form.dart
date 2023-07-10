@@ -27,7 +27,7 @@ class SchoolFloorPlanForm extends ConsumerWidget {
       children: [
         const TitleWithCaption(
           title: SWStrings.labelSchoolFloorPlan,
-          caption: SWStrings.dummyText,
+          caption: 'Gambar denah dari setiap ruangan yang ada di sekolah untuk melanjutkan.',
         ),
         const SizedBox(height: SWSizes.s16),
         Expanded(

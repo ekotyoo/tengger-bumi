@@ -133,11 +133,11 @@ extension NetworkExceptionsExtension on NetworkExceptions {
     }, requestCancelled: () {
       errorMessage = "Request Cancelled";
     }, internalServerError: () {
-      errorMessage = "Internal Server Error";
+      errorMessage = "Terjadi kesalahan server, coba lagi nanti";
     }, notFound: (String reason) {
       errorMessage = reason;
     }, serviceUnavailable: () {
-      errorMessage = "Service unavailable";
+      errorMessage = "Terjadi kesalahan server, coba lagi nanti";
     }, methodNotAllowed: () {
       errorMessage = "Method Allowed";
     }, badRequest: () {
@@ -149,13 +149,13 @@ extension NetworkExceptionsExtension on NetworkExceptions {
     }, requestTimeout: () {
       errorMessage = "Connection request timeout";
     }, noInternetConnection: () {
-      errorMessage = "No internet connection";
+      errorMessage = "Tidak ada koneksi internet, coba lagi nanti";
     }, conflict: () {
       errorMessage = "Error due to a conflict";
     }, sendTimeout: () {
       errorMessage = "Send timeout in connection with API server";
     }, unableToProcess: () {
-      errorMessage = "Unable to process the data";
+      errorMessage = "Terjadi kesalahan, coba lagi nanti";
     }, defaultError: (String error) {
       errorMessage = error;
     }, formatException: () {

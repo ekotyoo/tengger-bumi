@@ -43,7 +43,7 @@ class PickSchoolForm extends StatelessWidget {
       children: [
         const TitleWithCaption(
           title: SWStrings.labelChooseSchool,
-          caption: SWStrings.dummyText,
+          caption: 'Anda belum menjadi anggota sekolah manapun. Silahkan pilih sekolah untuk menjadi member sekolah tersebut.',
         ),
         const SizedBox(height: SWSizes.s16),
         Expanded(

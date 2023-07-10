@@ -285,8 +285,13 @@ class PostReportController extends StateNotifier<PostReportState> {
           },
         );
       }
+
       final room = state.selectedSchoolData?.floorPlan.rooms
-          .firstWhere((element) => element.label == report.room);
+          .firstWhereOrNull((element) => element.id == report.roomId);
+
+      if (room == null) {
+        state = state.copyWith(locationInput: const LocationPickInput.pure());
+      }
 
       state = state.copyWith(
         categoryInput: selectedCategory != null
