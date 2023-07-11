@@ -28,7 +28,7 @@ const reportTypes = [
     name: 'Dampak',
     description:
         'Kondisi yang ditimbulkan setelah terjadinya bencana di lingkungan sekolah.',
-    color: kColorPrimary75,
+    color: kColorPrimary100,
   ),
 ];
 
@@ -147,7 +147,7 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: Text(widget.formType == FormType.edit
-                ? SWStrings.labelEditReport
+                ? SWStrings.labelEditPost
                 : SWStrings.labelPostReport),
             centerTitle: true,
             leading: IconButton(

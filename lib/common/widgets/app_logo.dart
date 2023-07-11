@@ -10,7 +10,7 @@ class AppLogo extends StatelessWidget {
     return Row(
       children: [
         Image.asset(
-          'assets/images/sw_logo.png',
+          'assets/images/tetenger_bumi_logo.png',
           width: SWSizes.s16,
           height: SWSizes.s16,
         ),

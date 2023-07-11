@@ -76,6 +76,20 @@ class LoginScreen extends ConsumerWidget {
   }
 
   _buildHeader(BuildContext context) => [
+        Center(
+          child: Image.asset('assets/images/tetenger_bumi_logo.png', width: 200),
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset('assets/images/filkom_logo.png', width: 30),
+            Image.asset('assets/images/ub_logo.png', width: 30,),
+            Image.asset('assets/images/km_logo.png', width: 30,),
+            Image.asset('assets/images/mmd_ub_logo.png', width: 30,),
+          ],
+        ),
+        const SizedBox(height: SWSizes.s32),
         Text(
           SWStrings.labelLogin,
           style: Theme.of(context).textTheme.headlineLarge,
@@ -85,7 +99,7 @@ class LoginScreen extends ConsumerWidget {
           style: Theme.of(context)
               .textTheme
               .bodyMedium
-              ?.copyWith(color: kColorNeutral200),
+              ?.copyWith(color: kColorPrimary),
         ),
       ];
 

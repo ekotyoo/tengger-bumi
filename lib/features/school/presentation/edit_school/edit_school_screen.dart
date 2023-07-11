@@ -234,7 +234,7 @@ class _EditSchoolScreenState extends ConsumerState<EditSchoolScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: const Text(SWStrings.labelEditSchool),
+          title: const Text(SWStrings.labelEditPlant),
           centerTitle: true,
           leading: IconButton(
             onPressed: () => context.pop(),
@@ -251,7 +251,7 @@ class _EditSchoolScreenState extends ConsumerState<EditSchoolScreen> {
                   _buildSelectedImage(state.cover, state.newCover),
                   const SizedBox(height: SWSizes.s16),
                   SWTextField(
-                    hint: SWStrings.labelSchoolName,
+                    hint: SWStrings.labelPlantName,
                     maxLines: 1,
                     initialText: state.school.name,
                     errorText: state.schoolNameInput.isPure
@@ -267,7 +267,7 @@ class _EditSchoolScreenState extends ConsumerState<EditSchoolScreen> {
                   ),
                   const SizedBox(height: SWSizes.s16),
                   SWTextField(
-                    hint: SWStrings.labelSchoolAddress,
+                    hint: SWStrings.labelPlantAddress,
                     maxLines: 1,
                     initialText: state.school.address,
                     errorText: state.schoolAddressInput.isPure

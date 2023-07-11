@@ -6,7 +6,7 @@ import '../constants/constant.dart';
 class SWTheme {
   static ThemeData get lightTheme => ThemeData(
         primarySwatch: const MaterialColor(
-          0xff183d9c,
+          0xff4A6800,
           {
             50: kColorPrimary50,
             100: kColorPrimary100,
@@ -17,7 +17,7 @@ class SWTheme {
             600: kColorPrimary500,
             700: kColorPrimary500,
             800: kColorPrimary500,
-            900: kColorPrimary500,
+            900: kColorPrimary,
           },
         ),
         scaffoldBackgroundColor: kColorNeutral0,

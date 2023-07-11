@@ -43,9 +43,12 @@ class ReportCard extends StatelessWidget {
           const SizedBox(height: SWSizes.s8),
           _buildImage(context, report),
           const SizedBox(height: SWSizes.s8),
-          _buildCategoryList(context, report),
-          const SizedBox(height: SWSizes.s8),
+          // _buildCategoryList(context, report),
+          _buildPlantTitle(context, report.school),
+          const SizedBox(height: SWSizes.s4),
           _buildCaption(context, report.description),
+          const SizedBox(height: SWSizes.s2),
+          _buildTime(context, report.createdAt),
           const SizedBox(height: SWSizes.s8),
           if (showInteractionBar)
             _buildInteractionBar(
@@ -59,6 +62,91 @@ class ReportCard extends StatelessWidget {
     );
   }
 
+  // _buildHeader(BuildContext context, Report report) {
+  //   final author = report.author;
+  //
+  //   return Row(
+  //     children: [
+  //       CircleAvatar(
+  //         foregroundImage:
+  //             author.avatar != null ? NetworkImage(author.avatar!) : null,
+  //         backgroundColor: kColorPrimary50,
+  //         child: const Icon(Icons.person, color: kColorPrimary100),
+  //       ),
+  //       const SizedBox(width: SWSizes.s8),
+  //       Expanded(
+  //         child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             Row(
+  //               crossAxisAlignment: CrossAxisAlignment.center,
+  //               children: [
+  //                 Text(
+  //                   author.name,
+  //                   overflow: TextOverflow.ellipsis,
+  //                   style: Theme.of(context)
+  //                       .textTheme
+  //                       .bodyMedium
+  //                       ?.copyWith(fontWeight: FontWeight.bold),
+  //                 ),
+  //                 const SizedBox(width: SWSizes.s8),
+  //                 Container(
+  //                   width: SWSizes.s4,
+  //                   height: SWSizes.s4,
+  //                   decoration: BoxDecoration(
+  //                     borderRadius: BorderRadius.circular(SWSizes.s2),
+  //                     color: kColorNeutral900,
+  //                   ),
+  //                 ),
+  //                 const SizedBox(width: SWSizes.s8),
+  //                 Expanded(
+  //                   child: Text(
+  //                     '${report.school} - ${report.room}',
+  //                     overflow: TextOverflow.ellipsis,
+  //                     style: Theme.of(context)
+  //                         .textTheme
+  //                         .bodySmall
+  //                         ?.copyWith(color: kColorNeutral200),
+  //                   ),
+  //                 )
+  //               ],
+  //             ),
+  //             Text(
+  //               DateFormat("HH:mm - EE, d MMMM yyyy", "id_ID")
+  //                   .format(report.createdAt),
+  //               overflow: TextOverflow.ellipsis,
+  //               style: Theme.of(context)
+  //                   .textTheme
+  //                   .bodySmall
+  //                   ?.copyWith(color: kColorNeutral200),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //       if (showMenu && !deleting)
+  //         PopupMenuButton(
+  //           icon: const Icon(Icons.more_vert),
+  //           iconSize: SWSizes.s24,
+  //           splashRadius: SWSizes.s16,
+  //           padding: EdgeInsets.zero,
+  //           shape: RoundedRectangleBorder(
+  //             borderRadius: BorderRadius.circular(SWSizes.s8),
+  //           ),
+  //           itemBuilder: (context) => [
+  //             PopupMenuItem(
+  //               onTap: onEdited,
+  //               child: const Text(SWStrings.labelEditPost),
+  //             ),
+  //             PopupMenuItem(
+  //               onTap: onDeleted,
+  //               child: const Text(SWStrings.labelDeletePost),
+  //             ),
+  //           ],
+  //         ),
+  //       if (deleting) _buildLoadingIndicator(context)
+  //     ],
+  //   );
+  // }
   _buildHeader(BuildContext context, Report report) {
     final author = report.author;
 
@@ -66,7 +154,7 @@ class ReportCard extends StatelessWidget {
       children: [
         CircleAvatar(
           foregroundImage:
-              author.avatar != null ? NetworkImage(author.avatar!) : null,
+          author.avatar != null ? NetworkImage(author.avatar!) : null,
           backgroundColor: kColorPrimary50,
           child: const Icon(Icons.person, color: kColorPrimary100),
         ),
@@ -75,27 +163,17 @@ class ReportCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(
+                author.name,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    author.name,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(width: SWSizes.s8),
-                  Container(
-                    width: SWSizes.s4,
-                    height: SWSizes.s4,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(SWSizes.s2),
-                      color: kColorNeutral900,
-                    ),
-                  ),
-                  const SizedBox(width: SWSizes.s8),
                   Expanded(
                     child: Text(
                       '${report.school} - ${report.room}',
@@ -107,15 +185,6 @@ class ReportCard extends StatelessWidget {
                     ),
                   )
                 ],
-              ),
-              Text(
-                DateFormat("HH:mm - EE, d MMMM yyyy", "id_ID")
-                    .format(report.createdAt),
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(color: kColorNeutral200),
               ),
             ],
           ),
@@ -132,11 +201,11 @@ class ReportCard extends StatelessWidget {
             itemBuilder: (context) => [
               PopupMenuItem(
                 onTap: onEdited,
-                child: const Text(SWStrings.labelEditReport),
+                child: const Text(SWStrings.labelEditPost),
               ),
               PopupMenuItem(
                 onTap: onDeleted,
-                child: const Text(SWStrings.labelDeleteReport),
+                child: const Text(SWStrings.labelDeletePost),
               ),
             ],
           ),
@@ -175,15 +244,15 @@ class ReportCard extends StatelessWidget {
             ),
             itemCount: report.images.length,
           ),
-          Positioned(
-            top: SWSizes.s8,
-            right: SWSizes.s16,
-            child: CategoryChip(
-              label: report.isActive ? 'Aktif' : 'Tidak Aktif',
-              backgroundColor: report.isActive ? kColorSuccess300 : kColorNeutral40,
-              foregroundColor: report.isActive ? kColorNeutral0 : kColorNeutral600,
-            ),
-          ),
+          // Positioned(
+          //   top: SWSizes.s8,
+          //   right: SWSizes.s16,
+          //   child: CategoryChip(
+          //     label: report.isActive ? 'Aktif' : 'Tidak Aktif',
+          //     backgroundColor: report.isActive ? kColorSuccess300 : kColorNeutral40,
+          //     foregroundColor: report.isActive ? kColorNeutral0 : kColorNeutral600,
+          //   ),
+          // ),
         ],
       ),
     );
@@ -195,6 +264,7 @@ class ReportCard extends StatelessWidget {
       report.category.name,
     ];
 
+
     return SizedBox(
       height: SWSizes.s32,
       child: ListView.separated(
@@ -205,11 +275,33 @@ class ReportCard extends StatelessWidget {
       ),
     );
   }
+  _buildPlantTitle(BuildContext context, String text){
+    return Text(
+      text,
+      textAlign: TextAlign.justify,
+      style: Theme.of(context)
+          .textTheme
+          .headlineLarge
+          ?.copyWith(color: kColorNeutral200),
+    );
+  }
 
   _buildCaption(BuildContext context, String text) {
     return Text(
       text,
       textAlign: TextAlign.justify,
+      style: Theme.of(context)
+          .textTheme
+          .bodyLarge
+          ?.copyWith(color: kColorNeutral200),
+    );
+  }
+
+  _buildTime(BuildContext context, DateTime date){
+    return Text(
+      DateFormat("EE, d MMMM yyyy - HH:mm", "id_ID")
+          .format(date),
+      overflow: TextOverflow.ellipsis,
       style: Theme.of(context)
           .textTheme
           .bodySmall

@@ -23,7 +23,7 @@ class SchoolListScreen extends ConsumerWidget {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: const Text(SWStrings.labelSchoolList),
+          title: const Text(SWStrings.labelPlantList),
           centerTitle: true,
           actions: [
             if (isAdmin)
@@ -84,7 +84,7 @@ class _SchoolSearchBarState extends ConsumerState<SchoolSearchBar> {
       maxLines: 1,
       style: Theme.of(context).textTheme.bodyMedium,
       decoration: const InputDecoration(
-        hintText: SWStrings.labelSearchSchool,
+        hintText: SWStrings.labelSearchPlant,
         suffixIcon: Icon(Icons.search_rounded),
       ),
       onChanged: (value) =>

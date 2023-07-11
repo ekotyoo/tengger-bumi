@@ -1,9 +1,9 @@
 class SWStrings {
   // General
-  static const appName = 'School Watch Semeru';
-  static const appNameShort = 'School Watch';
+  static const appName = 'Tetenger Bumi UB';
+  static const appNameShort = 'Tetenger Bumi';
   static const appDesc =
-      'Unggah laporanmu dan diskusikan untuk melancarkan mitigasi bencana di lingkungan sekolah.';
+      'Tetenger Bumi adalah kegiatan menandai bumi dengan menanam pohon, yang hasilnya dapat dinikmati oleh banyak makhluk hidup di kemudian hari.';
   static const dummyText =
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa mi.';
   static const dummyLongText =
@@ -44,7 +44,7 @@ class SWStrings {
   static const labelChooseSchool = 'Pilih Sekolah';
   static const labelChooseReportType = 'Pilih Jenis Laporan';
   static const labelCompleteReport = 'Lengkapi Laporan';
-  static const labelReportDetail = 'Detail Laporan';
+  static const labelPostDetail = 'Detail Postingan';
   static const descDescriptionCannotBeEmpty = 'Deskripsi tidak boleh kosong';
   static const descDescriptionTooShort = 'Deskripsi minimal terdiri dari 3 karkter';
   static const labelDescription = 'Deksripsi';
@@ -66,18 +66,18 @@ class SWStrings {
   static const labelReportPostTime = 'Waktu Posting';
   static const labelWriteComment = 'Tulis Komentar';
   static const descSchoolNotAvailable = 'Belum ada sekolah yang tersedia untuk saat ini.';
-  static const labelEditReport = 'Edit Laporan';
-  static const labelDeleteReport = 'Hapus Laporan';
+  static const labelEditPost = 'Edit Postingan';
+  static const labelDeletePost = 'Hapus Postingan';
   static const labelDeleteComment = 'Hapus Komentar';
 
   // School
-  static const labelSchoolList = 'Daftar Sekolah';
-  static const labelSearchSchool = 'Cari Sekolah';
-  static const labelAddSchool = 'Buat Sekolah';
-  static const labelSchoolData = 'Data Sekolah';
+  static const labelPlantList = 'Daftar Tanaman';
+  static const labelSearchPlant = 'Cari Tanaman';
+  static const labelAddSchool = 'Buat Tanaman';
+  static const labelPlantData = 'Data Tanaman';
   static const labelSchoolFloorPlan = 'Denah Sekolah';
-  static const labelSchoolName = 'Nama Sekolah';
-  static const labelSchoolAddress = 'Alamat Sekolah';
+  static const labelPlantName = 'Nama Tanaman';
+  static const labelPlantAddress = 'Alamat Tanaman';
   static const labelCreateFloorPlan = 'Buat Denah';
   static const labelCreateRoom = 'Buat Ruangan';
   static const descSchoolNameCannotBeEmpty = 'Nama sekolah tidak boleh kosong';
@@ -89,6 +89,6 @@ class SWStrings {
   static const labelPickColor = 'Pilih warna:';
   static const descRoomNameCannotBeEmpty = 'Nama ruang tidak boleh kosong';
   static const descRoomFloorPlanInvalid = 'Denah ruang belum terbentuk';
-  static const labelSchoolDetail = 'Detail Sekolah';
-  static const labelEditSchool = 'Edit Sekolah';
+  static const labelPlantDetail = 'Detail Tanaman';
+  static const labelEditPlant = 'Edit Tanaman';
 }

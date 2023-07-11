@@ -36,12 +36,22 @@ class WelcomeScreen extends StatelessWidget {
 
   _buildWelcomeHeader(BuildContext context) => [
         Center(
-          child: Image.asset('assets/images/sw_logo.png', width: 150, height: 150),
+          child: Image.asset('assets/images/tetenger_bumi_logo.png', width: 300),
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset('assets/images/filkom_logo.png', width: 50),
+            Image.asset('assets/images/ub_logo.png', width: 50,),
+            Image.asset('assets/images/km_logo.png', width: 50,),
+            Image.asset('assets/images/mmd_ub_logo.png', width: 50,),
+          ],
         ),
         const SizedBox(height: SWSizes.s32),
         Text(
-          'Semeru\nSchool Watch',
-          style: Theme.of(context).textTheme.displayLarge,
+          'Tetenger Bumi',
+          style: Theme.of(context).textTheme.displaySmall,
         ),
         Text(
           SWStrings.appDesc,

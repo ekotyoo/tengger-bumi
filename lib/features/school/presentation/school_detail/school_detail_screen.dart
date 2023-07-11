@@ -34,7 +34,7 @@ class SchoolDetailScreen extends ConsumerWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(SWStrings.labelSchoolDetail),
+          title: const Text(SWStrings.labelPlantDetail),
           centerTitle: true,
           actions: [
             schoolDetailAsync.when(

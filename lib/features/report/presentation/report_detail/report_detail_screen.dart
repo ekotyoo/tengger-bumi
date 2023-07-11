@@ -111,7 +111,7 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
                           params: {'reportId': report.id.toString()},
                         );
                       },
-                      child: const Text(SWStrings.labelEditReport),
+                      child: const Text(SWStrings.labelEditPost),
                     ),
                     PopupMenuItem(
                       onTap: () {
@@ -123,7 +123,7 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
                                     .notifier)
                             .deleteReport(report);
                       },
-                      child: const Text(SWStrings.labelDeleteReport),
+                      child: const Text(SWStrings.labelDeletePost),
                     ),
                   ],
                 )

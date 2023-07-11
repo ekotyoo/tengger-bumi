@@ -193,7 +193,7 @@ class _SchoolDataFormState extends ConsumerState<SchoolDataForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const TitleWithCaption(
-          title: SWStrings.labelSchoolData,
+          title: SWStrings.labelPlantData,
           caption: 'Silahkan lengkapi form dibawah untuk melanjutkan.',
         ),
         const SizedBox(height: SWSizes.s16),
@@ -203,7 +203,7 @@ class _SchoolDataFormState extends ConsumerState<SchoolDataForm> {
         const SizedBox(height: SWSizes.s16),
         SWTextField(
           initialText: widget.schoolName,
-          hint: SWStrings.labelSchoolName,
+          hint: SWStrings.labelPlantName,
           maxLines: 1,
           errorText: state.schoolNameInput.isPure
               ? null
@@ -216,7 +216,7 @@ class _SchoolDataFormState extends ConsumerState<SchoolDataForm> {
         const SizedBox(height: SWSizes.s16),
         SWTextField(
           initialText: widget.schoolAddress,
-          hint: SWStrings.labelSchoolAddress,
+          hint: SWStrings.labelPlantAddress,
           maxLines: 1,
           errorText: state.schoolAddressInput.isPure
               ? null
