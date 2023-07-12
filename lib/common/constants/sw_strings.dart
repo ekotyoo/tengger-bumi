@@ -51,6 +51,10 @@ class SWStrings {
   static const labelQuantity = 'Jumlah Tanaman';
   static const labelPlantAge = 'Usia Tanaman';
   static const labelArea = 'Area Tanam';
+  static const labelProvinces = 'Provinsi';
+  static const labelCities = 'Kota / Kabupaten';
+  static const labelDistricts = 'Kecamatan';
+  static const labelVillages = 'Kelurahan / Desa';
   static const labelDescription = 'Deskripsi';
   static const labelCategory = 'Kategori Tanaman';
   static const labelLocation = 'Lokasi';
