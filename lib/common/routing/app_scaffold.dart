@@ -33,11 +33,11 @@ class _AppScaffoldState extends State<AppScaffold> {
 
     if (location.startsWith('/home')) {
       return 0;
-    } else if (location.startsWith('/schoollist')) {
+    } else if (location.startsWith('/map')) {
       return 1;
     } else if (location.startsWith('/postreport')) {
       return 2;
-    } else if (location.startsWith('/map')) {
+    } else if (location.startsWith('/schoollist')) {
       return 3;
     } else if (location.startsWith('/profile')) {
       return 4;
@@ -52,13 +52,13 @@ class _AppScaffoldState extends State<AppScaffold> {
         context.goNamed(Routes.home);
         break;
       case 1:
-        context.goNamed(Routes.schoolList);
+        context.goNamed(Routes.map);
         break;
       case 2:
         context.pushNamed(Routes.postReport);
         break;
       case 3:
-        context.goNamed(Routes.map);
+        context.goNamed(Routes.schoolList);
         break;
       case 4:
         context.goNamed(Routes.profile);

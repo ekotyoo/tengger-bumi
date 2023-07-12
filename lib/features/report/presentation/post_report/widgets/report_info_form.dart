@@ -59,8 +59,6 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
               : ListView(
                   physics: const BouncingScrollPhysics(),
                   children: [
-                    ..._buildFormInputFields(context, state),
-                    const Divider(),
                     ImagePickerInput(
                       images: state.imageInput.value,
                       onImageFromGalleryPicked: (images) {
@@ -85,6 +83,8 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
                           ? null
                           : state.imageInput.error?.getErrorMessage(),
                     ),
+                    const Divider(),
+                    ..._buildFormInputFields(context, state),
                   ],
                 ),
         ),
@@ -94,19 +94,6 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
 
   _buildFormInputFields(BuildContext context, PostReportState state) {
     return [
-      SWTextField(
-        initialText: state.reportDetail?.description,
-        hint: SWStrings.labelDescription,
-        maxLines: 5,
-        errorText: state.descriptionInput.isPure
-            ? null
-            : state.descriptionInput.error?.getErrorMessage(),
-        action: TextInputAction.done,
-        onChanged: (value) => ref
-            .read(postReportControllerProvider(widget.formType).notifier)
-            .onDescriptionChange(value),
-      ),
-      const SizedBox(height: SWSizes.s16),
       SWDropdown(
         hint: SWStrings.labelCategory,
         errorText: state.categoryInput.isPure
@@ -122,6 +109,19 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
                   child: Text(e.name),
                 ))
             .toList(),
+      ),
+      const SizedBox(height: SWSizes.s16),
+      SWTextField(
+        initialText: state.reportDetail?.description,
+        hint: SWStrings.labelDescription,
+        maxLines: 5,
+        errorText: state.descriptionInput.isPure
+            ? null
+            : state.descriptionInput.error?.getErrorMessage(),
+        action: TextInputAction.done,
+        onChanged: (value) => ref
+            .read(postReportControllerProvider(widget.formType).notifier)
+            .onDescriptionChange(value),
       ),
       const SizedBox(height: SWSizes.s16),
       _PickLocationButton(

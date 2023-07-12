@@ -40,7 +40,7 @@ class SWStrings {
   static const labelReportTimeline = 'Feed Laporan';
 
   // Report
-  static const labelPostReport = 'Buat Laporan';
+  static const labelPostReport = 'Posting';
   static const labelChooseSchool = 'Pilih Sekolah';
   static const labelChooseReportType = 'Pilih Jenis Laporan';
   static const labelCompleteReport = 'Lengkapi Laporan';
