@@ -149,9 +149,11 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
             .read(postReportControllerProvider(widget.formType).notifier)
             .onDescriptionChange(value),
       ),
-      const SizedBox(height: SWSizes.s16),
+      // const SizedBox(height: SWSizes.s16),
+      const Divider(),
+      const Text(SWStrings.labelArea),
       SWDropdown(
-        hint: SWStrings.labelArea,
+        hint: SWStrings.labelProvinces,
         errorText: state.categoryInput.isPure
             ? null
             : state.categoryInput.error?.getErrorMessage(),
@@ -167,6 +169,58 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
             .toList(),
       ),
       const SizedBox(height: SWSizes.s16),
+      SWDropdown(
+        hint: SWStrings.labelCities,
+        errorText: state.categoryInput.isPure
+            ? null
+            : state.categoryInput.error?.getErrorMessage(),
+        onChanged: (value) => ref
+            .read(postReportControllerProvider(widget.formType).notifier)
+            .onCategoryChange(value),
+        value: state.categoryInput.value,
+        items: state.categories
+            .map((e) => DropdownMenuItem(
+          value: e,
+          child: Text(e.name),
+        ))
+            .toList(),
+      ),
+      const SizedBox(height: SWSizes.s16),
+      SWDropdown(
+        hint: SWStrings.labelDistricts,
+        errorText: state.categoryInput.isPure
+            ? null
+            : state.categoryInput.error?.getErrorMessage(),
+        onChanged: (value) => ref
+            .read(postReportControllerProvider(widget.formType).notifier)
+            .onCategoryChange(value),
+        value: state.categoryInput.value,
+        items: state.categories
+            .map((e) => DropdownMenuItem(
+          value: e,
+          child: Text(e.name),
+        ))
+            .toList(),
+      ),
+      const SizedBox(height: SWSizes.s16),
+      SWDropdown(
+        hint: SWStrings.labelVillages,
+        errorText: state.categoryInput.isPure
+            ? null
+            : state.categoryInput.error?.getErrorMessage(),
+        onChanged: (value) => ref
+            .read(postReportControllerProvider(widget.formType).notifier)
+            .onCategoryChange(value),
+        value: state.categoryInput.value,
+        items: state.categories
+            .map((e) => DropdownMenuItem(
+          value: e,
+          child: Text(e.name),
+        ))
+            .toList(),
+      ),
+      const Divider(),
+      // const SizedBox(height: SWSizes.s16),
       SWTextField(
         initialText: state.reportDetail?.description,
         hint: SWStrings.labelDescription,
