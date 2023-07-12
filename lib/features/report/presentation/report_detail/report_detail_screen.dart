@@ -88,7 +88,7 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Detail Laporan'),
+          title: const Text('Detail'),
           centerTitle: true,
           actions: reportAsync.when(
             data: (data) => [
