@@ -150,17 +150,21 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
             .onDescriptionChange(value),
       ),
       const SizedBox(height: SWSizes.s16),
-      SWTextField(
-        initialText: state.reportDetail?.description,
+      SWDropdown(
         hint: SWStrings.labelArea,
-        maxLines: 5,
-        errorText: state.descriptionInput.isPure
+        errorText: state.categoryInput.isPure
             ? null
-            : state.descriptionInput.error?.getErrorMessage(),
-        action: TextInputAction.done,
+            : state.categoryInput.error?.getErrorMessage(),
         onChanged: (value) => ref
             .read(postReportControllerProvider(widget.formType).notifier)
-            .onDescriptionChange(value),
+            .onCategoryChange(value),
+        value: state.categoryInput.value,
+        items: state.categories
+            .map((e) => DropdownMenuItem(
+          value: e,
+          child: Text(e.name),
+        ))
+            .toList(),
       ),
       const SizedBox(height: SWSizes.s16),
       SWTextField(
