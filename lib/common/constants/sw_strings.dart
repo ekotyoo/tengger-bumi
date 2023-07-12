@@ -47,8 +47,12 @@ class SWStrings {
   static const labelPostDetail = 'Detail Postingan';
   static const descDescriptionCannotBeEmpty = 'Deskripsi tidak boleh kosong';
   static const descDescriptionTooShort = 'Deskripsi minimal terdiri dari 3 karkter';
-  static const labelDescription = 'Deksripsi';
-  static const labelCategory = 'Kategori';
+  static const labelPlantName = 'Nama Tanaman';
+  static const labelQuantity = 'Jumlah Tanaman';
+  static const labelPlantAge = 'Usia Tanaman';
+  static const labelArea = 'Area Tanam';
+  static const labelDescription = 'Deskripsi';
+  static const labelCategory = 'Kategori Tanaman';
   static const labelLocation = 'Lokasi';
   static const labelAddAdditionalInfo = 'Informasi Tambahan';
   static const labelLabel = 'Label';
@@ -76,7 +80,6 @@ class SWStrings {
   static const labelAddSchool = 'Buat Tanaman';
   static const labelPlantData = 'Data Tanaman';
   static const labelSchoolFloorPlan = 'Denah Sekolah';
-  static const labelPlantName = 'Nama Tanaman';
   static const labelPlantAddress = 'Alamat Tanaman';
   static const labelCreateFloorPlan = 'Buat Denah';
   static const labelCreateRoom = 'Buat Ruangan';

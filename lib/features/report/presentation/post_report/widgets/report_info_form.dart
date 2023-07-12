@@ -113,6 +113,58 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
       const SizedBox(height: SWSizes.s16),
       SWTextField(
         initialText: state.reportDetail?.description,
+        hint: SWStrings.labelPlantName,
+        maxLines: 2,
+        errorText: state.descriptionInput.isPure
+            ? null
+            : state.descriptionInput.error?.getErrorMessage(),
+        action: TextInputAction.done,
+        onChanged: (value) => ref
+            .read(postReportControllerProvider(widget.formType).notifier)
+            .onDescriptionChange(value),
+      ),
+      const SizedBox(height: SWSizes.s16),
+      SWTextField(
+        initialText: state.reportDetail?.description,
+        hint: SWStrings.labelQuantity,
+        maxLines: 5,
+        errorText: state.descriptionInput.isPure
+            ? null
+            : state.descriptionInput.error?.getErrorMessage(),
+        action: TextInputAction.done,
+        onChanged: (value) => ref
+            .read(postReportControllerProvider(widget.formType).notifier)
+            .onDescriptionChange(value),
+      ),
+      const SizedBox(height: SWSizes.s16),
+      SWTextField(
+        initialText: state.reportDetail?.description,
+        hint: SWStrings.labelPlantAge,
+        maxLines: 5,
+        errorText: state.descriptionInput.isPure
+            ? null
+            : state.descriptionInput.error?.getErrorMessage(),
+        action: TextInputAction.done,
+        onChanged: (value) => ref
+            .read(postReportControllerProvider(widget.formType).notifier)
+            .onDescriptionChange(value),
+      ),
+      const SizedBox(height: SWSizes.s16),
+      SWTextField(
+        initialText: state.reportDetail?.description,
+        hint: SWStrings.labelArea,
+        maxLines: 5,
+        errorText: state.descriptionInput.isPure
+            ? null
+            : state.descriptionInput.error?.getErrorMessage(),
+        action: TextInputAction.done,
+        onChanged: (value) => ref
+            .read(postReportControllerProvider(widget.formType).notifier)
+            .onDescriptionChange(value),
+      ),
+      const SizedBox(height: SWSizes.s16),
+      SWTextField(
+        initialText: state.reportDetail?.description,
         hint: SWStrings.labelDescription,
         maxLines: 5,
         errorText: state.descriptionInput.isPure
