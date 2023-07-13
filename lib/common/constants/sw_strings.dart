@@ -16,7 +16,7 @@ class SWStrings {
 
   // Auth
   static const labelLogin = 'Masuk';
-  static const labelRegister = 'Register';
+  static const labelRegister = 'Daftar';
   static const labelLogout = 'Logout';
   static const labelEditProfile = 'Edit Profil';
   static const labelEmailVerification = 'Verifikasi Email';
