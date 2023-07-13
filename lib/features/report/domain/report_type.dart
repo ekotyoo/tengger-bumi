@@ -1,12 +1,12 @@
 enum ReportType {
-  prevention,
+  post,
   existing,
   impact;
 
   String get name {
     switch (this) {
-      case ReportType.prevention:
-        return 'Pencegahan';
+      case ReportType.gi:
+        return 'Postingan';
       case ReportType.existing:
         return 'Eksisting';
       case ReportType.impact:
