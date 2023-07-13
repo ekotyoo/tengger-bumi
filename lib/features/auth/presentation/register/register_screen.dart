@@ -73,7 +73,7 @@ class RegisterScreen extends ConsumerWidget {
         Center(
           child: Column(
             children: [
-              Image.asset('assets/images/tetenger_bumi_logo.png', width: 200),
+              Image.asset('assets/images/tetenger_bumi_logo.png'),
               const SizedBox(height: SWSizes.s32),
               Text(
                 SWStrings.labelRegister,
@@ -135,9 +135,19 @@ class RegisterScreen extends ConsumerWidget {
             ref.read(registerControllerProvider.notifier).onSubmit(),
       ),
       const SizedBox(height: SWSizes.s16),
-      OutlinedButton(
-        onPressed: () => _navigateToLogin(context),
-        child: const Text(SWStrings.descAlreadyHaveAccount),
+      SizedBox(
+        height: 48,
+        child: OutlinedButton(
+          style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  )
+              )
+          ),
+          onPressed: () => _navigateToLogin(context),
+          child: const Text(SWStrings.descAlreadyHaveAccount),
+        ),
       ),
     ];
   }

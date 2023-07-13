@@ -21,7 +21,7 @@ class SWStrings {
   static const labelEditProfile = 'Edit Profil';
   static const labelEmailVerification = 'Verifikasi Email';
   static const descDidNotHaveAccount = 'Belum punya akun? Daftar';
-  static const descAlreadyHaveAccount = 'Sudah punya akun? Login';
+  static const descAlreadyHaveAccount = 'Sudah punya akun? Masuk';
   static const labelName = 'Nama';
   static const labelEmail = 'Email';
   static const labelPassword = 'Password';

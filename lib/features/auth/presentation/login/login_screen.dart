@@ -133,16 +133,19 @@ class LoginScreen extends ConsumerWidget {
         },
       ),
       const SizedBox(height: SWSizes.s16),
-      OutlinedButton(
-        style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(100),
-                )
-            )
+      SizedBox(
+        height: 48,
+        child: OutlinedButton(
+          style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  )
+              )
+          ),
+          onPressed: () => _navigateToRegister(context),
+          child: const Text(SWStrings.descDidNotHaveAccount),
         ),
-        onPressed: () => _navigateToRegister(context),
-        child: const Text(SWStrings.descDidNotHaveAccount),
       ),
     ];
   }

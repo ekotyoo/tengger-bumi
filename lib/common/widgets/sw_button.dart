@@ -18,21 +18,23 @@ class SWButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ButtonStyle(
+    return SizedBox(
+      height: 48,
+      child: ElevatedButton(
+        style: ButtonStyle(
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(100),
-              )
-          )
+            borderRadius: BorderRadius.circular(24),
+          )),
+        ),
+        onPressed: disabled
+            ? null
+            : () {
+                if (loading) return;
+                onPressed?.call();
+              },
+        child: loading ? _buildLoadingIndicator(context) : Text(label),
       ),
-      onPressed: disabled
-          ? null
-          : () {
-              if (loading) return;
-              onPressed?.call();
-            },
-      child: loading ? _buildLoadingIndicator(context) : Text(label),
     );
   }
 

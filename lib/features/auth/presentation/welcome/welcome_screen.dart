@@ -26,7 +26,8 @@ class WelcomeScreen extends StatelessWidget {
               ..._buildWelcomeHeader(context),
               const Spacer(),
               ..._buildWelcomeActions(context),
-              const SizedBox(height: SWSizes.s32),
+              const SizedBox(height: SWSizes.s24),
+              ..._buildFooter(context),
             ],
           ),
         ),
@@ -36,17 +37,7 @@ class WelcomeScreen extends StatelessWidget {
 
   _buildWelcomeHeader(BuildContext context) => [
         Center(
-          child: Image.asset('assets/images/tetenger_bumi_logo.png', width: 300),
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/images/filkom_logo.png', width: 50),
-            Image.asset('assets/images/ub_logo.png', width: 50,),
-            Image.asset('assets/images/km_logo.png', width: 50,),
-            Image.asset('assets/images/mmd_ub_logo.png', width: 50,),
-          ],
+          child: Image.asset('assets/images/tetenger_bumi_logo.png'),
         ),
         const SizedBox(height: SWSizes.s32),
         Text(
@@ -63,14 +54,50 @@ class WelcomeScreen extends StatelessWidget {
       ];
 
   _buildWelcomeActions(BuildContext context) => [
-        ElevatedButton(
-          onPressed: () => _navigateToLogin(context),
-          child: const Text(SWStrings.labelLogin),
+        SizedBox(
+          height: 48,
+          child: ElevatedButton(
+            style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    )
+                )
+            ),
+            onPressed: () => _navigateToLogin(context),
+            child: const Text(SWStrings.labelLogin),
+          ),
         ),
         const SizedBox(height: SWSizes.s16),
-        OutlinedButton(
-          onPressed: () => _navigateToRegister(context),
-          child: const Text(SWStrings.labelRegister),
+        SizedBox(
+          height: 48,
+          child: OutlinedButton(
+            style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    )
+                )
+            ),
+            onPressed: () => _navigateToRegister(context),
+            child: const Text(SWStrings.labelRegister),
+          ),
         ),
       ];
+
+  _buildFooter(BuildContext context) => [
+    Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset('assets/images/filkom_logo.png'),
+        const SizedBox(width: 8),
+        Image.asset('assets/images/ub_logo.png'),
+        const SizedBox(width: 8),
+        Image.asset('assets/images/km_logo.png'),
+        const SizedBox(width: 8),
+        Image.asset('assets/images/mmd_ub_logo.png'),
+      ],
+    ),
+  ];
 }
