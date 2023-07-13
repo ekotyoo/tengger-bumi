@@ -65,9 +65,10 @@ class LoginScreen extends ConsumerWidget {
               ..._buildHeader(context),
               const SizedBox(height: SWSizes.s32),
               ..._buildLoginInputs(context, ref),
-              const Spacer(),
-              ..._buildLoginActions(context, ref),
               const SizedBox(height: SWSizes.s32),
+              ..._buildLoginActions(context, ref),
+              const Spacer(),
+              ..._buildFooter(context),
             ],
           ),
         ),
@@ -77,29 +78,16 @@ class LoginScreen extends ConsumerWidget {
 
   _buildHeader(BuildContext context) => [
         Center(
-          child: Image.asset('assets/images/tetenger_bumi_logo.png', width: 200),
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/images/filkom_logo.png', width: 30),
-            Image.asset('assets/images/ub_logo.png', width: 30,),
-            Image.asset('assets/images/km_logo.png', width: 30,),
-            Image.asset('assets/images/mmd_ub_logo.png', width: 30,),
-          ],
-        ),
-        const SizedBox(height: SWSizes.s32),
-        Text(
-          SWStrings.labelLogin,
-          style: Theme.of(context).textTheme.headlineLarge,
-        ),
-        Text(
-          'Masukkan akun Anda yang telah didaftarkan.',
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(color: kColorPrimary),
+          child: Column(
+            children: [
+              Image.asset('assets/images/tetenger_bumi_logo.png'),
+              const SizedBox(height: SWSizes.s32),
+              Text(
+                SWStrings.labelLogin,
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
+            ],
+          ),
         ),
       ];
 
@@ -151,4 +139,20 @@ class LoginScreen extends ConsumerWidget {
       ),
     ];
   }
+
+  _buildFooter(BuildContext context) => [
+    Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset('assets/images/filkom_logo.png'),
+        const SizedBox(width: 8),
+        Image.asset('assets/images/ub_logo.png'),
+        const SizedBox(width: 8),
+        Image.asset('assets/images/km_logo.png'),
+        const SizedBox(width: 8),
+        Image.asset('assets/images/mmd_ub_logo.png'),
+      ],
+    ),
+  ];
 }

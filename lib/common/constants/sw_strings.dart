@@ -15,12 +15,12 @@ class SWStrings {
   static const labelSeeMore = 'Lihat Selengkapnya';
 
   // Auth
-  static const labelLogin = 'Login';
+  static const labelLogin = 'Masuk';
   static const labelRegister = 'Register';
   static const labelLogout = 'Logout';
   static const labelEditProfile = 'Edit Profil';
   static const labelEmailVerification = 'Verifikasi Email';
-  static const descDidNotHaveAccount = 'Belum punya akun? Register';
+  static const descDidNotHaveAccount = 'Belum punya akun? Daftar';
   static const descAlreadyHaveAccount = 'Sudah punya akun? Login';
   static const labelName = 'Nama';
   static const labelEmail = 'Email';

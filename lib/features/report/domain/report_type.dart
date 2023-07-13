@@ -5,7 +5,7 @@ enum ReportType {
 
   String get name {
     switch (this) {
-      case ReportType.gi:
+      case ReportType.post:
         return 'Postingan';
       case ReportType.existing:
         return 'Eksisting';
