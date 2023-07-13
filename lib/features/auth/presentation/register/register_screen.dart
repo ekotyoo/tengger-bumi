@@ -58,9 +58,10 @@ class RegisterScreen extends ConsumerWidget {
               ..._buildHeader(context),
               const SizedBox(height: SWSizes.s32),
               ..._buildRegisterInputs(context, ref),
-              const Spacer(),
-              ..._buildRegisterActions(context, ref),
               const SizedBox(height: SWSizes.s32),
+              ..._buildRegisterActions(context, ref),
+              const Spacer(),
+              ..._buildFooter(context),
             ],
           ),
         ),
@@ -70,29 +71,16 @@ class RegisterScreen extends ConsumerWidget {
 
   _buildHeader(BuildContext context) => [
         Center(
-          child: Image.asset('assets/images/tetenger_bumi_logo.png', width: 200),
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/images/filkom_logo.png', width: 30),
-            Image.asset('assets/images/ub_logo.png', width: 30,),
-            Image.asset('assets/images/km_logo.png', width: 30,),
-            Image.asset('assets/images/mmd_ub_logo.png', width: 30,),
-          ],
-        ),
-        const SizedBox(height: SWSizes.s32),
-        Text(
-          SWStrings.labelRegister,
-          style: Theme.of(context).textTheme.headlineLarge,
-        ),
-        Text(
-          'Buat akun Anda untuk bergabung.',
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(color: kColorNeutral200),
+          child: Column(
+            children: [
+              Image.asset('assets/images/tetenger_bumi_logo.png', width: 200),
+              const SizedBox(height: SWSizes.s32),
+              Text(
+                SWStrings.labelRegister,
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
+            ],
+          ),
         ),
       ];
 
@@ -153,4 +141,20 @@ class RegisterScreen extends ConsumerWidget {
       ),
     ];
   }
+
+  _buildFooter(BuildContext context) => [
+    Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset('assets/images/filkom_logo.png'),
+        const SizedBox(width: 8),
+        Image.asset('assets/images/ub_logo.png'),
+        const SizedBox(width: 8),
+        Image.asset('assets/images/km_logo.png'),
+        const SizedBox(width: 8),
+        Image.asset('assets/images/mmd_ub_logo.png'),
+      ],
+    ),
+  ];
 }

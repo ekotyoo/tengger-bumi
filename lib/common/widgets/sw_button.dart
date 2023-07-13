@@ -19,6 +19,13 @@ class SWButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
+      style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(100),
+              )
+          )
+      ),
       onPressed: disabled
           ? null
           : () {
