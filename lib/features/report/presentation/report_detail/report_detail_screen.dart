@@ -162,14 +162,18 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
                           const SizedBox(height: SWSizes.s16),
                           _buildImage(context, report.images),
                           const SizedBox(height: SWSizes.s16),
+                          _buildTopSection(context, report),
+                          const SizedBox(height: SWSizes.s8),
+                          _buildAge(context, report),
+                          const SizedBox(height: SWSizes.s8),
+                          _buildQuantity(context, report),
+                          const SizedBox(height: SWSizes.s8),
+                          _buildDescription(context, report.description),
+                          const SizedBox(height: SWSizes.s8),
                           _buildAuthorSection(context,
                               author: report.author,
                               createdAt: report.createdAt,
                               isActive: report.isActive),
-                          const SizedBox(height: SWSizes.s8),
-                          _buildCaption(context, report.description),
-                          const SizedBox(height: SWSizes.s8),
-                          _buildInteractionBar(context, report),
                           const SizedBox(height: SWSizes.s16),
                           _buildInfoSection(context, report),
                           const SizedBox(height: SWSizes.s8),
@@ -306,30 +310,126 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
     required DateTime createdAt,
     required bool isActive,
   }) {
-    return Row(
-      children: [
-        AuthorSection(
-          name: author.name,
-          subtitle: DateFormat("HH:mm - EE, d MMMM yyyy", "id_ID").format(createdAt),
-          avatar: author.avatar,
-        ),
-        const Spacer(),
-        CategoryChip(
-          label: isActive ? 'Aktif' : 'Tidak Aktif',
-          backgroundColor: isActive ? kColorSuccess300 : kColorNeutral40,
-          foregroundColor: isActive ? kColorNeutral0 : kColorNeutral600,
-        ),
-      ],
+    return Container(
+      decoration: const BoxDecoration(
+          color: kColorSurface,
+          borderRadius: BorderRadius.all(Radius.circular(SWSizes.s8))),
+      padding: const EdgeInsets.all(SWSizes.s8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Diposting oleh',
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge
+                ?.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: SWSizes.s4),
+          AuthorSection(
+            name: author.name,
+            subtitle: DateFormat("EE, d MMMM yyyy | HH:mm", "id_ID")
+                .format(createdAt),
+            avatar: author.avatar,
+          )
+        ],
+      ),
     );
   }
 
-  _buildCaption(BuildContext context, String text) {
-    return Text(
-      text,
-      style: Theme.of(context)
-          .textTheme
-          .bodySmall
-          ?.copyWith(color: kColorNeutral200),
+  _buildDescription(BuildContext context, String text) {
+    return Container(
+        decoration: const BoxDecoration(
+            color: kColorSurface,
+            borderRadius: BorderRadius.all(Radius.circular(SWSizes.s8))),
+        padding: const EdgeInsets.all(SWSizes.s8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Deskripsi',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            Text(
+              text,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall
+                  ?.copyWith(color: kColorNeutral200),
+            ),
+          ],
+        ));
+  }
+
+  _buildTopSection(BuildContext context, ReportDetail report) {
+    return Container(
+        decoration: const BoxDecoration(
+            color: kColorSurface,
+            borderRadius: BorderRadius.all(Radius.circular(SWSizes.s8))),
+        padding: const EdgeInsets.all(SWSizes.s8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(report.school,
+                  style: Theme.of(context)
+                      .textTheme
+                      .displaySmall
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                const Spacer(),
+                _buildInteractionBar(context, report)
+              ],
+            ),
+            Text(report.room)
+          ],
+        )
+    );
+  }
+
+  _buildAge(BuildContext context, ReportDetail report) {
+    return Container(
+        decoration: const BoxDecoration(
+            color: kColorSurface,
+            borderRadius: BorderRadius.all(Radius.circular(SWSizes.s8))),
+        padding: const EdgeInsets.all(SWSizes.s8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Usia tanaman',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            Text("${report.description} tahun")
+          ],
+        ));
+  }
+
+  _buildQuantity(BuildContext context, ReportDetail report) {
+    return Container(
+        decoration: const BoxDecoration(
+            color: kColorSurface,
+            borderRadius: BorderRadius.all(Radius.circular(SWSizes.s8))),
+        padding: const EdgeInsets.all(SWSizes.s8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Jumlah Penanaman',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            Text(report.description)
+          ],
+        )
     );
   }
 
@@ -640,7 +740,8 @@ class CommentTile extends StatelessWidget {
                   const SizedBox(width: SWSizes.s8),
                   Expanded(
                     child: Text(
-                      DateFormat("HH:mm - EE, d MMMM yyyy", "id_ID").format(comment.createdAt),
+                      DateFormat("HH:mm - EE, d MMMM yyyy", "id_ID")
+                          .format(comment.createdAt),
                       style: Theme.of(context)
                           .textTheme
                           .bodySmall

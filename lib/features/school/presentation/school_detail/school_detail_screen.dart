@@ -277,7 +277,9 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
       children: [
         _buildTab(context),
         const SizedBox(height: SWSizes.s16),
-        _buildReportList(context, _reports),
+        // _buildReportList(context, _reports),
+        _buildPostStatistic()
+        // Text("data")
       ],
     );
   }
@@ -360,5 +362,29 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
             separatorBuilder: (context, index) =>
                 const SizedBox(height: SWSizes.s8),
           );
+  }
+
+  _buildPostStatistic(){
+    const emptyPlaceholder = Padding(
+      padding: EdgeInsets.only(top: SWSizes.s16),
+      child: Center(child: Text('Belum ada data laporan')),
+    );
+    return false
+        ? emptyPlaceholder
+        : Column(
+      children: [
+        Text('Jumlah Penaman ${14}'),
+
+        Row(
+          children: [
+            CircleAvatar(
+                child: Image.asset('assets/images/ub_logo.png')
+            ),
+            Text('Kacang Bogor Varitas Universitas Brawijaya'),
+            Text('${14}')
+          ],
+        )
+      ],
+    );
   }
 }
