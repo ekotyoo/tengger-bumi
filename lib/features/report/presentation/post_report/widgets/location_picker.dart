@@ -7,6 +7,7 @@ import 'package:flutter_map_dragmarker/dragmarker.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:location/location.dart';
 import 'package:maps_toolkit/maps_toolkit.dart' as mp;
 import 'package:polylabel/polylabel.dart';
 import 'package:school_watch_semeru/features/school/presentation/models/room_ui_model.dart';
@@ -39,35 +40,44 @@ class _LocationPickerState extends State<LocationPicker> {
   late FollowOnLocationUpdate _followOnLocationUpdate;
   late StreamController<double?> _followCurrentLocationStreamController;
   late DragMarker? _marker;
-  late LatLng _schoolCentroid;
+  LatLng? currentDetectedPosition;
+  late  Location location;
+  // late LatLng _schoolCentroid;
 
   @override
   void initState() {
     super.initState();
+    location = Location();
     _markerValid = false;
     _mapController = MapController();
     _currentPosition = null;
     _currentRoom = null;
-    _followOnLocationUpdate = FollowOnLocationUpdate.never;
+    _followOnLocationUpdate = FollowOnLocationUpdate.always;
     _followCurrentLocationStreamController = StreamController();
     if (widget.selectedPosition != null) {
       _setNewDragMarker(widget.selectedPosition!);
     } else {
       _marker = null;
     }
-    _initSchoolCentroid();
+
+    // location.onLocationChanged.listen((event) {
+    //   setState(() => currentDetectedPosition =
+    //       LatLng(event.latitude ?? 0.0, event.longitude ?? 0.0));
+    //   debugPrint(currentDetectedPosition.toString());
+    // });
+    // _initSchoolCentroid();
   }
 
-  void _initSchoolCentroid() {
-    final points = widget.floorPlan.rooms
-        .map((e) => e.polygon.points
-            .map((p) => Point(p.latitude, p.longitude))
-            .toList())
-        .toList();
-
-    final result = polylabel(points).point;
-    _schoolCentroid = LatLng(result.x.toDouble(), result.y.toDouble());
-  }
+  // void _initSchoolCentroid() {
+  //   final points = widget.floorPlan.rooms
+  //       .map((e) => e.polygon.points
+  //           .map((p) => Point(p.latitude, p.longitude))
+  //           .toList())
+  //       .toList();
+  //
+  //   final result = polylabel(points).point;
+  // _schoolCentroid = LatLng(result.x.toDouble(), result.y.toDouble());
+  // }
 
   @override
   void dispose() {
@@ -76,10 +86,9 @@ class _LocationPickerState extends State<LocationPicker> {
     _followCurrentLocationStreamController.close();
   }
 
-  _navigateBack(BuildContext context, {LatLng? position, RoomUiModel? room}) {
+  _navigateBack(BuildContext context, {LatLng? position}) {
     context.pop({
-      'position': position,
-      'room': room,
+      'position': position
     });
   }
 
@@ -102,7 +111,7 @@ class _LocationPickerState extends State<LocationPicker> {
             FlutterMap(
               mapController: _mapController,
               options: MapOptions(
-                center: _schoolCentroid,
+                // center: _schoolCentroid,
                 zoom: 20,
                 minZoom: 10,
                 absorbPanEventsOnScrollables: false,
@@ -224,27 +233,37 @@ class _LocationPickerState extends State<LocationPicker> {
             ),
             IconButton(
               iconSize: SWSizes.s32 + SWSizes.s8,
-              onPressed: () => setState(() =>
-                  _followOnLocationUpdate = FollowOnLocationUpdate.always),
+              onPressed: () async {
+                setState(() =>
+                    _followOnLocationUpdate = FollowOnLocationUpdate.always);
+                var locationData = await location.getLocation();
+                var currentDetectedPosition = LatLng(locationData.latitude??0.0, locationData.longitude??0.0);
+                _setNewDragMarker(currentDetectedPosition);
+              },
               icon: const CircleAvatar(
                 child: Icon(Icons.my_location),
               ),
             ),
-            IconButton(
-              iconSize: SWSizes.s32 + SWSizes.s8,
-              onPressed: () {
-                setState(() =>
-                    _followOnLocationUpdate = FollowOnLocationUpdate.never);
-                _mapController.move(_schoolCentroid, 21);
-              },
-              icon: const CircleAvatar(
-                child: Icon(Icons.home_work_outlined),
-              ),
-            ),
+            // IconButton(
+            //   iconSize: SWSizes.s32 + SWSizes.s8,
+            //   onPressed: () {
+            //     setState(() =>
+            //         _followOnLocationUpdate = FollowOnLocationUpdate.never);
+            //     _mapController.move(_schoolCentroid, 21);
+            //   },
+            //   icon: const CircleAvatar(
+            //     child: Icon(Icons.home_work_outlined),
+            //   ),
+            // ),
           ],
         ),
       ),
     ];
+  }
+
+  @override
+  void onClose(){
+
   }
 
   _buildSaveButton(bool disabled) {
@@ -255,7 +274,8 @@ class _LocationPickerState extends State<LocationPicker> {
       child: ElevatedButton(
         onPressed: disabled
             ? null
-            : () => _navigateBack(context, position: _currentPosition, room: _currentRoom),
+            : () => _navigateBack(context,
+                position: _currentPosition),
         child: const Text(SWStrings.labelSave),
       ),
     );
@@ -298,8 +318,10 @@ class _LocationPickerState extends State<LocationPicker> {
   }
 
   void _setNewDragMarker(LatLng point) {
-    _checkValidPoint(context, point);
+    // _checkValidPoint(context, point);
     setState(() {
+      _currentPosition = point;
+      _markerValid = true;
       _marker = DragMarker(
         key: UniqueKey(),
         point: point,
@@ -308,9 +330,9 @@ class _LocationPickerState extends State<LocationPicker> {
         builder: (ctx) => const Icon(Icons.location_on, size: 50),
         offset: const Offset(0.0, -25),
         feedbackOffset: const Offset(0.0, -25),
-        onDragEnd: (_, position) {
-          _checkValidPoint(context, position);
-        },
+        // onDragEnd: (_, position) {
+        //   _checkValidPoint(context, position);
+        // },
       );
     });
   }

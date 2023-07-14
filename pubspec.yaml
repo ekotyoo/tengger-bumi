@@ -37,6 +37,7 @@ dependencies:
   intl: ^0.18.1
   rainbow_color: ^2.0.1
   flutter_color_utils: ^0.0.1
+  location: ^5.0.0
 
 dev_dependencies:
   flutter_test:

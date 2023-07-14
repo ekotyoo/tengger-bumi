@@ -71,7 +71,8 @@ class SchoolDetailScreen extends ConsumerWidget {
               key: _refreshIndicatorKey,
               onRefresh: () {
                 ref.invalidate(schoolDetailControllerProvider(schoolId));
-                return ref.read(schoolDetailControllerProvider(schoolId).future);
+                return ref
+                    .read(schoolDetailControllerProvider(schoolId).future);
               },
               child: Padding(
                 padding: const EdgeInsets.all(SWSizes.s16),
@@ -133,10 +134,11 @@ class SchoolDetailScreen extends ConsumerWidget {
                       children: [
                         Text(
                           reportDetail.name,
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: kColorNeutral0,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: kColorNeutral0,
+                                  ),
                         ),
                         Text(
                           reportDetail.address,
@@ -194,8 +196,10 @@ class SchoolDetailScreen extends ConsumerWidget {
               _buildSchoolAnalysisInfo(
                 context,
                 label: 'Tanggap Darurat',
-                color: getColorFromAnalysisScore(analysis.emergencyResponseLevel),
-                value: getLabelFromAnalysisScore(analysis.emergencyResponseLevel),
+                color:
+                    getColorFromAnalysisScore(analysis.emergencyResponseLevel),
+                value:
+                    getLabelFromAnalysisScore(analysis.emergencyResponseLevel),
               ),
               _buildSchoolAnalysisInfo(
                 context,
@@ -211,11 +215,11 @@ class SchoolDetailScreen extends ConsumerWidget {
   }
 
   _buildSchoolAnalysisInfo(
-      BuildContext context, {
-        required String label,
-        required String value,
-        required Color color,
-      }) {
+    BuildContext context, {
+    required String label,
+    required String value,
+    required Color color,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -256,83 +260,65 @@ class ReportListWithFilter extends StatefulWidget {
 }
 
 class _ReportListWithFilterState extends State<ReportListWithFilter>
-    with SingleTickerProviderStateMixin {
-  int _selectedTab = 0;
+
+    with SingleTickerProviderStateMixin {late TabController tabController;
+int selectedIndex = 0;
+
   late List<ReportType> reportTypes;
   late List<Report> _reports;
 
   @override
   void initState() {
-    reportTypes = ReportType.values;
-    _reports = widget.reports
-        .filter((t) =>
-            t.category.type == reportTypes[_selectedTab].name.toLowerCase())
-        .toList();
     super.initState();
+    tabController = TabController(length: 5, vsync: this, initialIndex: 0);
+    reportTypes = ReportType.values;
+    _reports = widget.reports;
   }
 
+@override
+void dispose() {
+  tabController.dispose();
+  super.dispose();
+}
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Column(
+  //     children: [
+  //       _buildTab(context),
+  //       const SizedBox(height: SWSizes.s16),
+  //       _buildReportList(context, _reports),
+  //       _buildPostStatistic()
+  //       // Text("data")
+  //     ],
+  //   );
+  // }
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _buildTab(context),
-        const SizedBox(height: SWSizes.s16),
-        // _buildReportList(context, _reports),
-        _buildPostStatistic()
-        // Text("data")
-      ],
-    );
-  }
-
-  _buildTab(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        for (int i = 0; i < reportTypes.length; i++)
-          _buildTabItem(
-            context,
-            label: reportTypes[i].name,
-            selected: _selectedTab == i,
-            onTap: () => setState(
-              () {
-                _selectedTab = i;
-                _reports = widget.reports
-                    .filter((t) =>
-                        t.category.type ==
-                        reportTypes[_selectedTab].name.toLowerCase())
-                    .toList();
+    return  Material(
+      child: DefaultTabController(
+        length: 2,
+        child: Column(
+          children: [
+            TabBar(
+              tabs: [
+                Tab(text: 'Posting'),
+                Tab(text: 'Statistic'),
+              ],controller: tabController,
+              onTap: (index) {
+                setState(() {
+                  selectedIndex = index;
+                  tabController.animateTo(index);
+                });
               },
             ),
-          ),
-      ],
-    );
-  }
-
-  _buildTabItem(
-    BuildContext context, {
-    required String label,
-    required bool selected,
-    VoidCallback? onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      child: Column(
-        children: [
-          Text(
-            label,
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: selected ? kColorPrimary500 : kColorNeutral50),
-          ),
-          const SizedBox(height: SWSizes.s4),
-          Container(
-            height: 3,
-            width: SWSizes.s56,
-            color: selected
-                ? kColorPrimary500
-                : Theme.of(context).scaffoldBackgroundColor,
-          ),
-        ],
+            IndexedStack(index: selectedIndex,
+              children: [
+                _buildReportList(context, _reports),
+                _buildPostStatistic(context, _reports),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -364,7 +350,7 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
           );
   }
 
-  _buildPostStatistic(){
+  _buildPostStatistic(BuildContext context, List<Report> reports) {
     const emptyPlaceholder = Padding(
       padding: EdgeInsets.only(top: SWSizes.s16),
       child: Center(child: Text('Belum ada data laporan')),
@@ -372,19 +358,17 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
     return false
         ? emptyPlaceholder
         : Column(
-      children: [
-        Text('Jumlah Penaman ${14}'),
-
-        Row(
-          children: [
-            CircleAvatar(
-                child: Image.asset('assets/images/ub_logo.png')
-            ),
-            Text('Kacang Bogor Varitas Universitas Brawijaya'),
-            Text('${14}')
-          ],
-        )
-      ],
-    );
+            children: [
+              const Text('Jumlah Penaman ${14}'),
+              Row(
+                children: [
+                  CircleAvatar(child: Image.asset('assets/images/ub_logo.png')),
+                  const Text('Kacang Bogor Varitas Universitas Brawijaya'),
+                  const Spacer(),
+                  const Text('${14}')
+                ],
+              )
+            ],
+          );
   }
 }
