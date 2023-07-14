@@ -22,7 +22,7 @@ class WelcomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: SWSizes.s56),
+              const Spacer(),
               ..._buildWelcomeHeader(context),
               const Spacer(),
               ..._buildWelcomeActions(context),
@@ -37,20 +37,22 @@ class WelcomeScreen extends StatelessWidget {
 
   _buildWelcomeHeader(BuildContext context) => [
         Center(
-          child: Image.asset('assets/images/tetenger_bumi_logo.png'),
-        ),
-        const SizedBox(height: SWSizes.s32),
-        Text(
-          'Tetenger Bumi',
-          style: Theme.of(context).textTheme.displaySmall,
-        ),
-        Text(
-          SWStrings.appDesc,
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(color: kColorNeutral200),
-        ),
+            child: Column(
+          children: [
+            Image.asset('assets/images/tetenger_bumi_logo.png'),
+            const SizedBox(height: SWSizes.s32),
+            Text(
+              'Selamat Datang!',
+              style: Theme.of(context).textTheme.displaySmall,
+            ),
+            const Text(SWStrings.appDesc,
+                textAlign: TextAlign.justify,
+                style: TextStyle(
+                    color: kColorPrimary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14)),
+          ],
+        )),
       ];
 
   _buildWelcomeActions(BuildContext context) => [
@@ -60,10 +62,8 @@ class WelcomeScreen extends StatelessWidget {
             style: ButtonStyle(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
-                    )
-                )
-            ),
+              borderRadius: BorderRadius.circular(24),
+            ))),
             onPressed: () => _navigateToLogin(context),
             child: const Text(SWStrings.labelLogin),
           ),
@@ -75,10 +75,8 @@ class WelcomeScreen extends StatelessWidget {
             style: ButtonStyle(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
-                    )
-                )
-            ),
+              borderRadius: BorderRadius.circular(24),
+            ))),
             onPressed: () => _navigateToRegister(context),
             child: const Text(SWStrings.labelRegister),
           ),
@@ -86,18 +84,18 @@ class WelcomeScreen extends StatelessWidget {
       ];
 
   _buildFooter(BuildContext context) => [
-    Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Image.asset('assets/images/filkom_logo.png'),
-        const SizedBox(width: 8),
-        Image.asset('assets/images/ub_logo.png'),
-        const SizedBox(width: 8),
-        Image.asset('assets/images/km_logo.png'),
-        const SizedBox(width: 8),
-        Image.asset('assets/images/mmd_ub_logo.png'),
-      ],
-    ),
-  ];
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset('assets/images/filkom_logo.png'),
+            const SizedBox(width: 8),
+            Image.asset('assets/images/ub_logo.png'),
+            const SizedBox(width: 8),
+            Image.asset('assets/images/km_logo.png'),
+            const SizedBox(width: 8),
+            Image.asset('assets/images/mmd_ub_logo.png'),
+          ],
+        ),
+      ];
 }
