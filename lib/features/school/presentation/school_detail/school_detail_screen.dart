@@ -294,15 +294,17 @@ void dispose() {
   // }
   @override
   Widget build(BuildContext context) {
-    return  Material(
+    return  Material(color: Colors.transparent,
       child: DefaultTabController(
         length: 2,
         child: Column(
           children: [
             TabBar(
+              labelColor: kColorPrimary,
+              labelStyle: TextStyle(fontWeight: FontWeight.bold),
               tabs: [
-                Tab(text: 'Posting'),
-                Tab(text: 'Statistic'),
+                Tab(icon: Icon(Icons.photo_album),text: 'Posting'),
+                Tab(icon: Icon(Icons.photo_album),text: 'Penanaman'),
               ],controller: tabController,
               onTap: (index) {
                 setState(() {
