@@ -19,14 +19,14 @@ class TimestampSerializer implements JsonConverter<DateTime, dynamic> {
 }
 
 @freezed
-class Report with _$Report {
-  const factory Report({
+class Plant with _$Plant {
+  const factory Plant({
     required int id,
+    required String name,
     required Category category,
     required String description,
     required Author author,
-    required String school,
-    required String room,
+    required String address,
     required Position position,
     @Default(false) bool deleting,
     bool? liked,
@@ -35,9 +35,8 @@ class Report with _$Report {
     @JsonKey(name: 'dislikes_count', defaultValue: 0) required  int dislikesCount,
     @JsonKey(name: 'comments_count', defaultValue: 0) required int commentsCount,
     @Default([]) List<String> images,
-    @JsonKey(name: 'is_active', defaultValue: true) required bool isActive,
     @JsonKey(name: 'allow_edit', defaultValue: false) required bool allowEdit,
-  }) = _Report;
+  }) = _Plant;
 
-  factory Report.fromJson(Map<String, Object?> json) => _$ReportFromJson(json);
+  factory Plant.fromJson(Map<String, Object?> json) => _$PlantFromJson(json);
 }

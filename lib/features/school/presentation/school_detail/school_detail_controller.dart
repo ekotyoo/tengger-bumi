@@ -17,10 +17,10 @@ class SchoolDetailController extends _$SchoolDetailController {
 
     final schoolResult = await schoolRepo.getSchool(schoolId: schoolId);
     final reportsResult =
-        await reportRepo.getReports(query: ReportQuery(schoolId: schoolId));
+        await reportRepo.getPlants(query: ReportQuery(schoolId: schoolId));
 
     final reports = reportsResult.fold(
-      (l) => const <Report>[],
+      (l) => const <Plant>[],
       (r) => r,
     );
 

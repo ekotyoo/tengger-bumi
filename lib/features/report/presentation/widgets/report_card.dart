@@ -21,7 +21,7 @@ class ReportCard extends StatelessWidget {
     this.deleting = false,
   });
 
-  final Report report;
+  final Plant report;
   final VoidCallback? onTap;
   final VoidCallback? onLiked;
   final VoidCallback? onDisliked;
@@ -43,7 +43,7 @@ class ReportCard extends StatelessWidget {
           _buildImage(context, report),
           const SizedBox(height: SWSizes.s8),
           // _buildCategoryList(context, report),
-          _buildPlantTitle(context, report.school),
+          _buildPlantTitle(context, report.address),
           const SizedBox(height: SWSizes.s4),
           _buildCaption(context, report.description),
           const SizedBox(height: SWSizes.s2),
@@ -146,7 +146,7 @@ class ReportCard extends StatelessWidget {
   //     ],
   //   );
   // }
-  _buildHeader(BuildContext context, Report report) {
+  _buildHeader(BuildContext context, Plant report) {
     final author = report.author;
 
     return Row(
@@ -175,7 +175,7 @@ class ReportCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      '${report.school} - ${report.room}',
+                      report.address,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
                           .textTheme
@@ -223,7 +223,7 @@ class ReportCard extends StatelessWidget {
 
   final _pageController = PageController(viewportFraction: 1.1);
 
-  _buildImage(BuildContext context, Report report) {
+  _buildImage(BuildContext context, Plant report) {
     return AspectRatio(
       aspectRatio: 5 / 4,
       child: Stack(
@@ -257,7 +257,7 @@ class ReportCard extends StatelessWidget {
     );
   }
 
-  _buildCategoryList(BuildContext context, Report report) {
+  _buildCategoryList(BuildContext context, Plant report) {
     final categories = [
       report.category.name,
     ];
@@ -332,7 +332,7 @@ class ReportCard extends StatelessWidget {
 
   _buildInteractionBar(
     BuildContext context, {
-    required Report report,
+    required Plant report,
     VoidCallback? onLiked,
     VoidCallback? onDisliked,
   }) {

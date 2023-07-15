@@ -191,10 +191,7 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
           state.descriptionInput.isNotValid ||
           state.plantingDateInput.isNotValid;
       disabled = firstPageDisabled;
-    } else {
-      disabled = !state.validated;
     }
-
     return SWButton(
       loading: state.finalFormSubmitting,
       disabled: disabled,

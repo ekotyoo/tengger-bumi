@@ -7,7 +7,7 @@ part 'report_feed_state.freezed.dart';
 @freezed
 class ReportFeedState with _$ReportFeedState {
   const factory ReportFeedState({
-    @Default([]) List<Report> reports,
+    @Default([]) List<Plant> reports,
     String? successMessage,
     String? errorMessage,
   }) = _ReportFeedState;

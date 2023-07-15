@@ -22,7 +22,7 @@ class ReportFeedController extends _$ReportFeedController {
   @override
   FutureOr<ReportFeedState> build(ReportQuery query) async {
     final reportRepo = ref.read(reportRepositoryProvider);
-    final result = await reportRepo.getReports(query: query);
+    final result = await reportRepo.getPlants(query: query);
 
     return result.fold(
       (l) => ReportFeedState(errorMessage: l.message),
@@ -30,7 +30,7 @@ class ReportFeedController extends _$ReportFeedController {
     );
   }
 
-  void deleteReport(Report report, int index) async {
+  void deleteReport(Plant report, int index) async {
     final reportRepo = ref.read(reportRepositoryProvider);
 
     final oldState = state.requireValue;
@@ -59,7 +59,7 @@ class ReportFeedController extends _$ReportFeedController {
     state = AsyncValue.data(oldState.copyWith(reports: oldReports));
   }
 
-  void updateReport(Report report) {
+  void updateReport(Plant report) {
     final oldState = state.requireValue;
     final reports = oldState.reports.toList();
     final index = reports.indexWhere((element) => element.id == report.id);
@@ -69,7 +69,7 @@ class ReportFeedController extends _$ReportFeedController {
     state = AsyncValue.data(oldState.copyWith(reports: newReports));
   }
 
-  void addReport(Report report) {
+  void addReport(Plant report) {
     final oldState = state.requireValue;
     state = AsyncValue.data(
         oldState.copyWith(reports: [report, ...oldState.reports]));

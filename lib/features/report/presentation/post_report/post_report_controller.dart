@@ -9,6 +9,7 @@ import 'package:school_watch_semeru/common/models/province.dart';
 import 'package:school_watch_semeru/common/services/http_client.dart';
 import 'package:school_watch_semeru/features/report/data/area_repository.dart';
 import 'package:school_watch_semeru/features/report/data/i_area_repository.dart';
+import 'package:school_watch_semeru/features/report/domain/plant_request.dart';
 import 'package:school_watch_semeru/features/report/presentation/models/date_input.dart';
 import 'package:school_watch_semeru/features/report/presentation/models/district_input.dart';
 import 'package:school_watch_semeru/features/report/presentation/models/plant_name_input.dart';
@@ -24,7 +25,6 @@ import 'post_report_screen.dart';
 import 'package:collection/collection.dart';
 import '../../data/i_report_repository.dart';
 import '../../data/report_repository.dart';
-import '../../domain/report_request.dart';
 import '../../../../common/models/position.dart';
 import '../models/image_pick_input.dart';
 import '../models/category_option_input.dart';
@@ -137,7 +137,8 @@ class PostReportController extends StateNotifier<PostReportState> {
     );
   }
 
-  void onVillageChange(Village value) => state = state.copyWith(villageInput: VillageInput.dirty(value: value));
+  void onVillageChange(Village value) =>
+      state = state.copyWith(villageInput: VillageInput.dirty(value: value));
 
   Future<void> _getVillages(int districtId) async {
     final result = await _areaRepository.getVillages(districtId);
@@ -242,7 +243,7 @@ class PostReportController extends StateNotifier<PostReportState> {
   }
 
   Future<void> getReportDetail(int reportId) async {
-    final result = await _reportRepository.getReport(reportId: reportId);
+    final result = await _reportRepository.getPlant(reportId: reportId);
     final report = await result.fold(
       (l) {
         setErrorMessage(l.message);
@@ -317,17 +318,19 @@ class PostReportController extends StateNotifier<PostReportState> {
     state = state.copyWith(finalFormSubmitting: true);
 
     final position = state.locationInput.value!;
-    final report = ReportRequest(
-        schoolId: 1,
-        description: state.descriptionInput.value,
-        categoryId: state.categoryInput.value!.id,
-        latitude: position.latitude,
-        longitude: position.longitude,
-        roomId: 1,
-        additionalInfos: [],
-        deletedImages: state.deletedImages
-            .map((e) => e.replaceAll(kBaseUrl, 'public'))
-            .toList());
+    final plant = PlantRequest(
+      name: state.nameInput.value,
+      description: state.descriptionInput.value,
+      categoryId: state.categoryInput.value!.id,
+      latitude: position.latitude,
+      longitude: position.longitude,
+      villageId: state.villageInput.value!.id,
+      deletedImages: state.deletedImages
+          .map((e) => e.replaceAll(kBaseUrl, 'public'))
+          .toList(),
+      plantingDate: state.plantingDateInput.value!.millisecondsSinceEpoch,
+      plantingCount: state.plantingCountInput.value,
+    );
 
     final images = state.imageInput.value
         .map((e) => e.fold((l) => l, (r) => null))
@@ -337,8 +340,8 @@ class PostReportController extends StateNotifier<PostReportState> {
 
     if (state.formType == FormType.edit) {
       if (state.reportDetail == null) return;
-      final result = await _reportRepository.updateReport(
-          reportId: state.reportDetail!.id, report: report, images: images);
+      final result = await _reportRepository.updatePlant(
+          reportId: state.reportDetail!.id, report: plant, images: images);
 
       result.fold(
         (l) {
@@ -358,7 +361,7 @@ class PostReportController extends StateNotifier<PostReportState> {
       return;
     }
 
-    final result = await _reportRepository.postReport(report, images);
+    final result = await _reportRepository.postPlant(plant, images);
 
     result.fold(
       (l) {

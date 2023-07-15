@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:school_watch_semeru/features/report/domain/plant_request.dart';
 
-import '../domain/report_request.dart';
 import '../../../common/error/failure.dart';
 import '../../../common/error/network_exceptions.dart';
 import '../domain/category.dart';
@@ -15,7 +15,6 @@ import '../domain/report_detail.dart';
 import '../../../common/services/http_client.dart';
 import '../domain/report_query.dart';
 import '../domain/report.dart';
-import '../domain/report_status.dart';
 import 'i_report_repository.dart';
 
 part 'report_repository.g.dart';
@@ -32,34 +31,23 @@ class ReportRepository implements IReportRepository {
   final HttpClient _client;
 
   @override
-  Future<Either<Failure, List<Report>>> getReports({
+  Future<Either<Failure, List<Plant>>> getPlants({
     required ReportQuery query,
     CancelToken? cancelToken,
   }) async {
     debugPrint(query.toString());
     try {
-      bool? isActive;
-
-      if (query.reportStatus == ReportStatus.active) {
-        isActive = true;
-      } else if (query.reportStatus == ReportStatus.inactive) {
-        isActive = false;
-      }
-
       final response = await _client.get(
-        '/report',
+        '/plant',
         queryParameters: {'page': query.page, 'take': query.take},
         data: {
-          'type': query.reportType?.name.toLowerCase(),
-          'is_active': isActive,
-          'school_id': query.schoolId,
           'author_id': query.authorId
         },
       );
 
-      final reports = (response['data'] as List<dynamic>).map(
+      final plants = (response['data'] as List<dynamic>).map(
         (e) {
-          final r = Report.fromJson(e);
+          final r = Plant.fromJson(e);
           final report = r.copyWith(
             images:
                 r.images.map((e) => e.replaceAll('public', kBaseUrl)).toList(),
@@ -72,7 +60,7 @@ class ReportRepository implements IReportRepository {
         },
       ).toList();
 
-      return right(reports);
+      return right(plants);
     } catch (e) {
       final exception = NetworkExceptions.getDioException(e);
       return left(Failure(exception.getErrorMessage()));
@@ -80,7 +68,7 @@ class ReportRepository implements IReportRepository {
   }
 
   @override
-  Future<Either<Failure, ReportDetail>> getReport({
+  Future<Either<Failure, ReportDetail>> getPlant({
     required int reportId,
     CancelToken? cancelToken,
   }) async {
@@ -180,12 +168,12 @@ class ReportRepository implements IReportRepository {
   }
 
   @override
-  Future<Either<Failure, Report>> postReport(
-    ReportRequest report,
+  Future<Either<Failure, Plant>> postPlant(
+    PlantRequest plant,
     List<File> images,
   ) async {
     try {
-      final reportMap = report.toJson();
+      final reportMap = plant.toJson();
       final formData = FormData.fromMap(reportMap);
 
       final multipartFiles = <MapEntry<String, MultipartFile>>[];
@@ -209,19 +197,19 @@ class ReportRepository implements IReportRepository {
       }
       formData.files.addAll(multipartFiles);
 
-      final response = await _client.post('/report', data: formData);
+      final response = await _client.post('/plant', data: formData);
 
       if (response['status'] == 'success' && response['data'] != null) {
-        final report = Report.fromJson(response['data']);
-        final newReport = report.copyWith(
-          images: report.images
+        final plant = Plant.fromJson(response['data']);
+        final newPlant = plant.copyWith(
+          images: plant.images
               .map((e) => e.replaceAll('public', kBaseUrl))
               .toList(),
-          author: report.author.copyWith(
-            avatar: report.author.avatar?.replaceAll('public', kBaseUrl),
+          author: plant.author.copyWith(
+            avatar: plant.author.avatar?.replaceAll('public', kBaseUrl),
           ),
         );
-        return right(newReport);
+        return right(newPlant);
       }
 
       return left(const Failure('Terjadi kesalahan, coba lagi nanti.'));
@@ -232,9 +220,9 @@ class ReportRepository implements IReportRepository {
   }
 
   @override
-  Future<Either<Failure, Report>> updateReport({
+  Future<Either<Failure, Plant>> updatePlant({
     required int reportId,
-    required ReportRequest report,
+    required PlantRequest report,
     required List<File> images,
   }) async {
     try {
@@ -265,7 +253,7 @@ class ReportRepository implements IReportRepository {
       final response = await _client.put('/report/$reportId', data: formData);
 
       if (response['status'] == 'success' && response['data'] != null) {
-        final report = Report.fromJson(response['data']);
+        final report = Plant.fromJson(response['data']);
         final newReport = report.copyWith(
           images: report.images
               .map((e) => e.replaceAll('public', kBaseUrl))

@@ -15,7 +15,7 @@ _$_SchoolDetail _$$_SchoolDetailFromJson(Map<String, dynamic> json) =>
           SchoolAnalysis.fromJson(json['analysis'] as Map<String, dynamic>),
       floorPlan: FloorPlan.fromJson(json['floor_plan'] as Map<String, dynamic>),
       reports: (json['reports'] as List<dynamic>?)
-              ?.map((e) => Report.fromJson(e as Map<String, dynamic>))
+              ?.map((e) => Plant.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
       image: json['image'] as String?,

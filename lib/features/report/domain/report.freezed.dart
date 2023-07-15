@@ -14,18 +14,18 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-Report _$ReportFromJson(Map<String, dynamic> json) {
-  return _Report.fromJson(json);
+Plant _$PlantFromJson(Map<String, dynamic> json) {
+  return _Plant.fromJson(json);
 }
 
 /// @nodoc
-mixin _$Report {
+mixin _$Plant {
   int get id => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
   Category get category => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   Author get author => throw _privateConstructorUsedError;
-  String get school => throw _privateConstructorUsedError;
-  String get room => throw _privateConstructorUsedError;
+  String get address => throw _privateConstructorUsedError;
   Position get position => throw _privateConstructorUsedError;
   bool get deleting => throw _privateConstructorUsedError;
   bool? get liked => throw _privateConstructorUsedError;
@@ -39,28 +39,26 @@ mixin _$Report {
   @JsonKey(name: 'comments_count', defaultValue: 0)
   int get commentsCount => throw _privateConstructorUsedError;
   List<String> get images => throw _privateConstructorUsedError;
-  @JsonKey(name: 'is_active', defaultValue: true)
-  bool get isActive => throw _privateConstructorUsedError;
   @JsonKey(name: 'allow_edit', defaultValue: false)
   bool get allowEdit => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ReportCopyWith<Report> get copyWith => throw _privateConstructorUsedError;
+  $PlantCopyWith<Plant> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ReportCopyWith<$Res> {
-  factory $ReportCopyWith(Report value, $Res Function(Report) then) =
-      _$ReportCopyWithImpl<$Res, Report>;
+abstract class $PlantCopyWith<$Res> {
+  factory $PlantCopyWith(Plant value, $Res Function(Plant) then) =
+      _$PlantCopyWithImpl<$Res, Plant>;
   @useResult
   $Res call(
       {int id,
+      String name,
       Category category,
       String description,
       Author author,
-      String school,
-      String room,
+      String address,
       Position position,
       bool deleting,
       bool? liked,
@@ -69,7 +67,6 @@ abstract class $ReportCopyWith<$Res> {
       @JsonKey(name: 'dislikes_count', defaultValue: 0) int dislikesCount,
       @JsonKey(name: 'comments_count', defaultValue: 0) int commentsCount,
       List<String> images,
-      @JsonKey(name: 'is_active', defaultValue: true) bool isActive,
       @JsonKey(name: 'allow_edit', defaultValue: false) bool allowEdit});
 
   $CategoryCopyWith<$Res> get category;
@@ -78,9 +75,9 @@ abstract class $ReportCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ReportCopyWithImpl<$Res, $Val extends Report>
-    implements $ReportCopyWith<$Res> {
-  _$ReportCopyWithImpl(this._value, this._then);
+class _$PlantCopyWithImpl<$Res, $Val extends Plant>
+    implements $PlantCopyWith<$Res> {
+  _$PlantCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -91,11 +88,11 @@ class _$ReportCopyWithImpl<$Res, $Val extends Report>
   @override
   $Res call({
     Object? id = null,
+    Object? name = null,
     Object? category = null,
     Object? description = null,
     Object? author = null,
-    Object? school = null,
-    Object? room = null,
+    Object? address = null,
     Object? position = null,
     Object? deleting = null,
     Object? liked = freezed,
@@ -104,7 +101,6 @@ class _$ReportCopyWithImpl<$Res, $Val extends Report>
     Object? dislikesCount = null,
     Object? commentsCount = null,
     Object? images = null,
-    Object? isActive = null,
     Object? allowEdit = null,
   }) {
     return _then(_value.copyWith(
@@ -112,6 +108,10 @@ class _$ReportCopyWithImpl<$Res, $Val extends Report>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
       category: null == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
@@ -124,13 +124,9 @@ class _$ReportCopyWithImpl<$Res, $Val extends Report>
           ? _value.author
           : author // ignore: cast_nullable_to_non_nullable
               as Author,
-      school: null == school
-          ? _value.school
-          : school // ignore: cast_nullable_to_non_nullable
-              as String,
-      room: null == room
-          ? _value.room
-          : room // ignore: cast_nullable_to_non_nullable
+      address: null == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
               as String,
       position: null == position
           ? _value.position
@@ -164,10 +160,6 @@ class _$ReportCopyWithImpl<$Res, $Val extends Report>
           ? _value.images
           : images // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      isActive: null == isActive
-          ? _value.isActive
-          : isActive // ignore: cast_nullable_to_non_nullable
-              as bool,
       allowEdit: null == allowEdit
           ? _value.allowEdit
           : allowEdit // ignore: cast_nullable_to_non_nullable
@@ -201,18 +193,18 @@ class _$ReportCopyWithImpl<$Res, $Val extends Report>
 }
 
 /// @nodoc
-abstract class _$$_ReportCopyWith<$Res> implements $ReportCopyWith<$Res> {
-  factory _$$_ReportCopyWith(_$_Report value, $Res Function(_$_Report) then) =
-      __$$_ReportCopyWithImpl<$Res>;
+abstract class _$$_PlantCopyWith<$Res> implements $PlantCopyWith<$Res> {
+  factory _$$_PlantCopyWith(_$_Plant value, $Res Function(_$_Plant) then) =
+      __$$_PlantCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
       {int id,
+      String name,
       Category category,
       String description,
       Author author,
-      String school,
-      String room,
+      String address,
       Position position,
       bool deleting,
       bool? liked,
@@ -221,7 +213,6 @@ abstract class _$$_ReportCopyWith<$Res> implements $ReportCopyWith<$Res> {
       @JsonKey(name: 'dislikes_count', defaultValue: 0) int dislikesCount,
       @JsonKey(name: 'comments_count', defaultValue: 0) int commentsCount,
       List<String> images,
-      @JsonKey(name: 'is_active', defaultValue: true) bool isActive,
       @JsonKey(name: 'allow_edit', defaultValue: false) bool allowEdit});
 
   @override
@@ -233,21 +224,20 @@ abstract class _$$_ReportCopyWith<$Res> implements $ReportCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_ReportCopyWithImpl<$Res>
-    extends _$ReportCopyWithImpl<$Res, _$_Report>
-    implements _$$_ReportCopyWith<$Res> {
-  __$$_ReportCopyWithImpl(_$_Report _value, $Res Function(_$_Report) _then)
+class __$$_PlantCopyWithImpl<$Res> extends _$PlantCopyWithImpl<$Res, _$_Plant>
+    implements _$$_PlantCopyWith<$Res> {
+  __$$_PlantCopyWithImpl(_$_Plant _value, $Res Function(_$_Plant) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = null,
+    Object? name = null,
     Object? category = null,
     Object? description = null,
     Object? author = null,
-    Object? school = null,
-    Object? room = null,
+    Object? address = null,
     Object? position = null,
     Object? deleting = null,
     Object? liked = freezed,
@@ -256,14 +246,17 @@ class __$$_ReportCopyWithImpl<$Res>
     Object? dislikesCount = null,
     Object? commentsCount = null,
     Object? images = null,
-    Object? isActive = null,
     Object? allowEdit = null,
   }) {
-    return _then(_$_Report(
+    return _then(_$_Plant(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
       category: null == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
@@ -276,13 +269,9 @@ class __$$_ReportCopyWithImpl<$Res>
           ? _value.author
           : author // ignore: cast_nullable_to_non_nullable
               as Author,
-      school: null == school
-          ? _value.school
-          : school // ignore: cast_nullable_to_non_nullable
-              as String,
-      room: null == room
-          ? _value.room
-          : room // ignore: cast_nullable_to_non_nullable
+      address: null == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
               as String,
       position: null == position
           ? _value.position
@@ -316,10 +305,6 @@ class __$$_ReportCopyWithImpl<$Res>
           ? _value._images
           : images // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      isActive: null == isActive
-          ? _value.isActive
-          : isActive // ignore: cast_nullable_to_non_nullable
-              as bool,
       allowEdit: null == allowEdit
           ? _value.allowEdit
           : allowEdit // ignore: cast_nullable_to_non_nullable
@@ -330,14 +315,14 @@ class __$$_ReportCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Report implements _Report {
-  const _$_Report(
+class _$_Plant implements _Plant {
+  const _$_Plant(
       {required this.id,
+      required this.name,
       required this.category,
       required this.description,
       required this.author,
-      required this.school,
-      required this.room,
+      required this.address,
       required this.position,
       this.deleting = false,
       this.liked,
@@ -351,17 +336,17 @@ class _$_Report implements _Report {
       @JsonKey(name: 'comments_count', defaultValue: 0)
           required this.commentsCount,
       final List<String> images = const [],
-      @JsonKey(name: 'is_active', defaultValue: true)
-          required this.isActive,
       @JsonKey(name: 'allow_edit', defaultValue: false)
           required this.allowEdit})
       : _images = images;
 
-  factory _$_Report.fromJson(Map<String, dynamic> json) =>
-      _$$_ReportFromJson(json);
+  factory _$_Plant.fromJson(Map<String, dynamic> json) =>
+      _$$_PlantFromJson(json);
 
   @override
   final int id;
+  @override
+  final String name;
   @override
   final Category category;
   @override
@@ -369,9 +354,7 @@ class _$_Report implements _Report {
   @override
   final Author author;
   @override
-  final String school;
-  @override
-  final String room;
+  final String address;
   @override
   final Position position;
   @override
@@ -402,30 +385,27 @@ class _$_Report implements _Report {
   }
 
   @override
-  @JsonKey(name: 'is_active', defaultValue: true)
-  final bool isActive;
-  @override
   @JsonKey(name: 'allow_edit', defaultValue: false)
   final bool allowEdit;
 
   @override
   String toString() {
-    return 'Report(id: $id, category: $category, description: $description, author: $author, school: $school, room: $room, position: $position, deleting: $deleting, liked: $liked, createdAt: $createdAt, likesCount: $likesCount, dislikesCount: $dislikesCount, commentsCount: $commentsCount, images: $images, isActive: $isActive, allowEdit: $allowEdit)';
+    return 'Plant(id: $id, name: $name, category: $category, description: $description, author: $author, address: $address, position: $position, deleting: $deleting, liked: $liked, createdAt: $createdAt, likesCount: $likesCount, dislikesCount: $dislikesCount, commentsCount: $commentsCount, images: $images, allowEdit: $allowEdit)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Report &&
+            other is _$_Plant &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.name, name) || other.name == name) &&
             (identical(other.category, category) ||
                 other.category == category) &&
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.author, author) || other.author == author) &&
-            (identical(other.school, school) || other.school == school) &&
-            (identical(other.room, room) || other.room == room) &&
+            (identical(other.address, address) || other.address == address) &&
             (identical(other.position, position) ||
                 other.position == position) &&
             (identical(other.deleting, deleting) ||
@@ -440,8 +420,6 @@ class _$_Report implements _Report {
             (identical(other.commentsCount, commentsCount) ||
                 other.commentsCount == commentsCount) &&
             const DeepCollectionEquality().equals(other._images, _images) &&
-            (identical(other.isActive, isActive) ||
-                other.isActive == isActive) &&
             (identical(other.allowEdit, allowEdit) ||
                 other.allowEdit == allowEdit));
   }
@@ -451,11 +429,11 @@ class _$_Report implements _Report {
   int get hashCode => Object.hash(
       runtimeType,
       id,
+      name,
       category,
       description,
       author,
-      school,
-      room,
+      address,
       position,
       deleting,
       liked,
@@ -464,31 +442,30 @@ class _$_Report implements _Report {
       dislikesCount,
       commentsCount,
       const DeepCollectionEquality().hash(_images),
-      isActive,
       allowEdit);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ReportCopyWith<_$_Report> get copyWith =>
-      __$$_ReportCopyWithImpl<_$_Report>(this, _$identity);
+  _$$_PlantCopyWith<_$_Plant> get copyWith =>
+      __$$_PlantCopyWithImpl<_$_Plant>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ReportToJson(
+    return _$$_PlantToJson(
       this,
     );
   }
 }
 
-abstract class _Report implements Report {
-  const factory _Report(
+abstract class _Plant implements Plant {
+  const factory _Plant(
       {required final int id,
+      required final String name,
       required final Category category,
       required final String description,
       required final Author author,
-      required final String school,
-      required final String room,
+      required final String address,
       required final Position position,
       final bool deleting,
       final bool? liked,
@@ -502,15 +479,15 @@ abstract class _Report implements Report {
       @JsonKey(name: 'comments_count', defaultValue: 0)
           required final int commentsCount,
       final List<String> images,
-      @JsonKey(name: 'is_active', defaultValue: true)
-          required final bool isActive,
       @JsonKey(name: 'allow_edit', defaultValue: false)
-          required final bool allowEdit}) = _$_Report;
+          required final bool allowEdit}) = _$_Plant;
 
-  factory _Report.fromJson(Map<String, dynamic> json) = _$_Report.fromJson;
+  factory _Plant.fromJson(Map<String, dynamic> json) = _$_Plant.fromJson;
 
   @override
   int get id;
+  @override
+  String get name;
   @override
   Category get category;
   @override
@@ -518,9 +495,7 @@ abstract class _Report implements Report {
   @override
   Author get author;
   @override
-  String get school;
-  @override
-  String get room;
+  String get address;
   @override
   Position get position;
   @override
@@ -543,13 +518,10 @@ abstract class _Report implements Report {
   @override
   List<String> get images;
   @override
-  @JsonKey(name: 'is_active', defaultValue: true)
-  bool get isActive;
-  @override
   @JsonKey(name: 'allow_edit', defaultValue: false)
   bool get allowEdit;
   @override
   @JsonKey(ignore: true)
-  _$$_ReportCopyWith<_$_Report> get copyWith =>
+  _$$_PlantCopyWith<_$_Plant> get copyWith =>
       throw _privateConstructorUsedError;
 }

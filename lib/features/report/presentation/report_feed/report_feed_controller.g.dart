@@ -23,7 +23,7 @@ final reportFilterStateProvider =
 
 typedef _$ReportFilterState = AutoDisposeNotifier<ReportQuery>;
 String _$reportFeedControllerHash() =>
-    r'072403c7826ee1d43740dfe9c442e9d83be902db';
+    r'c889ccea630313e4b18cfb1cf7d421fa8188a599';
 
 /// Copied from Dart SDK
 class _SystemHash {

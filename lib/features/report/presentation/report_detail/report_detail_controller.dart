@@ -18,7 +18,7 @@ class ReportDetailController extends _$ReportDetailController {
       (r) => r,
     );
 
-    final result = await repo.getReport(reportId: reportId);
+    final result = await repo.getPlant(reportId: reportId);
 
     return result.fold(
       (l) => const ReportDetailState(),
