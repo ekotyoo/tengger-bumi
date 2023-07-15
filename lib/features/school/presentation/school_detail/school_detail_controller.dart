@@ -3,7 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../report/data/report_repository.dart';
 import '../../../report/domain/report_query.dart';
 import '../../data/school_repository.dart';
-import '../../../report/domain/report.dart';
+import '../../../report/domain/plant.dart';
 import '../../domain/school_detail.dart';
 
 part 'school_detail_controller.g.dart';

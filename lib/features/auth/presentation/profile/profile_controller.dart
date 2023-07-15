@@ -2,7 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../domain/auth_user.dart';
 import '../../../report/data/report_repository.dart';
-import '../../../report/domain/report.dart';
+import '../../../report/domain/plant.dart';
 import '../../../report/domain/report_query.dart';
 import '../../data/auth_repository.dart';
 import '../../auth_controller.dart';

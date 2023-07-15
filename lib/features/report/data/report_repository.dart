@@ -14,7 +14,7 @@ import '../domain/comment.dart';
 import '../domain/report_detail.dart';
 import '../../../common/services/http_client.dart';
 import '../domain/report_query.dart';
-import '../domain/report.dart';
+import '../domain/plant.dart';
 import 'i_report_repository.dart';
 
 part 'report_repository.g.dart';
@@ -35,7 +35,6 @@ class ReportRepository implements IReportRepository {
     required ReportQuery query,
     CancelToken? cancelToken,
   }) async {
-    debugPrint(query.toString());
     try {
       final response = await _client.get(
         '/plant',
@@ -68,21 +67,21 @@ class ReportRepository implements IReportRepository {
   }
 
   @override
-  Future<Either<Failure, ReportDetail>> getPlant({
-    required int reportId,
+  Future<Either<Failure, PlantDetail>> getPlant({
+    required int plantId,
     CancelToken? cancelToken,
   }) async {
     try {
-      final response = await _client.get('/report/$reportId');
-      final result = ReportDetail.fromJson(response['data']);
-      final report = result.copyWith(
+      final response = await _client.get('/plant/$plantId');
+      final result = PlantDetail.fromJson(response['data']);
+      final plant = result.copyWith(
         images:
             result.images.map((e) => e.replaceAll('public', kBaseUrl)).toList(),
         author: result.author.copyWith(
           avatar: result.author.avatar?.replaceAll('public', kBaseUrl),
         ),
       );
-      return right(report);
+      return right(plant);
     } catch (e) {
       final exception = NetworkExceptions.getDioException(e);
       return left(Failure(exception.getErrorMessage()));
@@ -91,13 +90,13 @@ class ReportRepository implements IReportRepository {
 
   @override
   Future<Either<Failure, Comment>> addComment(
-      {required int reportId,
+      {required int plantId,
       required String comment,
       CancelToken? cancelToken}) async {
     try {
       final response = await _client.post('/comment', data: {
         'comment': comment,
-        'report_id': reportId,
+        'plant_id': plantId,
       });
       final result = Comment.fromJson(response['data']);
       final newComment = result.copyWith(
@@ -115,12 +114,12 @@ class ReportRepository implements IReportRepository {
 
   @override
   Future<Either<Failure, List<Comment>>> getComments({
-    required int reportId,
+    required int plantId,
     CancelToken? cancelToken,
   }) async {
     try {
       final response = await _client.get('/comment', data: {
-        'report_id': reportId,
+        'plant_id': plantId,
       });
       final result = (response['data'] as List<dynamic>).map((e) {
         final c = Comment.fromJson(e);
@@ -140,12 +139,12 @@ class ReportRepository implements IReportRepository {
 
   @override
   Future<Either<Failure, Unit>> addLike(
-      {required int reportId,
+      {required int plantId,
       bool isLike = true,
       CancelToken? cancelToken}) async {
     try {
       final response = await _client
-          .post('/report/$reportId/like', data: {'is_like': isLike});
+          .post('/plant/$plantId/like', data: {'is_like': isLike});
       if (response['status'] == 'success') return right(unit);
       return left(const Failure('Terjadi kesalahan, coba lagi nanti'));
     } catch (e) {
@@ -156,9 +155,9 @@ class ReportRepository implements IReportRepository {
 
   @override
   Future<Either<Failure, Unit>> removeLike(
-      {required int reportId, CancelToken? cancelToken}) async {
+      {required int plantId, CancelToken? cancelToken}) async {
     try {
-      final response = await _client.delete('/report/$reportId/like');
+      final response = await _client.delete('/plant/$plantId/like');
       if (response['status'] == 'success') return right(unit);
       return left(const Failure('Terjadi kesalahan, coba lagi nanti'));
     } catch (e) {
@@ -221,12 +220,12 @@ class ReportRepository implements IReportRepository {
 
   @override
   Future<Either<Failure, Plant>> updatePlant({
-    required int reportId,
-    required PlantRequest report,
+    required int plantId,
+    required PlantRequest plant,
     required List<File> images,
   }) async {
     try {
-      final reportMap = report.toJson();
+      final reportMap = plant.toJson();
       final formData = FormData.fromMap(reportMap);
 
       final multipartFiles = <MapEntry<String, MultipartFile>>[];
@@ -250,7 +249,7 @@ class ReportRepository implements IReportRepository {
       }
       formData.files.addAll(multipartFiles);
 
-      final response = await _client.put('/report/$reportId', data: formData);
+      final response = await _client.put('/plant/$plantId', data: formData);
 
       if (response['status'] == 'success' && response['data'] != null) {
         final report = Plant.fromJson(response['data']);
@@ -291,11 +290,11 @@ class ReportRepository implements IReportRepository {
 
   @override
   Future<Either<Failure, Unit>> deleteReport({
-    required int reportId,
+    required int plantId,
     CancelToken? cancelToken,
   }) async {
     try {
-      final response = await _client.delete('/report/$reportId');
+      final response = await _client.delete('/plant/$plantId');
       if (response['status'] == 'success') {
         return right(unit);
       }
@@ -308,13 +307,13 @@ class ReportRepository implements IReportRepository {
 
   @override
   Future<Either<Failure, Unit>> deleteComment({
-    required int reportId,
+    required int plantId,
     required int commentId,
     CancelToken? cancelToken,
   }) async {
     try {
       final response =
-          await _client.delete('/report/$reportId/comment/$commentId');
+          await _client.delete('/plant/$plantId/comment/$commentId');
       if (response['status'] == 'success') {
         return right(unit);
       }

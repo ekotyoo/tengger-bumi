@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../domain/report.dart';
+import '../../domain/plant.dart';
 import '../../data/report_repository.dart';
 import '../../domain/report_query.dart';
 import 'report_feed_state.dart';
@@ -38,7 +38,7 @@ class ReportFeedController extends _$ReportFeedController {
     oldReports[index] = report.copyWith(deleting: true);
     state = AsyncValue.data(oldState.copyWith(reports: oldReports));
 
-    final result = await reportRepo.deleteReport(reportId: report.id);
+    final result = await reportRepo.deleteReport(plantId: report.id);
     result.fold(
       (l) {
         setErrorMessage(l.message);
@@ -98,7 +98,7 @@ class ReportFeedController extends _$ReportFeedController {
       // Decrement likes count local
       // Delete like on remote
       _setLike(index, liked: null, likesCount: oldLikesCount - 1);
-      final result = await repo.removeLike(reportId: reportId);
+      final result = await repo.removeLike(plantId: reportId);
       result.fold(
         (l) {
           // Revert changes
@@ -118,7 +118,7 @@ class ReportFeedController extends _$ReportFeedController {
         likesCount: oldLikesCount + 1,
         dislikesCount: oldLiked == false ? oldDislikesCount - 1 : null,
       );
-      final result = await repo.addLike(reportId: reportId);
+      final result = await repo.addLike(plantId: reportId);
       result.fold(
         (l) {
           // Revert changes
@@ -147,7 +147,7 @@ class ReportFeedController extends _$ReportFeedController {
       // Decrement dislikes count local
       // Delete like on remote
       _setLike(index, liked: null, dislikesCount: oldDislikesCount - 1);
-      final result = await repo.removeLike(reportId: reportId);
+      final result = await repo.removeLike(plantId: reportId);
       result.fold(
         (l) {
           // Revert changes
@@ -167,7 +167,7 @@ class ReportFeedController extends _$ReportFeedController {
         likesCount: oldLiked == true ? oldLikesCount - 1 : null,
         dislikesCount: oldDislikesCount + 1,
       );
-      final result = await repo.addLike(reportId: reportId, isLike: false);
+      final result = await repo.addLike(plantId: reportId, isLike: false);
       result.fold(
         (l) {
           // Revert changes

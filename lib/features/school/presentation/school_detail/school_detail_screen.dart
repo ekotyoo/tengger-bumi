@@ -10,7 +10,7 @@ import '../models/school_detail_floor_plan_nav_arg.dart';
 import 'school_detail_controller.dart';
 import '../../../../common/routing/routes.dart';
 import '../../../../common/widgets/title_with_caption.dart';
-import '../../../report/domain/report.dart';
+import '../../../report/domain/plant.dart';
 import '../../../report/domain/report_type.dart';
 import '../../../report/presentation/widgets/report_card.dart';
 import '../../../../common/widgets/loading_image.dart';

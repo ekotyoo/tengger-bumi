@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ReportDetailState {
-  ReportDetail? get report => throw _privateConstructorUsedError;
+  PlantDetail? get report => throw _privateConstructorUsedError;
   bool get commentLoading => throw _privateConstructorUsedError;
   bool get reportDeleting => throw _privateConstructorUsedError;
   String? get successMessage => throw _privateConstructorUsedError;
@@ -34,13 +34,13 @@ abstract class $ReportDetailStateCopyWith<$Res> {
       _$ReportDetailStateCopyWithImpl<$Res, ReportDetailState>;
   @useResult
   $Res call(
-      {ReportDetail? report,
+      {PlantDetail? report,
       bool commentLoading,
       bool reportDeleting,
       String? successMessage,
       String? errorMessage});
 
-  $ReportDetailCopyWith<$Res>? get report;
+  $PlantDetailCopyWith<$Res>? get report;
 }
 
 /// @nodoc
@@ -66,7 +66,7 @@ class _$ReportDetailStateCopyWithImpl<$Res, $Val extends ReportDetailState>
       report: freezed == report
           ? _value.report
           : report // ignore: cast_nullable_to_non_nullable
-              as ReportDetail?,
+              as PlantDetail?,
       commentLoading: null == commentLoading
           ? _value.commentLoading
           : commentLoading // ignore: cast_nullable_to_non_nullable
@@ -88,12 +88,12 @@ class _$ReportDetailStateCopyWithImpl<$Res, $Val extends ReportDetailState>
 
   @override
   @pragma('vm:prefer-inline')
-  $ReportDetailCopyWith<$Res>? get report {
+  $PlantDetailCopyWith<$Res>? get report {
     if (_value.report == null) {
       return null;
     }
 
-    return $ReportDetailCopyWith<$Res>(_value.report!, (value) {
+    return $PlantDetailCopyWith<$Res>(_value.report!, (value) {
       return _then(_value.copyWith(report: value) as $Val);
     });
   }
@@ -108,14 +108,14 @@ abstract class _$$_ReportDetailStateCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {ReportDetail? report,
+      {PlantDetail? report,
       bool commentLoading,
       bool reportDeleting,
       String? successMessage,
       String? errorMessage});
 
   @override
-  $ReportDetailCopyWith<$Res>? get report;
+  $PlantDetailCopyWith<$Res>? get report;
 }
 
 /// @nodoc
@@ -139,7 +139,7 @@ class __$$_ReportDetailStateCopyWithImpl<$Res>
       report: freezed == report
           ? _value.report
           : report // ignore: cast_nullable_to_non_nullable
-              as ReportDetail?,
+              as PlantDetail?,
       commentLoading: null == commentLoading
           ? _value.commentLoading
           : commentLoading // ignore: cast_nullable_to_non_nullable
@@ -171,7 +171,7 @@ class _$_ReportDetailState implements _ReportDetailState {
       this.errorMessage});
 
   @override
-  final ReportDetail? report;
+  final PlantDetail? report;
   @override
   @JsonKey()
   final bool commentLoading;
@@ -218,14 +218,14 @@ class _$_ReportDetailState implements _ReportDetailState {
 
 abstract class _ReportDetailState implements ReportDetailState {
   const factory _ReportDetailState(
-      {final ReportDetail? report,
+      {final PlantDetail? report,
       final bool commentLoading,
       final bool reportDeleting,
       final String? successMessage,
       final String? errorMessage}) = _$_ReportDetailState;
 
   @override
-  ReportDetail? get report;
+  PlantDetail? get report;
   @override
   bool get commentLoading;
   @override

@@ -243,7 +243,7 @@ class PostReportController extends StateNotifier<PostReportState> {
   }
 
   Future<void> getReportDetail(int reportId) async {
-    final result = await _reportRepository.getPlant(reportId: reportId);
+    final result = await _reportRepository.getPlant(plantId: reportId);
     final report = await result.fold(
       (l) {
         setErrorMessage(l.message);
@@ -256,7 +256,7 @@ class PostReportController extends StateNotifier<PostReportState> {
     state = state.copyWith(reportDetail: report);
   }
 
-  Future<void> _populateReportDetail(ReportDetail? report) async {
+  Future<void> _populateReportDetail(PlantDetail? report) async {
     if (report == null) return;
     final selectedLocation = report.position;
     final images = report.images.map((e) => right<XFile, String>(e)).toList();
@@ -341,7 +341,7 @@ class PostReportController extends StateNotifier<PostReportState> {
     if (state.formType == FormType.edit) {
       if (state.reportDetail == null) return;
       final result = await _reportRepository.updatePlant(
-          reportId: state.reportDetail!.id, report: plant, images: images);
+          plantId: state.reportDetail!.id, plant: plant, images: images);
 
       result.fold(
         (l) {

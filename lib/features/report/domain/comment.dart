@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'report.dart';
+import 'plant.dart';
 import 'author.dart';
 
 part 'comment.freezed.dart';

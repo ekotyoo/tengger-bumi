@@ -1,9 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:school_watch_semeru/common/models/regency.dart';
-import 'package:school_watch_semeru/common/models/regency.dart';
 import 'package:school_watch_semeru/common/models/village.dart';
 import 'package:school_watch_semeru/features/report/presentation/models/date_input.dart';
-import 'package:school_watch_semeru/features/report/presentation/models/district_input.dart';
 import 'package:school_watch_semeru/features/report/presentation/models/district_input.dart';
 import 'package:school_watch_semeru/features/report/presentation/models/plant_name_input.dart';
 import 'package:school_watch_semeru/features/report/presentation/models/village_input.dart';
@@ -26,7 +24,7 @@ part 'post_report_state.freezed.dart';
 @freezed
 class PostReportState with _$PostReportState {
   const factory PostReportState({
-    ReportDetail? reportDetail,
+    PlantDetail? reportDetail,
     @Default(FormType.post) FormType formType,
     @Default(0) int currentPage,
     @Default(true) bool firstFormLoading,

@@ -14,20 +14,18 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-ReportDetail _$ReportDetailFromJson(Map<String, dynamic> json) {
+PlantDetail _$PlantDetailFromJson(Map<String, dynamic> json) {
   return _ReportDetail.fromJson(json);
 }
 
 /// @nodoc
-mixin _$ReportDetail {
+mixin _$PlantDetail {
   int get id => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
   Category get category => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   Author get author => throw _privateConstructorUsedError;
-  String get school => throw _privateConstructorUsedError;
-  String get room => throw _privateConstructorUsedError;
-  @JsonKey(name: 'room_id')
-  int get roomId => throw _privateConstructorUsedError;
+  String get address => throw _privateConstructorUsedError;
   Position get position => throw _privateConstructorUsedError;
   bool? get liked => throw _privateConstructorUsedError;
   @JsonKey(name: 'created_at')
@@ -37,46 +35,53 @@ mixin _$ReportDetail {
   int get likesCount => throw _privateConstructorUsedError;
   @JsonKey(name: 'dislikes_count', defaultValue: 0)
   int get dislikesCount => throw _privateConstructorUsedError;
+  @JsonKey(name: 'planting_count', defaultValue: 0)
+  int get plantingCount => throw _privateConstructorUsedError;
+  @JsonKey(name: 'planting_date')
+  @TimestampSerializer()
+  DateTime get plantingDate => throw _privateConstructorUsedError;
   List<String> get images => throw _privateConstructorUsedError;
-  @JsonKey(name: 'is_active', defaultValue: true)
-  bool get isActive => throw _privateConstructorUsedError;
-  @JsonKey(name: 'additional_infos')
-  List<AdditionalInfo>? get additionalInfos =>
-      throw _privateConstructorUsedError;
   List<Comment> get comments => throw _privateConstructorUsedError;
   @JsonKey(name: 'allow_edit', defaultValue: false)
   bool get allowEdit => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ReportDetailCopyWith<ReportDetail> get copyWith =>
+  $PlantDetailCopyWith<PlantDetail> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ReportDetailCopyWith<$Res> {
-  factory $ReportDetailCopyWith(
-          ReportDetail value, $Res Function(ReportDetail) then) =
-      _$ReportDetailCopyWithImpl<$Res, ReportDetail>;
+abstract class $PlantDetailCopyWith<$Res> {
+  factory $PlantDetailCopyWith(
+          PlantDetail value, $Res Function(PlantDetail) then) =
+      _$PlantDetailCopyWithImpl<$Res, PlantDetail>;
   @useResult
   $Res call(
       {int id,
+      String name,
       Category category,
       String description,
       Author author,
-      String school,
-      String room,
-      @JsonKey(name: 'room_id') int roomId,
+      String address,
       Position position,
       bool? liked,
-      @JsonKey(name: 'created_at') @TimestampSerializer() DateTime createdAt,
-      @JsonKey(name: 'likes_count', defaultValue: 0) int likesCount,
-      @JsonKey(name: 'dislikes_count', defaultValue: 0) int dislikesCount,
+      @JsonKey(name: 'created_at')
+      @TimestampSerializer()
+          DateTime createdAt,
+      @JsonKey(name: 'likes_count', defaultValue: 0)
+          int likesCount,
+      @JsonKey(name: 'dislikes_count', defaultValue: 0)
+          int dislikesCount,
+      @JsonKey(name: 'planting_count', defaultValue: 0)
+          int plantingCount,
+      @JsonKey(name: 'planting_date')
+      @TimestampSerializer()
+          DateTime plantingDate,
       List<String> images,
-      @JsonKey(name: 'is_active', defaultValue: true) bool isActive,
-      @JsonKey(name: 'additional_infos') List<AdditionalInfo>? additionalInfos,
       List<Comment> comments,
-      @JsonKey(name: 'allow_edit', defaultValue: false) bool allowEdit});
+      @JsonKey(name: 'allow_edit', defaultValue: false)
+          bool allowEdit});
 
   $CategoryCopyWith<$Res> get category;
   $AuthorCopyWith<$Res> get author;
@@ -84,9 +89,9 @@ abstract class $ReportDetailCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ReportDetailCopyWithImpl<$Res, $Val extends ReportDetail>
-    implements $ReportDetailCopyWith<$Res> {
-  _$ReportDetailCopyWithImpl(this._value, this._then);
+class _$PlantDetailCopyWithImpl<$Res, $Val extends PlantDetail>
+    implements $PlantDetailCopyWith<$Res> {
+  _$PlantDetailCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -97,20 +102,19 @@ class _$ReportDetailCopyWithImpl<$Res, $Val extends ReportDetail>
   @override
   $Res call({
     Object? id = null,
+    Object? name = null,
     Object? category = null,
     Object? description = null,
     Object? author = null,
-    Object? school = null,
-    Object? room = null,
-    Object? roomId = null,
+    Object? address = null,
     Object? position = null,
     Object? liked = freezed,
     Object? createdAt = null,
     Object? likesCount = null,
     Object? dislikesCount = null,
+    Object? plantingCount = null,
+    Object? plantingDate = null,
     Object? images = null,
-    Object? isActive = null,
-    Object? additionalInfos = freezed,
     Object? comments = null,
     Object? allowEdit = null,
   }) {
@@ -119,6 +123,10 @@ class _$ReportDetailCopyWithImpl<$Res, $Val extends ReportDetail>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
       category: null == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
@@ -131,18 +139,10 @@ class _$ReportDetailCopyWithImpl<$Res, $Val extends ReportDetail>
           ? _value.author
           : author // ignore: cast_nullable_to_non_nullable
               as Author,
-      school: null == school
-          ? _value.school
-          : school // ignore: cast_nullable_to_non_nullable
+      address: null == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
               as String,
-      room: null == room
-          ? _value.room
-          : room // ignore: cast_nullable_to_non_nullable
-              as String,
-      roomId: null == roomId
-          ? _value.roomId
-          : roomId // ignore: cast_nullable_to_non_nullable
-              as int,
       position: null == position
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
@@ -163,18 +163,18 @@ class _$ReportDetailCopyWithImpl<$Res, $Val extends ReportDetail>
           ? _value.dislikesCount
           : dislikesCount // ignore: cast_nullable_to_non_nullable
               as int,
+      plantingCount: null == plantingCount
+          ? _value.plantingCount
+          : plantingCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      plantingDate: null == plantingDate
+          ? _value.plantingDate
+          : plantingDate // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       images: null == images
           ? _value.images
           : images // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      isActive: null == isActive
-          ? _value.isActive
-          : isActive // ignore: cast_nullable_to_non_nullable
-              as bool,
-      additionalInfos: freezed == additionalInfos
-          ? _value.additionalInfos
-          : additionalInfos // ignore: cast_nullable_to_non_nullable
-              as List<AdditionalInfo>?,
       comments: null == comments
           ? _value.comments
           : comments // ignore: cast_nullable_to_non_nullable
@@ -213,7 +213,7 @@ class _$ReportDetailCopyWithImpl<$Res, $Val extends ReportDetail>
 
 /// @nodoc
 abstract class _$$_ReportDetailCopyWith<$Res>
-    implements $ReportDetailCopyWith<$Res> {
+    implements $PlantDetailCopyWith<$Res> {
   factory _$$_ReportDetailCopyWith(
           _$_ReportDetail value, $Res Function(_$_ReportDetail) then) =
       __$$_ReportDetailCopyWithImpl<$Res>;
@@ -221,22 +221,29 @@ abstract class _$$_ReportDetailCopyWith<$Res>
   @useResult
   $Res call(
       {int id,
+      String name,
       Category category,
       String description,
       Author author,
-      String school,
-      String room,
-      @JsonKey(name: 'room_id') int roomId,
+      String address,
       Position position,
       bool? liked,
-      @JsonKey(name: 'created_at') @TimestampSerializer() DateTime createdAt,
-      @JsonKey(name: 'likes_count', defaultValue: 0) int likesCount,
-      @JsonKey(name: 'dislikes_count', defaultValue: 0) int dislikesCount,
+      @JsonKey(name: 'created_at')
+      @TimestampSerializer()
+          DateTime createdAt,
+      @JsonKey(name: 'likes_count', defaultValue: 0)
+          int likesCount,
+      @JsonKey(name: 'dislikes_count', defaultValue: 0)
+          int dislikesCount,
+      @JsonKey(name: 'planting_count', defaultValue: 0)
+          int plantingCount,
+      @JsonKey(name: 'planting_date')
+      @TimestampSerializer()
+          DateTime plantingDate,
       List<String> images,
-      @JsonKey(name: 'is_active', defaultValue: true) bool isActive,
-      @JsonKey(name: 'additional_infos') List<AdditionalInfo>? additionalInfos,
       List<Comment> comments,
-      @JsonKey(name: 'allow_edit', defaultValue: false) bool allowEdit});
+      @JsonKey(name: 'allow_edit', defaultValue: false)
+          bool allowEdit});
 
   @override
   $CategoryCopyWith<$Res> get category;
@@ -248,7 +255,7 @@ abstract class _$$_ReportDetailCopyWith<$Res>
 
 /// @nodoc
 class __$$_ReportDetailCopyWithImpl<$Res>
-    extends _$ReportDetailCopyWithImpl<$Res, _$_ReportDetail>
+    extends _$PlantDetailCopyWithImpl<$Res, _$_ReportDetail>
     implements _$$_ReportDetailCopyWith<$Res> {
   __$$_ReportDetailCopyWithImpl(
       _$_ReportDetail _value, $Res Function(_$_ReportDetail) _then)
@@ -258,20 +265,19 @@ class __$$_ReportDetailCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? name = null,
     Object? category = null,
     Object? description = null,
     Object? author = null,
-    Object? school = null,
-    Object? room = null,
-    Object? roomId = null,
+    Object? address = null,
     Object? position = null,
     Object? liked = freezed,
     Object? createdAt = null,
     Object? likesCount = null,
     Object? dislikesCount = null,
+    Object? plantingCount = null,
+    Object? plantingDate = null,
     Object? images = null,
-    Object? isActive = null,
-    Object? additionalInfos = freezed,
     Object? comments = null,
     Object? allowEdit = null,
   }) {
@@ -280,6 +286,10 @@ class __$$_ReportDetailCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
       category: null == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
@@ -292,18 +302,10 @@ class __$$_ReportDetailCopyWithImpl<$Res>
           ? _value.author
           : author // ignore: cast_nullable_to_non_nullable
               as Author,
-      school: null == school
-          ? _value.school
-          : school // ignore: cast_nullable_to_non_nullable
+      address: null == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
               as String,
-      room: null == room
-          ? _value.room
-          : room // ignore: cast_nullable_to_non_nullable
-              as String,
-      roomId: null == roomId
-          ? _value.roomId
-          : roomId // ignore: cast_nullable_to_non_nullable
-              as int,
       position: null == position
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
@@ -324,18 +326,18 @@ class __$$_ReportDetailCopyWithImpl<$Res>
           ? _value.dislikesCount
           : dislikesCount // ignore: cast_nullable_to_non_nullable
               as int,
+      plantingCount: null == plantingCount
+          ? _value.plantingCount
+          : plantingCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      plantingDate: null == plantingDate
+          ? _value.plantingDate
+          : plantingDate // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       images: null == images
           ? _value._images
           : images // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      isActive: null == isActive
-          ? _value.isActive
-          : isActive // ignore: cast_nullable_to_non_nullable
-              as bool,
-      additionalInfos: freezed == additionalInfos
-          ? _value._additionalInfos
-          : additionalInfos // ignore: cast_nullable_to_non_nullable
-              as List<AdditionalInfo>?,
       comments: null == comments
           ? _value._comments
           : comments // ignore: cast_nullable_to_non_nullable
@@ -353,13 +355,11 @@ class __$$_ReportDetailCopyWithImpl<$Res>
 class _$_ReportDetail implements _ReportDetail {
   const _$_ReportDetail(
       {required this.id,
+      required this.name,
       required this.category,
       required this.description,
       required this.author,
-      required this.school,
-      required this.room,
-      @JsonKey(name: 'room_id')
-          required this.roomId,
+      required this.address,
       required this.position,
       this.liked,
       @JsonKey(name: 'created_at')
@@ -369,16 +369,16 @@ class _$_ReportDetail implements _ReportDetail {
           required this.likesCount,
       @JsonKey(name: 'dislikes_count', defaultValue: 0)
           required this.dislikesCount,
+      @JsonKey(name: 'planting_count', defaultValue: 0)
+          required this.plantingCount,
+      @JsonKey(name: 'planting_date')
+      @TimestampSerializer()
+          required this.plantingDate,
       final List<String> images = const [],
-      @JsonKey(name: 'is_active', defaultValue: true)
-          required this.isActive,
-      @JsonKey(name: 'additional_infos')
-          final List<AdditionalInfo>? additionalInfos,
       final List<Comment> comments = const [],
       @JsonKey(name: 'allow_edit', defaultValue: false)
           required this.allowEdit})
       : _images = images,
-        _additionalInfos = additionalInfos,
         _comments = comments;
 
   factory _$_ReportDetail.fromJson(Map<String, dynamic> json) =>
@@ -387,18 +387,15 @@ class _$_ReportDetail implements _ReportDetail {
   @override
   final int id;
   @override
+  final String name;
+  @override
   final Category category;
   @override
   final String description;
   @override
   final Author author;
   @override
-  final String school;
-  @override
-  final String room;
-  @override
-  @JsonKey(name: 'room_id')
-  final int roomId;
+  final String address;
   @override
   final Position position;
   @override
@@ -413,6 +410,13 @@ class _$_ReportDetail implements _ReportDetail {
   @override
   @JsonKey(name: 'dislikes_count', defaultValue: 0)
   final int dislikesCount;
+  @override
+  @JsonKey(name: 'planting_count', defaultValue: 0)
+  final int plantingCount;
+  @override
+  @JsonKey(name: 'planting_date')
+  @TimestampSerializer()
+  final DateTime plantingDate;
   final List<String> _images;
   @override
   @JsonKey()
@@ -420,20 +424,6 @@ class _$_ReportDetail implements _ReportDetail {
     if (_images is EqualUnmodifiableListView) return _images;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_images);
-  }
-
-  @override
-  @JsonKey(name: 'is_active', defaultValue: true)
-  final bool isActive;
-  final List<AdditionalInfo>? _additionalInfos;
-  @override
-  @JsonKey(name: 'additional_infos')
-  List<AdditionalInfo>? get additionalInfos {
-    final value = _additionalInfos;
-    if (value == null) return null;
-    if (_additionalInfos is EqualUnmodifiableListView) return _additionalInfos;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
   }
 
   final List<Comment> _comments;
@@ -451,7 +441,7 @@ class _$_ReportDetail implements _ReportDetail {
 
   @override
   String toString() {
-    return 'ReportDetail(id: $id, category: $category, description: $description, author: $author, school: $school, room: $room, roomId: $roomId, position: $position, liked: $liked, createdAt: $createdAt, likesCount: $likesCount, dislikesCount: $dislikesCount, images: $images, isActive: $isActive, additionalInfos: $additionalInfos, comments: $comments, allowEdit: $allowEdit)';
+    return 'PlantDetail(id: $id, name: $name, category: $category, description: $description, author: $author, address: $address, position: $position, liked: $liked, createdAt: $createdAt, likesCount: $likesCount, dislikesCount: $dislikesCount, plantingCount: $plantingCount, plantingDate: $plantingDate, images: $images, comments: $comments, allowEdit: $allowEdit)';
   }
 
   @override
@@ -460,14 +450,13 @@ class _$_ReportDetail implements _ReportDetail {
         (other.runtimeType == runtimeType &&
             other is _$_ReportDetail &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.name, name) || other.name == name) &&
             (identical(other.category, category) ||
                 other.category == category) &&
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.author, author) || other.author == author) &&
-            (identical(other.school, school) || other.school == school) &&
-            (identical(other.room, room) || other.room == room) &&
-            (identical(other.roomId, roomId) || other.roomId == roomId) &&
+            (identical(other.address, address) || other.address == address) &&
             (identical(other.position, position) ||
                 other.position == position) &&
             (identical(other.liked, liked) || other.liked == liked) &&
@@ -477,11 +466,11 @@ class _$_ReportDetail implements _ReportDetail {
                 other.likesCount == likesCount) &&
             (identical(other.dislikesCount, dislikesCount) ||
                 other.dislikesCount == dislikesCount) &&
+            (identical(other.plantingCount, plantingCount) ||
+                other.plantingCount == plantingCount) &&
+            (identical(other.plantingDate, plantingDate) ||
+                other.plantingDate == plantingDate) &&
             const DeepCollectionEquality().equals(other._images, _images) &&
-            (identical(other.isActive, isActive) ||
-                other.isActive == isActive) &&
-            const DeepCollectionEquality()
-                .equals(other._additionalInfos, _additionalInfos) &&
             const DeepCollectionEquality().equals(other._comments, _comments) &&
             (identical(other.allowEdit, allowEdit) ||
                 other.allowEdit == allowEdit));
@@ -492,20 +481,19 @@ class _$_ReportDetail implements _ReportDetail {
   int get hashCode => Object.hash(
       runtimeType,
       id,
+      name,
       category,
       description,
       author,
-      school,
-      room,
-      roomId,
+      address,
       position,
       liked,
       createdAt,
       likesCount,
       dislikesCount,
+      plantingCount,
+      plantingDate,
       const DeepCollectionEquality().hash(_images),
-      isActive,
-      const DeepCollectionEquality().hash(_additionalInfos),
       const DeepCollectionEquality().hash(_comments),
       allowEdit);
 
@@ -523,16 +511,14 @@ class _$_ReportDetail implements _ReportDetail {
   }
 }
 
-abstract class _ReportDetail implements ReportDetail {
+abstract class _ReportDetail implements PlantDetail {
   const factory _ReportDetail(
       {required final int id,
+      required final String name,
       required final Category category,
       required final String description,
       required final Author author,
-      required final String school,
-      required final String room,
-      @JsonKey(name: 'room_id')
-          required final int roomId,
+      required final String address,
       required final Position position,
       final bool? liked,
       @JsonKey(name: 'created_at')
@@ -542,11 +528,12 @@ abstract class _ReportDetail implements ReportDetail {
           required final int likesCount,
       @JsonKey(name: 'dislikes_count', defaultValue: 0)
           required final int dislikesCount,
+      @JsonKey(name: 'planting_count', defaultValue: 0)
+          required final int plantingCount,
+      @JsonKey(name: 'planting_date')
+      @TimestampSerializer()
+          required final DateTime plantingDate,
       final List<String> images,
-      @JsonKey(name: 'is_active', defaultValue: true)
-          required final bool isActive,
-      @JsonKey(name: 'additional_infos')
-          final List<AdditionalInfo>? additionalInfos,
       final List<Comment> comments,
       @JsonKey(name: 'allow_edit', defaultValue: false)
           required final bool allowEdit}) = _$_ReportDetail;
@@ -557,18 +544,15 @@ abstract class _ReportDetail implements ReportDetail {
   @override
   int get id;
   @override
+  String get name;
+  @override
   Category get category;
   @override
   String get description;
   @override
   Author get author;
   @override
-  String get school;
-  @override
-  String get room;
-  @override
-  @JsonKey(name: 'room_id')
-  int get roomId;
+  String get address;
   @override
   Position get position;
   @override
@@ -584,13 +568,14 @@ abstract class _ReportDetail implements ReportDetail {
   @JsonKey(name: 'dislikes_count', defaultValue: 0)
   int get dislikesCount;
   @override
+  @JsonKey(name: 'planting_count', defaultValue: 0)
+  int get plantingCount;
+  @override
+  @JsonKey(name: 'planting_date')
+  @TimestampSerializer()
+  DateTime get plantingDate;
+  @override
   List<String> get images;
-  @override
-  @JsonKey(name: 'is_active', defaultValue: true)
-  bool get isActive;
-  @override
-  @JsonKey(name: 'additional_infos')
-  List<AdditionalInfo>? get additionalInfos;
   @override
   List<Comment> get comments;
   @override

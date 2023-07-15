@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:school_watch_semeru/common/widgets/shimmer_container.dart';
 
-import '../../domain/report.dart';
+import '../../domain/plant.dart';
 import '../../../../common/constants/constant.dart';
 import '../../../../common/widgets/category_chip.dart';
 import '../../../../common/widgets/loading_image.dart';

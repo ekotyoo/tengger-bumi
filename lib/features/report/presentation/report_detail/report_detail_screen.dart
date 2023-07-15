@@ -3,11 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:school_watch_semeru/utils/string_extension.dart';
 
 import '../../../../common/routing/routes.dart';
 import '../../../../utils/snackbar_utils.dart';
-import '../../domain/additional_info.dart';
 import '../../domain/report_detail.dart';
 import '../../../../common/constants/constant.dart';
 import '../../../../common/widgets/loading_image.dart';
@@ -160,7 +158,7 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
                         children: [
                           const SizedBox(height: SWSizes.s16),
                           _buildImage(context, report.images),
-                          const SizedBox(height: SWSizes.s16),
+                          const SizedBox(height: SWSizes.s8),
                           _buildTopSection(context, report),
                           const SizedBox(height: SWSizes.s8),
                           _buildAge(context, report),
@@ -169,22 +167,10 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
                           const SizedBox(height: SWSizes.s8),
                           _buildDescription(context, report.description),
                           const SizedBox(height: SWSizes.s8),
-                          _buildAuthorSection(context,
-                              author: report.author,
-                              createdAt: report.createdAt,
-                              isActive: report.isActive),
+                          _buildAuthorSection(context, author: report.author, createdAt: report.createdAt),
                           const SizedBox(height: SWSizes.s16),
                           _buildInfoSection(context, report),
                           const SizedBox(height: SWSizes.s8),
-                          if (report.additionalInfos?.isNotEmpty ?? false) ...[
-                            const Divider(),
-                            const SizedBox(height: SWSizes.s8),
-                            _buildAdditionalInfoTile(
-                              context,
-                              report.additionalInfos ?? [],
-                            ),
-                            const SizedBox(height: SWSizes.s8),
-                          ],
                           const Divider(),
                           const SizedBox(height: SWSizes.s8),
                           _buildCommentList(report.comments),
@@ -238,7 +224,7 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
     );
   }
 
-  _buildInteractionBar(BuildContext context, ReportDetail report) {
+  _buildInteractionBar(BuildContext context, PlantDetail report) {
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -307,7 +293,6 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
     BuildContext context, {
     required Author author,
     required DateTime createdAt,
-    required bool isActive,
   }) {
     return Container(
       decoration: const BoxDecoration(
@@ -363,7 +348,7 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
         ));
   }
 
-  _buildTopSection(BuildContext context, ReportDetail report) {
+  _buildTopSection(BuildContext context, PlantDetail report) {
     return Container(
         decoration: const BoxDecoration(
             color: kColorSurface,
@@ -374,7 +359,7 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
           children: [
             Row(
               children: [
-                Text(report.school,
+                Text('',
                   style: Theme.of(context)
                       .textTheme
                       .displaySmall
@@ -384,13 +369,12 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
                 _buildInteractionBar(context, report)
               ],
             ),
-            Text(report.room)
           ],
         )
     );
   }
 
-  _buildAge(BuildContext context, ReportDetail report) {
+  _buildAge(BuildContext context, PlantDetail report) {
     return Container(
         decoration: const BoxDecoration(
             color: kColorSurface,
@@ -411,7 +395,7 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
         ));
   }
 
-  _buildQuantity(BuildContext context, ReportDetail report) {
+  _buildQuantity(BuildContext context, PlantDetail report) {
     return Container(
         decoration: const BoxDecoration(
             color: kColorSurface,
@@ -432,7 +416,7 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
     );
   }
 
-  _buildInfoSection(BuildContext context, ReportDetail report) {
+  _buildInfoSection(BuildContext context, PlantDetail report) {
     final icons = [
       Icons.category_outlined,
       Icons.insert_drive_file_outlined,
@@ -441,8 +425,9 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
     ];
 
     final infos = {
-      'Kategori': report.category.name.capitalize(),
-      'Lokasi': report.room,
+      'Jenis Tanaman': report.category.name,
+      'Usia Tanaman': report.plantingDate.toString(),
+      'Jumlah Penanaman': report.plantingCount.toString(),
     };
 
     return AlignedGridView.count(
@@ -497,39 +482,6 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
               )
             ],
           ),
-        ),
-      ],
-    );
-  }
-
-  _buildAdditionalInfoTile(BuildContext context, List<AdditionalInfo> infos) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Informasi Lain',
-          style: Theme.of(context)
-              .textTheme
-              .bodyLarge
-              ?.copyWith(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: SWSizes.s16),
-        AlignedGridView.count(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: 2,
-          itemCount: infos.length,
-          mainAxisSpacing: SWSizes.s16,
-          crossAxisSpacing: SWSizes.s16,
-          itemBuilder: (context, index) {
-            final info = infos[index];
-            return _buildInfoTile(
-              context,
-              label: info.label,
-              value: info.information,
-              icon: Icons.info_outline_rounded,
-            );
-          },
         ),
       ],
     );

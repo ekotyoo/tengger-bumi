@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../report/domain/report.dart';
+import '../../report/domain/plant.dart';
 import 'floor_plan.dart';
 import 'school_analysis.dart';
 

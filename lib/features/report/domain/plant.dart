@@ -4,9 +4,9 @@ import '../../../common/models/position.dart';
 import 'category.dart';
 import 'author.dart';
 
-part 'report.freezed.dart';
+part 'plant.freezed.dart';
 
-part 'report.g.dart';
+part 'plant.g.dart';
 
 class TimestampSerializer implements JsonConverter<DateTime, dynamic> {
   const TimestampSerializer();

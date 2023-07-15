@@ -7,7 +7,7 @@ part 'report_detail_state.freezed.dart';
 @freezed
 class ReportDetailState with _$ReportDetailState {
   const factory ReportDetailState({
-    ReportDetail? report,
+    PlantDetail? report,
     @Default(false) bool commentLoading,
     @Default(false) bool reportDeleting,
     String? successMessage,

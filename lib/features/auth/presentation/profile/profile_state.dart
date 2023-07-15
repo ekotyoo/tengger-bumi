@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:school_watch_semeru/features/report/domain/report.dart';
+import 'package:school_watch_semeru/features/report/domain/plant.dart';
 
 import '../../domain/auth_user.dart';
 

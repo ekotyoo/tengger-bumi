@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$PostReportState {
-  ReportDetail? get reportDetail => throw _privateConstructorUsedError;
+  PlantDetail? get reportDetail => throw _privateConstructorUsedError;
   FormType get formType => throw _privateConstructorUsedError;
   int get currentPage => throw _privateConstructorUsedError;
   bool get firstFormLoading => throw _privateConstructorUsedError;
@@ -57,7 +57,7 @@ abstract class $PostReportStateCopyWith<$Res> {
       _$PostReportStateCopyWithImpl<$Res, PostReportState>;
   @useResult
   $Res call(
-      {ReportDetail? reportDetail,
+      {PlantDetail? reportDetail,
       FormType formType,
       int currentPage,
       bool firstFormLoading,
@@ -84,7 +84,7 @@ abstract class $PostReportStateCopyWith<$Res> {
       String? successMessage,
       String? errorMessage});
 
-  $ReportDetailCopyWith<$Res>? get reportDetail;
+  $PlantDetailCopyWith<$Res>? get reportDetail;
 }
 
 /// @nodoc
@@ -131,7 +131,7 @@ class _$PostReportStateCopyWithImpl<$Res, $Val extends PostReportState>
       reportDetail: freezed == reportDetail
           ? _value.reportDetail
           : reportDetail // ignore: cast_nullable_to_non_nullable
-              as ReportDetail?,
+              as PlantDetail?,
       formType: null == formType
           ? _value.formType
           : formType // ignore: cast_nullable_to_non_nullable
@@ -237,12 +237,12 @@ class _$PostReportStateCopyWithImpl<$Res, $Val extends PostReportState>
 
   @override
   @pragma('vm:prefer-inline')
-  $ReportDetailCopyWith<$Res>? get reportDetail {
+  $PlantDetailCopyWith<$Res>? get reportDetail {
     if (_value.reportDetail == null) {
       return null;
     }
 
-    return $ReportDetailCopyWith<$Res>(_value.reportDetail!, (value) {
+    return $PlantDetailCopyWith<$Res>(_value.reportDetail!, (value) {
       return _then(_value.copyWith(reportDetail: value) as $Val);
     });
   }
@@ -257,7 +257,7 @@ abstract class _$$_PostReportStateCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {ReportDetail? reportDetail,
+      {PlantDetail? reportDetail,
       FormType formType,
       int currentPage,
       bool firstFormLoading,
@@ -285,7 +285,7 @@ abstract class _$$_PostReportStateCopyWith<$Res>
       String? errorMessage});
 
   @override
-  $ReportDetailCopyWith<$Res>? get reportDetail;
+  $PlantDetailCopyWith<$Res>? get reportDetail;
 }
 
 /// @nodoc
@@ -330,7 +330,7 @@ class __$$_PostReportStateCopyWithImpl<$Res>
       reportDetail: freezed == reportDetail
           ? _value.reportDetail
           : reportDetail // ignore: cast_nullable_to_non_nullable
-              as ReportDetail?,
+              as PlantDetail?,
       formType: null == formType
           ? _value.formType
           : formType // ignore: cast_nullable_to_non_nullable
@@ -473,7 +473,7 @@ class _$_PostReportState implements _PostReportState {
         _deletedImages = deletedImages;
 
   @override
-  final ReportDetail? reportDetail;
+  final PlantDetail? reportDetail;
   @override
   @JsonKey()
   final FormType formType;
@@ -687,7 +687,7 @@ class _$_PostReportState implements _PostReportState {
 
 abstract class _PostReportState implements PostReportState {
   const factory _PostReportState(
-      {final ReportDetail? reportDetail,
+      {final PlantDetail? reportDetail,
       final FormType formType,
       final int currentPage,
       final bool firstFormLoading,
@@ -715,7 +715,7 @@ abstract class _PostReportState implements PostReportState {
       final String? errorMessage}) = _$_PostReportState;
 
   @override
-  ReportDetail? get reportDetail;
+  PlantDetail? get reportDetail;
   @override
   FormType get formType;
   @override
