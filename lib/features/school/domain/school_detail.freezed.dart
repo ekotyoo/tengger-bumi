@@ -26,7 +26,7 @@ mixin _$SchoolDetail {
   SchoolAnalysis get analysis => throw _privateConstructorUsedError;
   @JsonKey(name: 'floor_plan')
   FloorPlan get floorPlan => throw _privateConstructorUsedError;
-  List<Report> get reports => throw _privateConstructorUsedError;
+  List<Plant> get reports => throw _privateConstructorUsedError;
   String? get image => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -47,7 +47,7 @@ abstract class $SchoolDetailCopyWith<$Res> {
       String address,
       SchoolAnalysis analysis,
       @JsonKey(name: 'floor_plan') FloorPlan floorPlan,
-      List<Report> reports,
+      List<Plant> reports,
       String? image});
 
   $SchoolAnalysisCopyWith<$Res> get analysis;
@@ -99,7 +99,7 @@ class _$SchoolDetailCopyWithImpl<$Res, $Val extends SchoolDetail>
       reports: null == reports
           ? _value.reports
           : reports // ignore: cast_nullable_to_non_nullable
-              as List<Report>,
+              as List<Plant>,
       image: freezed == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
@@ -138,7 +138,7 @@ abstract class _$$_SchoolDetailCopyWith<$Res>
       String address,
       SchoolAnalysis analysis,
       @JsonKey(name: 'floor_plan') FloorPlan floorPlan,
-      List<Report> reports,
+      List<Plant> reports,
       String? image});
 
   @override
@@ -190,7 +190,7 @@ class __$$_SchoolDetailCopyWithImpl<$Res>
       reports: null == reports
           ? _value._reports
           : reports // ignore: cast_nullable_to_non_nullable
-              as List<Report>,
+              as List<Plant>,
       image: freezed == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
@@ -208,7 +208,7 @@ class _$_SchoolDetail implements _SchoolDetail {
       required this.address,
       required this.analysis,
       @JsonKey(name: 'floor_plan') required this.floorPlan,
-      final List<Report> reports = const [],
+      final List<Plant> reports = const [],
       this.image})
       : _reports = reports;
 
@@ -226,10 +226,10 @@ class _$_SchoolDetail implements _SchoolDetail {
   @override
   @JsonKey(name: 'floor_plan')
   final FloorPlan floorPlan;
-  final List<Report> _reports;
+  final List<Plant> _reports;
   @override
   @JsonKey()
-  List<Report> get reports {
+  List<Plant> get reports {
     if (_reports is EqualUnmodifiableListView) return _reports;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_reports);
@@ -285,7 +285,7 @@ abstract class _SchoolDetail implements SchoolDetail {
       required final String address,
       required final SchoolAnalysis analysis,
       @JsonKey(name: 'floor_plan') required final FloorPlan floorPlan,
-      final List<Report> reports,
+      final List<Plant> reports,
       final String? image}) = _$_SchoolDetail;
 
   factory _SchoolDetail.fromJson(Map<String, dynamic> json) =
@@ -303,7 +303,7 @@ abstract class _SchoolDetail implements SchoolDetail {
   @JsonKey(name: 'floor_plan')
   FloorPlan get floorPlan;
   @override
-  List<Report> get reports;
+  List<Plant> get reports;
   @override
   String? get image;
   @override

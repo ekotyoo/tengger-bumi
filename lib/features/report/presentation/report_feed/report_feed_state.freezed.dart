@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ReportFeedState {
-  List<Report> get reports => throw _privateConstructorUsedError;
+  List<Plant> get reports => throw _privateConstructorUsedError;
   String? get successMessage => throw _privateConstructorUsedError;
   String? get errorMessage => throw _privateConstructorUsedError;
 
@@ -32,7 +32,7 @@ abstract class $ReportFeedStateCopyWith<$Res> {
       _$ReportFeedStateCopyWithImpl<$Res, ReportFeedState>;
   @useResult
   $Res call(
-      {List<Report> reports, String? successMessage, String? errorMessage});
+      {List<Plant> reports, String? successMessage, String? errorMessage});
 }
 
 /// @nodoc
@@ -56,7 +56,7 @@ class _$ReportFeedStateCopyWithImpl<$Res, $Val extends ReportFeedState>
       reports: null == reports
           ? _value.reports
           : reports // ignore: cast_nullable_to_non_nullable
-              as List<Report>,
+              as List<Plant>,
       successMessage: freezed == successMessage
           ? _value.successMessage
           : successMessage // ignore: cast_nullable_to_non_nullable
@@ -78,7 +78,7 @@ abstract class _$$_ReportFeedStateCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {List<Report> reports, String? successMessage, String? errorMessage});
+      {List<Plant> reports, String? successMessage, String? errorMessage});
 }
 
 /// @nodoc
@@ -100,7 +100,7 @@ class __$$_ReportFeedStateCopyWithImpl<$Res>
       reports: null == reports
           ? _value._reports
           : reports // ignore: cast_nullable_to_non_nullable
-              as List<Report>,
+              as List<Plant>,
       successMessage: freezed == successMessage
           ? _value.successMessage
           : successMessage // ignore: cast_nullable_to_non_nullable
@@ -117,15 +117,15 @@ class __$$_ReportFeedStateCopyWithImpl<$Res>
 
 class _$_ReportFeedState implements _ReportFeedState {
   const _$_ReportFeedState(
-      {final List<Report> reports = const [],
+      {final List<Plant> reports = const [],
       this.successMessage,
       this.errorMessage})
       : _reports = reports;
 
-  final List<Report> _reports;
+  final List<Plant> _reports;
   @override
   @JsonKey()
-  List<Report> get reports {
+  List<Plant> get reports {
     if (_reports is EqualUnmodifiableListView) return _reports;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_reports);
@@ -169,12 +169,12 @@ class _$_ReportFeedState implements _ReportFeedState {
 
 abstract class _ReportFeedState implements ReportFeedState {
   const factory _ReportFeedState(
-      {final List<Report> reports,
+      {final List<Plant> reports,
       final String? successMessage,
       final String? errorMessage}) = _$_ReportFeedState;
 
   @override
-  List<Report> get reports;
+  List<Plant> get reports;
   @override
   String? get successMessage;
   @override

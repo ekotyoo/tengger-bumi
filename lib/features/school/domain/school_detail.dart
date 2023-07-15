@@ -16,7 +16,7 @@ class SchoolDetail with _$SchoolDetail {
     required String address,
     required SchoolAnalysis analysis,
     @JsonKey(name: 'floor_plan') required FloorPlan floorPlan,
-    @Default([]) List<Report> reports,
+    @Default([]) List<Plant> reports,
     String? image,
 }) = _SchoolDetail;
 

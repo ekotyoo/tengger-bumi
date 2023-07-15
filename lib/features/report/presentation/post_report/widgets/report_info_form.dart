@@ -113,7 +113,7 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
         errorText: state.nameInput.isPure
             ? null
             : state.nameInput.error?.getErrorMessage(),
-        action: TextInputAction.next,
+        action: TextInputAction.done,
         onChanged: (value) {
           ref
               .read(postReportControllerProvider(widget.formType).notifier)
@@ -129,7 +129,7 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
         errorText: state.plantingCountInput.isPure
             ? null
             : state.plantingCountInput.error?.getErrorMessage(),
-        action: TextInputAction.next,
+        action: TextInputAction.done,
         onChanged: (value) {
           try {
             final count = int.parse(value);
@@ -149,7 +149,7 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
         errorText: state.descriptionInput.isPure
             ? null
             : state.descriptionInput.error?.getErrorMessage(),
-        action: TextInputAction.next,
+        action: TextInputAction.done,
         onChanged: (value) => ref
             .read(postReportControllerProvider(widget.formType).notifier)
             .onDescriptionChange(value),

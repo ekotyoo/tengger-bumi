@@ -23,9 +23,9 @@ class ProfileController extends _$ProfileController {
     return ProfileState(user: authState);
   }
 
-  Future<List<Report>> getUserReports(int userId) async {
+  Future<List<Plant>> getUserReports(int userId) async {
     final repo = ref.watch(reportRepositoryProvider);
-    final result = await repo.getReports(query: ReportQuery(authorId: userId));
+    final result = await repo.getPlants(query: ReportQuery(authorId: userId));
     return result.fold(
       (l) => const [],
       (r) => r,

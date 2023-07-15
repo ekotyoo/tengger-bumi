@@ -5,5 +5,5 @@ class SchoolDetailFloorPlanNavArg {
   const SchoolDetailFloorPlanNavArg({required this.floorPlan, required this.reports});
 
   final FloorPlanUiModel floorPlan;
-  final List<Report> reports;
+  final List<Plant> reports;
 }

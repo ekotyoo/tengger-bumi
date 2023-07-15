@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart' as fp;
 import 'package:go_router/go_router.dart';
 import 'package:school_watch_semeru/features/school/domain/school_analysis.dart';
 import 'package:school_watch_semeru/features/school/domain/school_detail.dart';
@@ -253,7 +252,7 @@ class ReportListWithFilter extends StatefulWidget {
   const ReportListWithFilter({Key? key, this.reports = const []})
       : super(key: key);
 
-  final List<Report> reports;
+  final List<Plant> reports;
 
   @override
   State<ReportListWithFilter> createState() => _ReportListWithFilterState();
@@ -265,7 +264,7 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
 int selectedIndex = 0;
 
   late List<ReportType> reportTypes;
-  late List<Report> _reports;
+  late List<Plant> _reports;
 
   @override
   void initState() {
@@ -325,7 +324,7 @@ void dispose() {
     );
   }
 
-  _buildReportList(BuildContext context, List<Report> reports) {
+  _buildReportList(BuildContext context, List<Plant> reports) {
     const emptyPlaceholder = Padding(
       padding: EdgeInsets.only(top: SWSizes.s16),
       child: Center(child: Text('Belum ada data laporan')),
@@ -352,7 +351,7 @@ void dispose() {
           );
   }
 
-  _buildPostStatistic(BuildContext context, List<Report> reports) {
+  _buildPostStatistic(BuildContext context, List<Plant> reports) {
     const emptyPlaceholder = Padding(
       padding: EdgeInsets.only(top: SWSizes.s16),
       child: Center(child: Text('Belum ada data laporan')),

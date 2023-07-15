@@ -9,6 +9,6 @@ part 'profile_state.freezed.dart';
 class ProfileState with _$ProfileState {
   const factory ProfileState({
     AuthUser? user,
-    @Default([]) List<Report> reports,
+    @Default([]) List<Plant> reports,
   }) = _ProfileState;
 }

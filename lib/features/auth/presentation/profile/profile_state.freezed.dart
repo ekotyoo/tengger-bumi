@@ -17,7 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$ProfileState {
   AuthUser? get user => throw _privateConstructorUsedError;
-  List<Report> get reports => throw _privateConstructorUsedError;
+  List<Plant> get reports => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ProfileStateCopyWith<ProfileState> get copyWith =>
@@ -30,7 +30,7 @@ abstract class $ProfileStateCopyWith<$Res> {
           ProfileState value, $Res Function(ProfileState) then) =
       _$ProfileStateCopyWithImpl<$Res, ProfileState>;
   @useResult
-  $Res call({AuthUser? user, List<Report> reports});
+  $Res call({AuthUser? user, List<Plant> reports});
 
   $AuthUserCopyWith<$Res>? get user;
 }
@@ -59,7 +59,7 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
       reports: null == reports
           ? _value.reports
           : reports // ignore: cast_nullable_to_non_nullable
-              as List<Report>,
+              as List<Plant>,
     ) as $Val);
   }
 
@@ -84,7 +84,7 @@ abstract class _$$_ProfileStateCopyWith<$Res>
       __$$_ProfileStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({AuthUser? user, List<Report> reports});
+  $Res call({AuthUser? user, List<Plant> reports});
 
   @override
   $AuthUserCopyWith<$Res>? get user;
@@ -112,7 +112,7 @@ class __$$_ProfileStateCopyWithImpl<$Res>
       reports: null == reports
           ? _value._reports
           : reports // ignore: cast_nullable_to_non_nullable
-              as List<Report>,
+              as List<Plant>,
     ));
   }
 }
@@ -120,15 +120,15 @@ class __$$_ProfileStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_ProfileState implements _ProfileState {
-  const _$_ProfileState({this.user, final List<Report> reports = const []})
+  const _$_ProfileState({this.user, final List<Plant> reports = const []})
       : _reports = reports;
 
   @override
   final AuthUser? user;
-  final List<Report> _reports;
+  final List<Plant> _reports;
   @override
   @JsonKey()
-  List<Report> get reports {
+  List<Plant> get reports {
     if (_reports is EqualUnmodifiableListView) return _reports;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_reports);
@@ -161,12 +161,12 @@ class _$_ProfileState implements _ProfileState {
 
 abstract class _ProfileState implements ProfileState {
   const factory _ProfileState(
-      {final AuthUser? user, final List<Report> reports}) = _$_ProfileState;
+      {final AuthUser? user, final List<Plant> reports}) = _$_ProfileState;
 
   @override
   AuthUser? get user;
   @override
-  List<Report> get reports;
+  List<Plant> get reports;
   @override
   @JsonKey(ignore: true)
   _$$_ProfileStateCopyWith<_$_ProfileState> get copyWith =>
