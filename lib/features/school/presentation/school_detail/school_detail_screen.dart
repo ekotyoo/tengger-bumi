@@ -259,9 +259,9 @@ class ReportListWithFilter extends StatefulWidget {
 }
 
 class _ReportListWithFilterState extends State<ReportListWithFilter>
-
-    with SingleTickerProviderStateMixin {late TabController tabController;
-int selectedIndex = 0;
+    with SingleTickerProviderStateMixin {
+  late TabController tabController;
+  int selectedIndex = 0;
 
   late List<ReportType> reportTypes;
   late List<Plant> _reports;
@@ -274,11 +274,12 @@ int selectedIndex = 0;
     _reports = widget.reports;
   }
 
-@override
-void dispose() {
-  tabController.dispose();
-  super.dispose();
-}
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
   // @override
   // Widget build(BuildContext context) {
   //   return Column(
@@ -293,7 +294,8 @@ void dispose() {
   // }
   @override
   Widget build(BuildContext context) {
-    return  Material(color: Colors.transparent,
+    return Material(
+      color: Colors.transparent,
       child: DefaultTabController(
         length: 2,
         child: Column(
@@ -302,9 +304,23 @@ void dispose() {
               labelColor: kColorPrimary,
               labelStyle: TextStyle(fontWeight: FontWeight.bold),
               tabs: [
-                Tab(icon: Icon(Icons.photo_album),text: 'Posting'),
-                Tab(icon: Icon(Icons.photo_album),text: 'Penanaman'),
-              ],controller: tabController,
+                Tab(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [Icon(Icons.photo), Text('Posting')],
+                  ),
+                ),
+                Tab(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ImageIcon(AssetImage('assets/images/penanaman.png')),
+                      Text('Penanaman')
+                    ],
+                  ),
+                ),
+              ],
+              controller: tabController,
               onTap: (index) {
                 setState(() {
                   selectedIndex = index;
@@ -312,7 +328,8 @@ void dispose() {
                 });
               },
             ),
-            IndexedStack(index: selectedIndex,
+            IndexedStack(
+              index: selectedIndex,
               children: [
                 _buildReportList(context, _reports),
                 _buildPostStatistic(context, _reports),
@@ -354,18 +371,34 @@ void dispose() {
   _buildPostStatistic(BuildContext context, List<Plant> reports) {
     const emptyPlaceholder = Padding(
       padding: EdgeInsets.only(top: SWSizes.s16),
-      child: Center(child: Text('Belum ada data laporan')),
+      child: Expanded(child: Center(child: Text('Belum ada data laporan'))),
     );
     return false
         ? emptyPlaceholder
         : Column(
             children: [
-              const Text('Jumlah Penaman ${14}'),
+              const SizedBox(height: SWSizes.s16),
+              const Text(
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  'Jumlah Penanaman : ${14}'),
+              const SizedBox(height: SWSizes.s4),
               Row(
                 children: [
                   CircleAvatar(child: Image.asset('assets/images/ub_logo.png')),
-                  const Text('Kacang Bogor Varitas Universitas Brawijaya'),
-                  const Spacer(),
+                  const SizedBox(
+                    width: SWSizes.s8,
+                  ),
+                  const Expanded(
+                      child: Text(
+                        'Kacang Panjang',
+                        softWrap: true,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      )
+                  ),
+                  const SizedBox(
+                    width: SWSizes.s8,
+                  ),
                   const Text('${14}')
                 ],
               )
