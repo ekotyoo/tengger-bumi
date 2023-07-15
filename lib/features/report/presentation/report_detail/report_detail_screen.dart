@@ -9,7 +9,6 @@ import '../../../../common/routing/routes.dart';
 import '../../../../utils/snackbar_utils.dart';
 import '../../domain/additional_info.dart';
 import '../../domain/report_detail.dart';
-import '../../../../common/widgets/category_chip.dart';
 import '../../../../common/constants/constant.dart';
 import '../../../../common/widgets/loading_image.dart';
 import '../../domain/author.dart';
@@ -442,9 +441,7 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
     ];
 
     final infos = {
-      'Jenis Laporan': report.category.type.capitalize(),
       'Kategori': report.category.name.capitalize(),
-      'Sekolah': report.school,
       'Lokasi': report.room,
     };
 

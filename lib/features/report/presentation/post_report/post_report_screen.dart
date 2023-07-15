@@ -1,36 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:school_watch_semeru/features/report/presentation/post_report/widgets/planting_area_form.dart';
 
 import '../../../../common/widgets/sw_button.dart';
 import '../../../../utils/snackbar_utils.dart';
 import 'post_report_state.dart';
 import '../../../../common/constants/constant.dart';
-import 'widgets/pick_report_type_form.dart';
-import 'widgets/pick_school_form.dart';
 import 'widgets/report_info_form.dart';
 import 'post_report_controller.dart';
-
-const reportTypes = [
-  ReportType(
-    name: 'Pencegahan',
-    description:
-        'Upaya pencegahan untuk menghindari risiko ketika terjadinya bencana.',
-    color: kColorSuccess75,
-  ),
-  ReportType(
-    name: 'Eksisting',
-    description:
-        'Kondisi sekolah saat ini, baik fasilitas sekolah dan upaya pemeliharaannya.',
-    color: kColorSecondary75,
-  ),
-  ReportType(
-    name: 'Dampak',
-    description:
-        'Kondisi yang ditimbulkan setelah terjadinya bencana di lingkungan sekolah.',
-    color: kColorPrimary100,
-  ),
-];
 
 enum FormType { post, edit }
 
@@ -106,31 +84,14 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
     final forms = [
       FractionallySizedBox(
         widthFactor: 1 / _pageController.viewportFraction,
-        child: PickSchoolForm(
-          schools: state.schools,
-          isLoading: state.firstFormLoading,
-          selectedSchool: state.selectedSchool,
-          onSchoolSelected: (school) => ref
-              .read(postReportControllerProvider(widget.formType).notifier)
-              .onSchoolChange(school),
-        ),
-      ),
-      FractionallySizedBox(
-        widthFactor: 1 / _pageController.viewportFraction,
-        child: PickReportTypeForm(
-          types: reportTypes,
-          selectedType: state.selectedReportType,
-          onTypeSelected: (type) => ref
-              .read(postReportControllerProvider(widget.formType).notifier)
-              .onReportTypeChange(type),
-        ),
-      ),
-      FractionallySizedBox(
-        widthFactor: 1 / _pageController.viewportFraction,
         child: ReportInfoForm(
           descriptionController: _descriptionController,
           formType: widget.formType,
         ),
+      ),
+      FractionallySizedBox(
+        widthFactor: 1 / _pageController.viewportFraction,
+        child: PlantingAreaForm(formType: widget.formType),
       ),
     ];
 
@@ -221,10 +182,17 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
   ) {
     var disabled = false;
 
-    if (state.currentPage == 0 && state.selectedSchool == null) {
-      disabled = true;
-    } else if (state.currentPage == 1 && state.selectedReportType == null) {
-      disabled = true;
+    if  (state.currentPage == 0) {
+      var firstPageDisabled =
+          state.imageInput.isNotValid ||
+          state.categoryInput.isNotValid ||
+          state.nameInput.isNotValid ||
+          state.plantingCountInput.isNotValid ||
+          state.descriptionInput.isNotValid ||
+          state.plantingDateInput.isNotValid;
+      disabled = firstPageDisabled;
+    } else {
+      disabled = !state.validated;
     }
 
     return SWButton(

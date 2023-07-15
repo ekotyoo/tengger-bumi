@@ -1,24 +1,24 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'app_router.dart';
+part of 'area_repository.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$appRouterHash() => r'def399900ea184d2bc56e9b66408bb0ca582b292';
+String _$areaRepositoryHash() => r'78f1edbe9b5ea7a9e97f837b5f4f653a7bffd48f';
 
-/// See also [AppRouter].
-@ProviderFor(AppRouter)
-final appRouterProvider =
-    AutoDisposeAsyncNotifierProvider<AppRouter, void>.internal(
-  AppRouter.new,
-  name: r'appRouterProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$appRouterHash,
+/// See also [areaRepository].
+@ProviderFor(areaRepository)
+final areaRepositoryProvider = AutoDisposeProvider<IAreaRepository>.internal(
+  areaRepository,
+  name: r'areaRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$areaRepositoryHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$AppRouter = AutoDisposeAsyncNotifier<void>;
+typedef AreaRepositoryRef = AutoDisposeProviderRef<IAreaRepository>;
 // ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions

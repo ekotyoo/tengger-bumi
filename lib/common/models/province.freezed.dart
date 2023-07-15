@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'category.dart';
+part of 'province.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,33 +14,33 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-Category _$CategoryFromJson(Map<String, dynamic> json) {
-  return _Category.fromJson(json);
+Province _$ProvinceFromJson(Map<String, dynamic> json) {
+  return _Province.fromJson(json);
 }
 
 /// @nodoc
-mixin _$Category {
+mixin _$Province {
   int get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $CategoryCopyWith<Category> get copyWith =>
+  $ProvinceCopyWith<Province> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $CategoryCopyWith<$Res> {
-  factory $CategoryCopyWith(Category value, $Res Function(Category) then) =
-      _$CategoryCopyWithImpl<$Res, Category>;
+abstract class $ProvinceCopyWith<$Res> {
+  factory $ProvinceCopyWith(Province value, $Res Function(Province) then) =
+      _$ProvinceCopyWithImpl<$Res, Province>;
   @useResult
   $Res call({int id, String name});
 }
 
 /// @nodoc
-class _$CategoryCopyWithImpl<$Res, $Val extends Category>
-    implements $CategoryCopyWith<$Res> {
-  _$CategoryCopyWithImpl(this._value, this._then);
+class _$ProvinceCopyWithImpl<$Res, $Val extends Province>
+    implements $ProvinceCopyWith<$Res> {
+  _$ProvinceCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -67,21 +67,21 @@ class _$CategoryCopyWithImpl<$Res, $Val extends Category>
 }
 
 /// @nodoc
-abstract class _$$_CategoryCopyWith<$Res> implements $CategoryCopyWith<$Res> {
-  factory _$$_CategoryCopyWith(
-          _$_Category value, $Res Function(_$_Category) then) =
-      __$$_CategoryCopyWithImpl<$Res>;
+abstract class _$$_ProvinceCopyWith<$Res> implements $ProvinceCopyWith<$Res> {
+  factory _$$_ProvinceCopyWith(
+          _$_Province value, $Res Function(_$_Province) then) =
+      __$$_ProvinceCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int id, String name});
 }
 
 /// @nodoc
-class __$$_CategoryCopyWithImpl<$Res>
-    extends _$CategoryCopyWithImpl<$Res, _$_Category>
-    implements _$$_CategoryCopyWith<$Res> {
-  __$$_CategoryCopyWithImpl(
-      _$_Category _value, $Res Function(_$_Category) _then)
+class __$$_ProvinceCopyWithImpl<$Res>
+    extends _$ProvinceCopyWithImpl<$Res, _$_Province>
+    implements _$$_ProvinceCopyWith<$Res> {
+  __$$_ProvinceCopyWithImpl(
+      _$_Province _value, $Res Function(_$_Province) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -90,7 +90,7 @@ class __$$_CategoryCopyWithImpl<$Res>
     Object? id = null,
     Object? name = null,
   }) {
-    return _then(_$_Category(
+    return _then(_$_Province(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -105,11 +105,11 @@ class __$$_CategoryCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Category implements _Category {
-  const _$_Category({required this.id, required this.name});
+class _$_Province implements _Province {
+  const _$_Province({required this.id, required this.name});
 
-  factory _$_Category.fromJson(Map<String, dynamic> json) =>
-      _$$_CategoryFromJson(json);
+  factory _$_Province.fromJson(Map<String, dynamic> json) =>
+      _$$_ProvinceFromJson(json);
 
   @override
   final int id;
@@ -118,14 +118,14 @@ class _$_Category implements _Category {
 
   @override
   String toString() {
-    return 'Category(id: $id, name: $name)';
+    return 'Province(id: $id, name: $name)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Category &&
+            other is _$_Province &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name));
   }
@@ -137,22 +137,22 @@ class _$_Category implements _Category {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_CategoryCopyWith<_$_Category> get copyWith =>
-      __$$_CategoryCopyWithImpl<_$_Category>(this, _$identity);
+  _$$_ProvinceCopyWith<_$_Province> get copyWith =>
+      __$$_ProvinceCopyWithImpl<_$_Province>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_CategoryToJson(
+    return _$$_ProvinceToJson(
       this,
     );
   }
 }
 
-abstract class _Category implements Category {
-  const factory _Category({required final int id, required final String name}) =
-      _$_Category;
+abstract class _Province implements Province {
+  const factory _Province({required final int id, required final String name}) =
+      _$_Province;
 
-  factory _Category.fromJson(Map<String, dynamic> json) = _$_Category.fromJson;
+  factory _Province.fromJson(Map<String, dynamic> json) = _$_Province.fromJson;
 
   @override
   int get id;
@@ -160,6 +160,6 @@ abstract class _Category implements Category {
   String get name;
   @override
   @JsonKey(ignore: true)
-  _$$_CategoryCopyWith<_$_Category> get copyWith =>
+  _$$_ProvinceCopyWith<_$_Province> get copyWith =>
       throw _privateConstructorUsedError;
 }

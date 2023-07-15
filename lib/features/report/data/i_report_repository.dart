@@ -34,7 +34,6 @@ abstract class IReportRepository {
   });
 
   Future<Either<Failure, List<Category>>> getCategories({
-    required String type,
     CancelToken? cancelToken,
   });
 

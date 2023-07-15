@@ -62,6 +62,10 @@ class SWStrings {
   static const labelLabel = 'Label';
   static const labelInformation = 'Informasi';
   static const descCategoryCannotBeEmpty = 'Kategori tidak boleh kosong';
+  static const descVillageCannotBeEmpty = 'Kel/Desa tidak boleh kosong';
+  static const descDistrictCannotBeEmpty = 'Kecamatan tidak boleh kosong';
+  static const descRegencyCannotBeEmpty = 'Kota/Kab tidak boleh kosong';
+  static const descProvinceCannotBeEmpty = 'Provinsi tidak boleh kosong';
   static const descLocationCannotBeEmpty = 'Lokasi tidak boleh kosong';
   static const descInformationCannotBeEmpty = 'Informasi tidak boleh kosong';
   static const descLabelCannotBeEmpty = 'Label tidak boleh kosong';
@@ -77,6 +81,9 @@ class SWStrings {
   static const labelEditPost = 'Edit Postingan';
   static const labelDeletePost = 'Hapus Postingan';
   static const labelDeleteComment = 'Hapus Komentar';
+  static const descDateCannotBeEmpty  = 'Tanggal tidak boleh kosong';
+  static const labelPlantingDate = 'Tanggal Penanaman';
+  static const descPlantingCountCannotBeEmpty = 'Jumlah penanaman tidak boleh kosong';
 
   // School
   static const labelPlantList = 'Daftar Tanaman';

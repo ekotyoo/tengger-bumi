@@ -8,25 +8,17 @@ import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
-import 'package:maps_toolkit/maps_toolkit.dart' as mp;
-import 'package:polylabel/polylabel.dart';
-import 'package:school_watch_semeru/features/school/presentation/models/room_ui_model.dart';
 
 import '../../../../../common/widgets/open_street_map_attribution.dart';
-import '../../../../school/presentation/models/floor_plan_ui_model.dart';
 import '../../../../../common/constants/constant.dart';
-import '../../../../../utils/snackbar_utils.dart';
-import '../extensions/latlng_extenstion.dart';
 
 class LocationPicker extends StatefulWidget {
   const LocationPicker({
     Key? key,
     this.selectedPosition,
-    required this.floorPlan,
   }) : super(key: key);
 
   final LatLng? selectedPosition;
-  final FloorPlanUiModel floorPlan;
 
   @override
   State<LocationPicker> createState() => _LocationPickerState();
@@ -35,14 +27,12 @@ class LocationPicker extends StatefulWidget {
 class _LocationPickerState extends State<LocationPicker> {
   late MapController _mapController;
   late LatLng? _currentPosition;
-  late RoomUiModel? _currentRoom;
   late bool _markerValid;
   late FollowOnLocationUpdate _followOnLocationUpdate;
   late StreamController<double?> _followCurrentLocationStreamController;
   late DragMarker? _marker;
   LatLng? currentDetectedPosition;
   late  Location location;
-  // late LatLng _schoolCentroid;
 
   @override
   void initState() {
@@ -51,7 +41,6 @@ class _LocationPickerState extends State<LocationPicker> {
     _markerValid = false;
     _mapController = MapController();
     _currentPosition = null;
-    _currentRoom = null;
     _followOnLocationUpdate = FollowOnLocationUpdate.always;
     _followCurrentLocationStreamController = StreamController();
     if (widget.selectedPosition != null) {
@@ -111,7 +100,6 @@ class _LocationPickerState extends State<LocationPicker> {
             FlutterMap(
               mapController: _mapController,
               options: MapOptions(
-                // center: _schoolCentroid,
                 zoom: 20,
                 minZoom: 10,
                 absorbPanEventsOnScrollables: false,
@@ -136,21 +124,6 @@ class _LocationPickerState extends State<LocationPicker> {
                   userAgentPackageName: 'com.ekotyoo.school_watch_semeru',
                   maxNativeZoom: 19,
                   maxZoom: 35,
-                ),
-                PolygonLayer(
-                  polygons: widget.floorPlan.rooms
-                      .map(
-                        (e) => Polygon(
-                          points: e.polygon.points,
-                          label: e.label,
-                          color: e.color.withOpacity(.5),
-                          isFilled: true,
-                          borderStrokeWidth: 1,
-                          borderColor: kColorNeutral900,
-                          labelStyle: const TextStyle(color: kColorNeutral900),
-                        ),
-                      )
-                      .toList(),
                 ),
                 CurrentLocationLayer(
                   followOnLocationUpdate: _followOnLocationUpdate,
@@ -261,11 +234,6 @@ class _LocationPickerState extends State<LocationPicker> {
     ];
   }
 
-  @override
-  void onClose(){
-
-  }
-
   _buildSaveButton(bool disabled) {
     return Positioned(
       bottom: SWSizes.s32,
@@ -281,44 +249,7 @@ class _LocationPickerState extends State<LocationPicker> {
     );
   }
 
-  void _checkValidPoint(BuildContext context, LatLng position) {
-    List<bool> insidePolygonTemp = [];
-    RoomUiModel? selectedRoom;
-
-    for (var room in widget.floorPlan.rooms) {
-      final polygon = room.polygon.points.map((e) => e.toMpLatLng()).toList();
-      final contains = mp.PolygonUtil.containsLocation(
-        position.toMpLatLng(),
-        polygon,
-        false,
-      );
-
-      if (contains) {
-        selectedRoom = room;
-      }
-
-      insidePolygonTemp.add(contains);
-    }
-
-    final insidePolygon = insidePolygonTemp.any((contains) => contains);
-
-    setState(() {
-      _currentPosition = position;
-      _currentRoom = selectedRoom;
-      _markerValid = insidePolygon && selectedRoom != null;
-    });
-
-    if (!insidePolygon) {
-      showSnackbar(
-        context,
-        message: SWStrings.descOutsideAreaMarker,
-        type: SnackbarType.error,
-      );
-    }
-  }
-
   void _setNewDragMarker(LatLng point) {
-    // _checkValidPoint(context, point);
     setState(() {
       _currentPosition = point;
       _markerValid = true;
@@ -330,9 +261,6 @@ class _LocationPickerState extends State<LocationPicker> {
         builder: (ctx) => const Icon(Icons.location_on, size: 50),
         offset: const Offset(0.0, -25),
         feedbackOffset: const Offset(0.0, -25),
-        // onDragEnd: (_, position) {
-        //   _checkValidPoint(context, position);
-        // },
       );
     });
   }

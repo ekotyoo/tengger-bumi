@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../constants/constant.dart';
 
-enum SWTextFieldType { normal, email, password }
+enum SWTextFieldType { normal, email, password, number }
 
 class SWTextField extends StatefulWidget {
   const SWTextField({
@@ -67,6 +67,8 @@ class _SWTextFieldState extends State<SWTextField> {
           obscureText ? Icons.visibility_off_rounded : Icons.visibility_rounded,
         ),
       );
+    } else if  (widget.type == SWTextFieldType.number) {
+      keyboardType = TextInputType.number;
     }
 
     return Column(

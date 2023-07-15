@@ -285,12 +285,10 @@ class ReportRepository implements IReportRepository {
 
   @override
   Future<Either<Failure, List<Category>>> getCategories({
-    required String type,
     CancelToken? cancelToken,
   }) async {
     try {
-      final response = await _client.get('/category',
-          cancelToken: cancelToken, queryParameters: {'type': type});
+      final response = await _client.get('/category', cancelToken: cancelToken);
 
       final categories = (response['data'] as List<dynamic>)
           .map((e) => Category.fromJson(e))

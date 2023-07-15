@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:school_watch_semeru/common/widgets/image_viewer.dart';
 import 'package:school_watch_semeru/features/auth/domain/auth_user.dart';
@@ -7,7 +8,6 @@ import 'package:school_watch_semeru/features/auth/presentation/edit_profile/edit
 import 'package:school_watch_semeru/features/auth/presentation/email_verification/email_verification_screen.dart';
 import 'package:school_watch_semeru/features/school/presentation/edit_school/edit_school_screen.dart';
 
-import '../../features/report/presentation/models/location_pick_nav_arg.dart';
 import '../../features/report/presentation/report_detail/report_detail_screen.dart';
 import '../../features/school/presentation/models/school_detail_floor_plan_nav_arg.dart';
 import '../../features/school/presentation/school_detail/school_detail_screen.dart';
@@ -188,15 +188,11 @@ class AppRouter extends _$AppRouter implements Listenable {
           name: Routes.locationPicker,
           parentNavigatorKey: navigatorKey,
           pageBuilder: (context, state) {
-            final arg = state.extra as LocationPickNavArg?;
-
-            if (arg == null) throw Exception();
-
+            final arg = state.extra as LatLng?;
             return MaterialPage(
               key: state.pageKey,
               child: LocationPicker(
-                selectedPosition: arg.selectedPosition,
-                floorPlan: arg.floorPlan,
+                selectedPosition: arg
               ),
             );
           },

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:school_watch_semeru/common/widgets/shimmer_container.dart';
 
-import '../../../../utils/string_extension.dart';
 import '../../domain/report.dart';
 import '../../../../common/constants/constant.dart';
 import '../../../../common/widgets/category_chip.dart';
@@ -260,7 +259,6 @@ class ReportCard extends StatelessWidget {
 
   _buildCategoryList(BuildContext context, Report report) {
     final categories = [
-      report.category.type.capitalize(),
       report.category.name,
     ];
 

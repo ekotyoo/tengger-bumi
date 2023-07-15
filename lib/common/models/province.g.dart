@@ -1,17 +1,17 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'category.dart';
+part of 'province.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Category _$$_CategoryFromJson(Map<String, dynamic> json) => _$_Category(
+_$_Province _$$_ProvinceFromJson(Map<String, dynamic> json) => _$_Province(
       id: json['id'] as int,
       name: json['name'] as String,
     );
 
-Map<String, dynamic> _$$_CategoryToJson(_$_Category instance) =>
+Map<String, dynamic> _$$_ProvinceToJson(_$_Province instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
