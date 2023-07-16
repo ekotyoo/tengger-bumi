@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:school_watch_semeru/features/report/data/area_repository.dart';
 
 import '../../../../common/constants/constant.dart';
 import '../../../../common/models/regency.dart';
+import '../../data/area_repository.dart';
 import '../../domain/category.dart';
 import '../../domain/plant.dart';
 import '../../data/report_repository.dart';

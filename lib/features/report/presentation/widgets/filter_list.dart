@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:school_watch_semeru/common/models/regency.dart';
-import 'package:school_watch_semeru/common/widgets/title_with_caption.dart';
 
 import '../../../../common/constants/constant.dart';
+import '../../../../common/models/regency.dart';
+import '../../../../common/widgets/title_with_caption.dart';
 import '../../domain/category.dart';
 import '../report_feed/report_feed_controller.dart';
 
