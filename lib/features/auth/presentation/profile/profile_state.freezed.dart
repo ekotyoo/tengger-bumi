@@ -19,6 +19,7 @@ mixin _$ProfileState {
   AuthUser? get user => throw _privateConstructorUsedError;
   List<Plant> get reports => throw _privateConstructorUsedError;
   List<Statistic> get stats => throw _privateConstructorUsedError;
+  int get total => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ProfileStateCopyWith<ProfileState> get copyWith =>
@@ -31,7 +32,8 @@ abstract class $ProfileStateCopyWith<$Res> {
           ProfileState value, $Res Function(ProfileState) then) =
       _$ProfileStateCopyWithImpl<$Res, ProfileState>;
   @useResult
-  $Res call({AuthUser? user, List<Plant> reports, List<Statistic> stats});
+  $Res call(
+      {AuthUser? user, List<Plant> reports, List<Statistic> stats, int total});
 
   $AuthUserCopyWith<$Res>? get user;
 }
@@ -52,6 +54,7 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
     Object? user = freezed,
     Object? reports = null,
     Object? stats = null,
+    Object? total = null,
   }) {
     return _then(_value.copyWith(
       user: freezed == user
@@ -66,6 +69,10 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
           ? _value.stats
           : stats // ignore: cast_nullable_to_non_nullable
               as List<Statistic>,
+      total: null == total
+          ? _value.total
+          : total // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 
@@ -90,7 +97,8 @@ abstract class _$$_ProfileStateCopyWith<$Res>
       __$$_ProfileStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({AuthUser? user, List<Plant> reports, List<Statistic> stats});
+  $Res call(
+      {AuthUser? user, List<Plant> reports, List<Statistic> stats, int total});
 
   @override
   $AuthUserCopyWith<$Res>? get user;
@@ -110,6 +118,7 @@ class __$$_ProfileStateCopyWithImpl<$Res>
     Object? user = freezed,
     Object? reports = null,
     Object? stats = null,
+    Object? total = null,
   }) {
     return _then(_$_ProfileState(
       user: freezed == user
@@ -124,6 +133,10 @@ class __$$_ProfileStateCopyWithImpl<$Res>
           ? _value._stats
           : stats // ignore: cast_nullable_to_non_nullable
               as List<Statistic>,
+      total: null == total
+          ? _value.total
+          : total // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -134,7 +147,8 @@ class _$_ProfileState implements _ProfileState {
   const _$_ProfileState(
       {this.user,
       final List<Plant> reports = const [],
-      final List<Statistic> stats = const []})
+      final List<Statistic> stats = const [],
+      this.total = 0})
       : _reports = reports,
         _stats = stats;
 
@@ -159,8 +173,12 @@ class _$_ProfileState implements _ProfileState {
   }
 
   @override
+  @JsonKey()
+  final int total;
+
+  @override
   String toString() {
-    return 'ProfileState(user: $user, reports: $reports, stats: $stats)';
+    return 'ProfileState(user: $user, reports: $reports, stats: $stats, total: $total)';
   }
 
   @override
@@ -170,7 +188,8 @@ class _$_ProfileState implements _ProfileState {
             other is _$_ProfileState &&
             (identical(other.user, user) || other.user == user) &&
             const DeepCollectionEquality().equals(other._reports, _reports) &&
-            const DeepCollectionEquality().equals(other._stats, _stats));
+            const DeepCollectionEquality().equals(other._stats, _stats) &&
+            (identical(other.total, total) || other.total == total));
   }
 
   @override
@@ -178,7 +197,8 @@ class _$_ProfileState implements _ProfileState {
       runtimeType,
       user,
       const DeepCollectionEquality().hash(_reports),
-      const DeepCollectionEquality().hash(_stats));
+      const DeepCollectionEquality().hash(_stats),
+      total);
 
   @JsonKey(ignore: true)
   @override
@@ -191,7 +211,8 @@ abstract class _ProfileState implements ProfileState {
   const factory _ProfileState(
       {final AuthUser? user,
       final List<Plant> reports,
-      final List<Statistic> stats}) = _$_ProfileState;
+      final List<Statistic> stats,
+      final int total}) = _$_ProfileState;
 
   @override
   AuthUser? get user;
@@ -199,6 +220,8 @@ abstract class _ProfileState implements ProfileState {
   List<Plant> get reports;
   @override
   List<Statistic> get stats;
+  @override
+  int get total;
   @override
   @JsonKey(ignore: true)
   _$$_ProfileStateCopyWith<_$_ProfileState> get copyWith =>

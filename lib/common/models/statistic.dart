@@ -9,7 +9,7 @@ class Statistic with _$Statistic {
   const factory Statistic({
     required int id,
     required String name,
-    required String icon,
+    @JsonKey(name: 'icon_path') required String icon,
     required int count,
   }) = _Statistic;
 

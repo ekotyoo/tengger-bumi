@@ -55,7 +55,7 @@ class ProfileScreen extends ConsumerWidget {
               children: [
                 _buildProfileHeader(context, state.user),
                 const SizedBox(height: SWSizes.s32),
-                ReportListWithFilter(reports: state.reports),
+                ReportListWithFilter(reports: state.reports, stats: state.stats, total: state.total,),
               ],
             );
           },
