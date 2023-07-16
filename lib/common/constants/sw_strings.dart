@@ -13,6 +13,7 @@ class SWStrings {
   static const labelSave = 'Simpan';
   static const labelCancel = 'Batal';
   static const labelSeeMore = 'Lihat Selengkapnya';
+  static const lebelSeeAll = 'Lihat Semua';
 
   // Auth
   static const labelLogin = 'Masuk';

@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:school_watch_semeru/features/report/presentation/widgets/filter_list.dart';
 
 import '../../../../common/constants/constant.dart';
 import '../../domain/category.dart';
@@ -25,6 +27,7 @@ class ReportFilterState extends _$ReportFilterState {
 @riverpod
 Future<List<Category>> getCategories(GetCategoriesRef ref) async {
   final repo = ref.watch(reportRepositoryProvider);
+  final query = ref.watch(plantCategoryQueryProvider);
 
   final cancelToken = CancelToken();
 
@@ -47,11 +50,17 @@ Future<List<Category>> getCategories(GetCategoriesRef ref) async {
 
   final result = await repo.getCategories(cancelToken: cancelToken);
   return result.fold(
-        (l) => const [],
-        (r) => r,
+    (l) => const [],
+    (r) => r
+        .filter(
+          (t) {
+            if (query == null) return true;
+            return t.name.toLowerCase().contains(query.toLowerCase());
+          },
+        )
+        .toList(),
   );
 }
-
 
 @riverpod
 class ReportFeedController extends _$ReportFeedController {

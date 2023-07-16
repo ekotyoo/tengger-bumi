@@ -65,7 +65,7 @@ class _$EditProfileStateCopyWithImpl<$Res, $Val extends EditProfileState>
     Object? validated = null,
     Object? avatar = freezed,
     Object? newAvatar = freezed,
-    Object? user = freezed,
+    Object? user = null,
     Object? successMessage = freezed,
     Object? errorMessage = freezed,
   }) {
@@ -90,7 +90,7 @@ class _$EditProfileStateCopyWithImpl<$Res, $Val extends EditProfileState>
           ? _value.newAvatar
           : newAvatar // ignore: cast_nullable_to_non_nullable
               as XFile?,
-      user: freezed == user
+      user: null == user
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
               as SignedIn,
@@ -141,7 +141,7 @@ class __$$_EditProfileStateCopyWithImpl<$Res>
     Object? validated = null,
     Object? avatar = freezed,
     Object? newAvatar = freezed,
-    Object? user = freezed,
+    Object? user = null,
     Object? successMessage = freezed,
     Object? errorMessage = freezed,
   }) {
@@ -164,7 +164,7 @@ class __$$_EditProfileStateCopyWithImpl<$Res>
           ? _value.newAvatar
           : newAvatar // ignore: cast_nullable_to_non_nullable
               as XFile?,
-      user: freezed == user
+      user: null == user
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
               as SignedIn,
@@ -232,7 +232,7 @@ class _$_EditProfileState implements _EditProfileState {
             (identical(other.avatar, avatar) || other.avatar == avatar) &&
             (identical(other.newAvatar, newAvatar) ||
                 other.newAvatar == newAvatar) &&
-            const DeepCollectionEquality().equals(other.user, user) &&
+            (identical(other.user, user) || other.user == user) &&
             (identical(other.successMessage, successMessage) ||
                 other.successMessage == successMessage) &&
             (identical(other.errorMessage, errorMessage) ||
@@ -247,7 +247,7 @@ class _$_EditProfileState implements _EditProfileState {
       validated,
       avatar,
       newAvatar,
-      const DeepCollectionEquality().hash(user),
+      user,
       successMessage,
       errorMessage);
 

@@ -6,7 +6,7 @@ part of 'report_feed_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getCategoriesHash() => r'74bc138b1da357aae29e1f92eacc41e0d75b95df';
+String _$getCategoriesHash() => r'810a52a26bd8af46a60c632baf028f36557997dd';
 
 /// See also [getCategories].
 @ProviderFor(getCategories)
