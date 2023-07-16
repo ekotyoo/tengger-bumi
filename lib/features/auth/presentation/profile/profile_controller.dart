@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../../common/models/statistic.dart';
 import '../../domain/auth_user.dart';
 import '../../../report/data/report_repository.dart';
 import '../../../report/domain/plant.dart';
@@ -17,7 +18,8 @@ class ProfileController extends _$ProfileController {
     final authState = ref.watch(authStateProvider);
     if (authState is SignedIn) {
       final reports = await getUserReports(authState.id);
-      return ProfileState(user: authState, reports: reports);
+      final stats = await getUserStats(authState.id);
+      return ProfileState(user: authState, reports: reports, stats: stats);
     }
 
     return ProfileState(user: authState);
@@ -26,6 +28,15 @@ class ProfileController extends _$ProfileController {
   Future<List<Plant>> getUserReports(int userId) async {
     final repo = ref.watch(reportRepositoryProvider);
     final result = await repo.getPlants(query: ReportQuery(authorId: userId));
+    return result.fold(
+      (l) => const [],
+      (r) => r,
+    );
+  }
+
+  Future<List<Statistic>> getUserStats(int userId) async {
+    final repo = ref.watch(authRepositoryProvider);
+    final result = await repo.getStats(userId: userId);
     return result.fold(
       (l) => const [],
       (r) => r,

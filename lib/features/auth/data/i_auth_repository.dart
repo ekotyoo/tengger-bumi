@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:fpdart/fpdart.dart';
 
 import '../../../common/error/failure.dart';
+import '../../../common/models/statistic.dart';
 import '../domain/auth_user.dart';
 
 abstract class IAuthRepository {
@@ -25,6 +26,8 @@ abstract class IAuthRepository {
     bool? deleteOld,
     File? newAvatar,
   });
+
+  Future<Either<Failure, List<Statistic>>> getStats({required int userId});
 
   Future<Either<Failure, Unit>> verifyEmail({
     required String email,

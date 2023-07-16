@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$ProfileState {
   AuthUser? get user => throw _privateConstructorUsedError;
   List<Plant> get reports => throw _privateConstructorUsedError;
+  List<Statistic> get stats => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ProfileStateCopyWith<ProfileState> get copyWith =>
@@ -30,7 +31,7 @@ abstract class $ProfileStateCopyWith<$Res> {
           ProfileState value, $Res Function(ProfileState) then) =
       _$ProfileStateCopyWithImpl<$Res, ProfileState>;
   @useResult
-  $Res call({AuthUser? user, List<Plant> reports});
+  $Res call({AuthUser? user, List<Plant> reports, List<Statistic> stats});
 
   $AuthUserCopyWith<$Res>? get user;
 }
@@ -50,6 +51,7 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
   $Res call({
     Object? user = freezed,
     Object? reports = null,
+    Object? stats = null,
   }) {
     return _then(_value.copyWith(
       user: freezed == user
@@ -60,6 +62,10 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
           ? _value.reports
           : reports // ignore: cast_nullable_to_non_nullable
               as List<Plant>,
+      stats: null == stats
+          ? _value.stats
+          : stats // ignore: cast_nullable_to_non_nullable
+              as List<Statistic>,
     ) as $Val);
   }
 
@@ -84,7 +90,7 @@ abstract class _$$_ProfileStateCopyWith<$Res>
       __$$_ProfileStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({AuthUser? user, List<Plant> reports});
+  $Res call({AuthUser? user, List<Plant> reports, List<Statistic> stats});
 
   @override
   $AuthUserCopyWith<$Res>? get user;
@@ -103,6 +109,7 @@ class __$$_ProfileStateCopyWithImpl<$Res>
   $Res call({
     Object? user = freezed,
     Object? reports = null,
+    Object? stats = null,
   }) {
     return _then(_$_ProfileState(
       user: freezed == user
@@ -113,6 +120,10 @@ class __$$_ProfileStateCopyWithImpl<$Res>
           ? _value._reports
           : reports // ignore: cast_nullable_to_non_nullable
               as List<Plant>,
+      stats: null == stats
+          ? _value._stats
+          : stats // ignore: cast_nullable_to_non_nullable
+              as List<Statistic>,
     ));
   }
 }
@@ -120,8 +131,12 @@ class __$$_ProfileStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_ProfileState implements _ProfileState {
-  const _$_ProfileState({this.user, final List<Plant> reports = const []})
-      : _reports = reports;
+  const _$_ProfileState(
+      {this.user,
+      final List<Plant> reports = const [],
+      final List<Statistic> stats = const []})
+      : _reports = reports,
+        _stats = stats;
 
   @override
   final AuthUser? user;
@@ -134,9 +149,18 @@ class _$_ProfileState implements _ProfileState {
     return EqualUnmodifiableListView(_reports);
   }
 
+  final List<Statistic> _stats;
+  @override
+  @JsonKey()
+  List<Statistic> get stats {
+    if (_stats is EqualUnmodifiableListView) return _stats;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_stats);
+  }
+
   @override
   String toString() {
-    return 'ProfileState(user: $user, reports: $reports)';
+    return 'ProfileState(user: $user, reports: $reports, stats: $stats)';
   }
 
   @override
@@ -145,12 +169,16 @@ class _$_ProfileState implements _ProfileState {
         (other.runtimeType == runtimeType &&
             other is _$_ProfileState &&
             (identical(other.user, user) || other.user == user) &&
-            const DeepCollectionEquality().equals(other._reports, _reports));
+            const DeepCollectionEquality().equals(other._reports, _reports) &&
+            const DeepCollectionEquality().equals(other._stats, _stats));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, user, const DeepCollectionEquality().hash(_reports));
+      runtimeType,
+      user,
+      const DeepCollectionEquality().hash(_reports),
+      const DeepCollectionEquality().hash(_stats));
 
   @JsonKey(ignore: true)
   @override
@@ -161,12 +189,16 @@ class _$_ProfileState implements _ProfileState {
 
 abstract class _ProfileState implements ProfileState {
   const factory _ProfileState(
-      {final AuthUser? user, final List<Plant> reports}) = _$_ProfileState;
+      {final AuthUser? user,
+      final List<Plant> reports,
+      final List<Statistic> stats}) = _$_ProfileState;
 
   @override
   AuthUser? get user;
   @override
   List<Plant> get reports;
+  @override
+  List<Statistic> get stats;
   @override
   @JsonKey(ignore: true)
   _$$_ProfileStateCopyWith<_$_ProfileState> get copyWith =>

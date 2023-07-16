@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:school_watch_semeru/common/models/statistic.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../domain/auth_user.dart';
@@ -210,6 +211,23 @@ class AuthRepository implements IAuthRepository {
         }
       }
       return left(const Failure('Terjadi kesalahan, coba lagi nanti'));
+    } catch (e) {
+      final exception = NetworkExceptions.getDioException(e);
+      return left(Failure(exception.getErrorMessage()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Statistic>>> getStats({required int userId}) async {
+    try {
+      final response = await _client.get('/user/$userId/stats');
+
+      final stats = (response['data'] as List<dynamic>)
+          .map((e) => Statistic.fromJson(e))
+          .map((e) => e.copyWith(icon: e.icon.replaceAll('public', kBaseUrl)))
+          .toList();
+
+      return right(stats);
     } catch (e) {
       final exception = NetworkExceptions.getDioException(e);
       return left(Failure(exception.getErrorMessage()));
