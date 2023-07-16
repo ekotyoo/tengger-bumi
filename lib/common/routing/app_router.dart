@@ -6,6 +6,7 @@ import 'package:school_watch_semeru/common/widgets/image_viewer.dart';
 import 'package:school_watch_semeru/features/auth/domain/auth_user.dart';
 import 'package:school_watch_semeru/features/auth/presentation/edit_profile/edit_profile_screen.dart';
 import 'package:school_watch_semeru/features/auth/presentation/email_verification/email_verification_screen.dart';
+import 'package:school_watch_semeru/features/report/presentation/map/map_screen.dart';
 import 'package:school_watch_semeru/features/school/presentation/edit_school/edit_school_screen.dart';
 
 import '../../features/report/presentation/report_detail/report_detail_screen.dart';
@@ -17,7 +18,6 @@ import '../../features/school/presentation/add_school/add_school_screen.dart';
 import '../../features/school/presentation/add_school/widgets/floor_plan_maker.dart';
 import '../../features/school/presentation/models/floor_plan_nav_arg.dart';
 import '../../features/report/presentation/post_report/widgets/location_picker.dart';
-import '../../features/school/presentation/school_map/school_map_screen.dart';
 import '../../features/report/presentation/post_report/post_report_screen.dart';
 import '../../features/auth/presentation/profile/profile_screen.dart';
 import '../../features/school/presentation/school_list/school_list_screen.dart';
@@ -106,7 +106,7 @@ class AppRouter extends _$AppRouter implements Listenable {
               name: Routes.map,
               pageBuilder: (context, state) => NoTransitionPage(
                 key: state.pageKey,
-                child: const SchoolMapScreen(),
+                child: const MapScreen(),
               ),
             ),
             GoRoute(
