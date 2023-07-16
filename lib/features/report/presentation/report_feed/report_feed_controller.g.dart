@@ -6,7 +6,7 @@ part of 'report_feed_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getCategoriesHash() => r'810a52a26bd8af46a60c632baf028f36557997dd';
+String _$getCategoriesHash() => r'74bc138b1da357aae29e1f92eacc41e0d75b95df';
 
 /// See also [getCategories].
 @ProviderFor(getCategories)
@@ -22,6 +22,22 @@ final getCategoriesProvider =
 );
 
 typedef GetCategoriesRef = AutoDisposeFutureProviderRef<List<Category>>;
+String _$getAllRegenciesHash() => r'8125ca90d437350bb6497085bbecfc78c76f7baa';
+
+/// See also [getAllRegencies].
+@ProviderFor(getAllRegencies)
+final getAllRegenciesProvider =
+    AutoDisposeFutureProvider<List<Regency>>.internal(
+  getAllRegencies,
+  name: r'getAllRegenciesProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getAllRegenciesHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef GetAllRegenciesRef = AutoDisposeFutureProviderRef<List<Regency>>;
 String _$reportFilterStateHash() => r'f9a1d5ca8ecbfcc299136c46227441436a117564';
 
 /// See also [ReportFilterState].

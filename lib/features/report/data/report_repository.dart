@@ -43,6 +43,7 @@ class ReportRepository implements IReportRepository {
         data: {
           'author_id': query.authorId,
           'category_id': query.category?.id,
+          'regency_id': query.regency?.id,
           'from_timestamp': timeBetween?.from.millisecondsSinceEpoch,
           'to_timestamp': timeBetween?.to.millisecondsSinceEpoch,
         },

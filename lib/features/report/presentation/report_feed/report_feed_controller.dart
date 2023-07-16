@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:school_watch_semeru/features/report/data/area_repository.dart';
 
 import '../../../../common/constants/constant.dart';
+import '../../../../common/models/regency.dart';
 import '../../domain/category.dart';
 import '../../domain/plant.dart';
 import '../../data/report_repository.dart';
@@ -52,6 +54,35 @@ Future<List<Category>> getCategories(GetCategoriesRef ref) async {
   );
 }
 
+@riverpod
+Future<List<Regency>> getAllRegencies(GetAllRegenciesRef ref) async {
+  final repo = ref.watch(areaRepositoryProvider);
+
+  final cancelToken = CancelToken();
+
+  final link = ref.keepAlive();
+  Timer? timer;
+
+  ref.onDispose(() {
+    cancelToken.cancel();
+    timer?.cancel();
+  });
+
+  ref.onCancel(() {
+    timer = Timer(const Duration(seconds: 30), () {
+      link.close();
+    });
+  });
+
+  await Future.delayed(kDurationLong);
+  if (cancelToken.isCancelled) throw Exception();
+
+  final result = await repo.getAllRegencies(cancelToken: cancelToken);
+  return result.fold(
+        (l) => const [],
+        (r) => r,
+  );
+}
 
 @riverpod
 class ReportFeedController extends _$ReportFeedController {
