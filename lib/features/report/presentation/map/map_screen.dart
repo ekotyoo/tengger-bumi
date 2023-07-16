@@ -232,19 +232,16 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                                   ),
                                 );
                               },
-                              child: const CircleAvatar(
+                              child: CircleAvatar(
                                 backgroundColor: kColorPrimary100,
                                 child: Padding(
-                                  padding: EdgeInsets.all(1),
+                                  padding: const EdgeInsets.all(1),
                                   child: CircleAvatar(
                                     radius: SWSizes.s16,
                                     backgroundColor: kColorPrimary100,
                                     child: Padding(
-                                      padding: EdgeInsets.all(SWSizes.s4),
-                                      child: Icon(
-                                        Icons.warning_amber_rounded,
-                                        color: kColorNeutral0,
-                                      ),
+                                      padding: const EdgeInsets.all(SWSizes.s2),
+                                      child: Image(image: NetworkImage(plant.category.icon)),
                                     ),
                                   ),
                                 ),

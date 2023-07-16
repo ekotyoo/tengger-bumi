@@ -52,11 +52,13 @@ class ReportRepository implements IReportRepository {
         (e) {
           final r = Plant.fromJson(e);
           final report = r.copyWith(
-            images:
-                r.images.map((e) => e.replaceAll('public', kBaseUrl)).toList(),
+            images: r.images.map((e) => e.replaceAll('public', kBaseUrl)).toList(),
             author: r.author.copyWith(
               avatar: r.author.avatar?.replaceAll('public', kBaseUrl),
             ),
+            category: r.category.copyWith(
+              icon: r.category.icon.replaceAll('public', kBaseUrl)
+            )
           );
 
           return report;
