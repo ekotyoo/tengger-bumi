@@ -6,6 +6,22 @@ part of 'report_feed_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+String _$getCategoriesHash() => r'74bc138b1da357aae29e1f92eacc41e0d75b95df';
+
+/// See also [getCategories].
+@ProviderFor(getCategories)
+final getCategoriesProvider =
+    AutoDisposeFutureProvider<List<Category>>.internal(
+  getCategories,
+  name: r'getCategoriesProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getCategoriesHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef GetCategoriesRef = AutoDisposeFutureProviderRef<List<Category>>;
 String _$reportFilterStateHash() => r'f9a1d5ca8ecbfcc299136c46227441436a117564';
 
 /// See also [ReportFilterState].
@@ -23,7 +39,7 @@ final reportFilterStateProvider =
 
 typedef _$ReportFilterState = AutoDisposeNotifier<ReportQuery>;
 String _$reportFeedControllerHash() =>
-    r'c889ccea630313e4b18cfb1cf7d421fa8188a599';
+    r'46cf3b4ff359538380c24b286443034ed9f18c87';
 
 /// Copied from Dart SDK
 class _SystemHash {

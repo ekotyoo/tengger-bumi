@@ -36,11 +36,15 @@ class ReportRepository implements IReportRepository {
     CancelToken? cancelToken,
   }) async {
     try {
+      final timeBetween = query.reportTime?.timeBetween;
       final response = await _client.get(
         '/plant',
         queryParameters: {'page': query.page, 'take': query.take},
         data: {
-          'author_id': query.authorId
+          'author_id': query.authorId,
+          'category_id': query.category?.id,
+          'from_timestamp': timeBetween?.from.millisecondsSinceEpoch,
+          'to_timestamp': timeBetween?.to.millisecondsSinceEpoch,
         },
       );
 

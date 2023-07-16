@@ -75,6 +75,9 @@ class SWStrings {
   static const descOutsideAreaMarker = 'Tanda tidak boleh berada diluar area sekolah';
   static const labelReportType = 'Jenis Laporan';
   static const labelReportStatus = 'Status Laporan';
+  static const labelPlantCategory = 'Jenis Tanaman';
+  static const labelPlantingArea = 'Area Tanam';
+  static const labelLastAdded = 'Terakhir Ditambahkan';
   static const labelReportPostTime = 'Waktu Posting';
   static const labelWriteComment = 'Tulis Komentar';
   static const descSchoolNotAvailable = 'Belum ada sekolah yang tersedia untuk saat ini.';

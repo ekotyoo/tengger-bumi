@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$ReportFeedState {
   List<Plant> get reports => throw _privateConstructorUsedError;
+  List<Category> get categories => throw _privateConstructorUsedError;
   String? get successMessage => throw _privateConstructorUsedError;
   String? get errorMessage => throw _privateConstructorUsedError;
 
@@ -32,7 +33,10 @@ abstract class $ReportFeedStateCopyWith<$Res> {
       _$ReportFeedStateCopyWithImpl<$Res, ReportFeedState>;
   @useResult
   $Res call(
-      {List<Plant> reports, String? successMessage, String? errorMessage});
+      {List<Plant> reports,
+      List<Category> categories,
+      String? successMessage,
+      String? errorMessage});
 }
 
 /// @nodoc
@@ -49,6 +53,7 @@ class _$ReportFeedStateCopyWithImpl<$Res, $Val extends ReportFeedState>
   @override
   $Res call({
     Object? reports = null,
+    Object? categories = null,
     Object? successMessage = freezed,
     Object? errorMessage = freezed,
   }) {
@@ -57,6 +62,10 @@ class _$ReportFeedStateCopyWithImpl<$Res, $Val extends ReportFeedState>
           ? _value.reports
           : reports // ignore: cast_nullable_to_non_nullable
               as List<Plant>,
+      categories: null == categories
+          ? _value.categories
+          : categories // ignore: cast_nullable_to_non_nullable
+              as List<Category>,
       successMessage: freezed == successMessage
           ? _value.successMessage
           : successMessage // ignore: cast_nullable_to_non_nullable
@@ -78,7 +87,10 @@ abstract class _$$_ReportFeedStateCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {List<Plant> reports, String? successMessage, String? errorMessage});
+      {List<Plant> reports,
+      List<Category> categories,
+      String? successMessage,
+      String? errorMessage});
 }
 
 /// @nodoc
@@ -93,6 +105,7 @@ class __$$_ReportFeedStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? reports = null,
+    Object? categories = null,
     Object? successMessage = freezed,
     Object? errorMessage = freezed,
   }) {
@@ -101,6 +114,10 @@ class __$$_ReportFeedStateCopyWithImpl<$Res>
           ? _value._reports
           : reports // ignore: cast_nullable_to_non_nullable
               as List<Plant>,
+      categories: null == categories
+          ? _value._categories
+          : categories // ignore: cast_nullable_to_non_nullable
+              as List<Category>,
       successMessage: freezed == successMessage
           ? _value.successMessage
           : successMessage // ignore: cast_nullable_to_non_nullable
@@ -118,9 +135,11 @@ class __$$_ReportFeedStateCopyWithImpl<$Res>
 class _$_ReportFeedState implements _ReportFeedState {
   const _$_ReportFeedState(
       {final List<Plant> reports = const [],
+      final List<Category> categories = const [],
       this.successMessage,
       this.errorMessage})
-      : _reports = reports;
+      : _reports = reports,
+        _categories = categories;
 
   final List<Plant> _reports;
   @override
@@ -131,6 +150,15 @@ class _$_ReportFeedState implements _ReportFeedState {
     return EqualUnmodifiableListView(_reports);
   }
 
+  final List<Category> _categories;
+  @override
+  @JsonKey()
+  List<Category> get categories {
+    if (_categories is EqualUnmodifiableListView) return _categories;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_categories);
+  }
+
   @override
   final String? successMessage;
   @override
@@ -138,7 +166,7 @@ class _$_ReportFeedState implements _ReportFeedState {
 
   @override
   String toString() {
-    return 'ReportFeedState(reports: $reports, successMessage: $successMessage, errorMessage: $errorMessage)';
+    return 'ReportFeedState(reports: $reports, categories: $categories, successMessage: $successMessage, errorMessage: $errorMessage)';
   }
 
   @override
@@ -147,6 +175,8 @@ class _$_ReportFeedState implements _ReportFeedState {
         (other.runtimeType == runtimeType &&
             other is _$_ReportFeedState &&
             const DeepCollectionEquality().equals(other._reports, _reports) &&
+            const DeepCollectionEquality()
+                .equals(other._categories, _categories) &&
             (identical(other.successMessage, successMessage) ||
                 other.successMessage == successMessage) &&
             (identical(other.errorMessage, errorMessage) ||
@@ -157,6 +187,7 @@ class _$_ReportFeedState implements _ReportFeedState {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_reports),
+      const DeepCollectionEquality().hash(_categories),
       successMessage,
       errorMessage);
 
@@ -170,11 +201,14 @@ class _$_ReportFeedState implements _ReportFeedState {
 abstract class _ReportFeedState implements ReportFeedState {
   const factory _ReportFeedState(
       {final List<Plant> reports,
+      final List<Category> categories,
       final String? successMessage,
       final String? errorMessage}) = _$_ReportFeedState;
 
   @override
   List<Plant> get reports;
+  @override
+  List<Category> get categories;
   @override
   String? get successMessage;
   @override

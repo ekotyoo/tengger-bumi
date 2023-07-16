@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'report_status.dart';
+import 'package:school_watch_semeru/features/report/domain/category.dart';
+import '../../../common/models/regency.dart';
 import 'report_time.dart';
-import 'report_type.dart';
 
 part 'report_query.freezed.dart';
 
@@ -10,12 +10,9 @@ class ReportQuery with _$ReportQuery {
   const factory ReportQuery({
     @Default(1) int page,
     @Default(200) int take,
-    ReportType? reportType,
-    ReportStatus? reportStatus,
-    @Default(ReportTime.all) ReportTime reportTime,
-    String? reportCategory,
+    Category? category,
+    Regency? regency,
+    ReportTime? reportTime,
     int? authorId,
-    int? schoolId,
-    @Default(true) bool isActive,
   }) = _ReportQuery;
 }

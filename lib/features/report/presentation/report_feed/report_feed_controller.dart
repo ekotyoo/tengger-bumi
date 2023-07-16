@@ -1,5 +1,10 @@
+import 'dart:async';
+
+import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../../common/constants/constant.dart';
+import '../../domain/category.dart';
 import '../../domain/plant.dart';
 import '../../data/report_repository.dart';
 import '../../domain/report_query.dart';
@@ -16,6 +21,37 @@ class ReportFilterState extends _$ReportFilterState {
 
   void updateFilterState(ReportQuery state) => this.state = state;
 }
+
+@riverpod
+Future<List<Category>> getCategories(GetCategoriesRef ref) async {
+  final repo = ref.watch(reportRepositoryProvider);
+
+  final cancelToken = CancelToken();
+
+  final link = ref.keepAlive();
+  Timer? timer;
+
+  ref.onDispose(() {
+    cancelToken.cancel();
+    timer?.cancel();
+  });
+
+  ref.onCancel(() {
+    timer = Timer(const Duration(seconds: 30), () {
+      link.close();
+    });
+  });
+
+  await Future.delayed(kDurationLong);
+  if (cancelToken.isCancelled) throw Exception();
+
+  final result = await repo.getCategories(cancelToken: cancelToken);
+  return result.fold(
+        (l) => const [],
+        (r) => r,
+  );
+}
+
 
 @riverpod
 class ReportFeedController extends _$ReportFeedController {
