@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../common/models/regency.dart';
 import '../../domain/report_time.dart';
 import '../widgets/filter_list.dart';
 import '../../../../common/routing/routes.dart';
@@ -186,8 +185,8 @@ class ReportFilter extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final reportQuery = ref.watch(reportFilterStateProvider);
-    final categoriesProvider = ref.watch(getCategoriesProvider);
-    final regencies = <Regency>[];
+    final categoriesAsync = ref.watch(getCategoriesProvider);
+    final regenciesAsync = ref.watch(getAllRegenciesProvider);
 
     final titleStyle = Theme.of(context)
         .textTheme
@@ -222,7 +221,7 @@ class ReportFilter extends ConsumerWidget {
                         style: titleStyle,
                       ),
                     ),
-                    categoriesProvider.when(
+                    categoriesAsync.when(
                       data: (categories) {
                         return GestureDetector(
                           child: const Text(SWStrings.lebelSeeAll),
@@ -244,9 +243,7 @@ class ReportFilter extends ConsumerWidget {
                               builder: (context) => const CategoryFilterList(
                                 label: SWStrings.labelPlantCategory,
                               ),
-                            ).whenComplete(() {
-                              ref.read(plantCategoryQueryProvider.notifier).updateFilterQuery('');
-                            });
+                            );
                           },
                         );
                       },
@@ -256,7 +253,7 @@ class ReportFilter extends ConsumerWidget {
                   ],
                 ),
                 const SizedBox(height: SWSizes.s8),
-                categoriesProvider.when(
+                categoriesAsync.when(
                   data: (categories) {
                     return Wrap(
                       runSpacing: SWSizes.s8,
@@ -293,33 +290,76 @@ class ReportFilter extends ConsumerWidget {
                       const Center(child: CircularProgressIndicator()),
                 ),
                 const SizedBox(height: SWSizes.s16),
-                Text(
-                  SWStrings.labelPlantingArea,
-                  style: titleStyle,
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        SWStrings.labelPlantingArea,
+                        style: titleStyle,
+                      ),
+                    ),
+                    regenciesAsync.when(
+                      data: (categories) {
+                        return GestureDetector(
+                          child: const Text(SWStrings.lebelSeeAll),
+                          onTap: () {
+                            context.pop();
+                            showModalBottomSheet(
+                              context: context,
+                              useSafeArea: true,
+                              constraints: BoxConstraints(
+                                  maxHeight:
+                                  MediaQuery.of(context).size.height),
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(SWSizes.s32),
+                                  topRight: Radius.circular(SWSizes.s32),
+                                ),
+                              ),
+                              isScrollControlled: true,
+                              builder: (context) => const PlantingAreaFilterList(
+                                label: SWStrings.labelPlantingArea,
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      error: (error, stackTrace) => const SizedBox(),
+                      loading: () => const SizedBox(),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: SWSizes.s8),
-                Wrap(
-                  runSpacing: SWSizes.s8,
-                  spacing: SWSizes.s8,
-                  children: [
-                    ...regencies
-                        .map(
-                          (area) => SelectChip(
-                              label: area.name,
-                              selected: reportQuery.regency == area,
-                              onTap: () {
-                                ref
-                                    .read(reportFilterStateProvider.notifier)
-                                    .updateFilterState(
-                                      reportQuery.copyWith(
-                                          regency: reportQuery.regency == area
-                                              ? null
-                                              : area),
-                                    );
-                              }),
-                        )
-                        .toList()
-                  ],
+                regenciesAsync.when(
+                  data: (regencies) => Wrap(
+                    runSpacing: SWSizes.s8,
+                    spacing: SWSizes.s8,
+                    children: [
+                      ...regencies
+                          .take(5)
+                          .map(
+                            (area) => SelectChip(
+                                label: area.name,
+                                selected: reportQuery.regency == area,
+                                onTap: () {
+                                  ref
+                                      .read(reportFilterStateProvider.notifier)
+                                      .updateFilterState(
+                                        reportQuery.copyWith(
+                                            regency: reportQuery.regency == area
+                                                ? null
+                                                : area),
+                                      );
+                                  context.pop();
+                                }),
+                          )
+                          .toList()
+                    ],
+                  ),
+                  error: (error, stackTrace) =>
+                      Center(child: Text(error.toString())),
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
                 ),
                 const SizedBox(height: SWSizes.s16),
                 Text(

@@ -86,9 +86,9 @@ class PostReportController extends StateNotifier<PostReportState> {
       regencies: [],
       districts: [],
       villages: [],
-      regencyInput: RegencyInput.pure(),
-      districtInput: DistrictInput.pure(),
-      villageInput: VillageInput.pure()
+      regencyInput: const RegencyInput.pure(),
+      districtInput: const DistrictInput.pure(),
+      villageInput: const VillageInput.pure()
     );
     await _getRegencies(value.id);
   }
@@ -108,14 +108,14 @@ class PostReportController extends StateNotifier<PostReportState> {
       regencyInput: RegencyInput.dirty(value: value),
       districts: [],
       villages: [],
-      districtInput: DistrictInput.pure(),
-      villageInput: VillageInput.pure()
+      districtInput: const DistrictInput.pure(),
+      villageInput: const VillageInput.pure()
     );
     await _getDistricts(value.id);
   }
 
   Future<void> _getRegencies(int provinceId) async {
-    final result = await _areaRepository.getRegencies(provinceId);
+    final result = await _areaRepository.getRegencies(provinceId: provinceId);
     result.fold(
       (l) => setErrorMessage(l.message),
       (r) => state = state.copyWith(
@@ -128,13 +128,13 @@ class PostReportController extends StateNotifier<PostReportState> {
     state = state.copyWith(
       districtInput: DistrictInput.dirty(value: value),
       villages: [],
-      villageInput: VillageInput.pure()
+      villageInput: const VillageInput.pure()
     );
     await _getVillages(value.id);
   }
 
   Future<void> _getDistricts(int regencyId) async {
-    final result = await _areaRepository.getDistricts(regencyId);
+    final result = await _areaRepository.getDistricts(regencyId: regencyId);
     result.fold(
       (l) => setErrorMessage(l.message),
       (r) => state = state.copyWith(
@@ -147,7 +147,7 @@ class PostReportController extends StateNotifier<PostReportState> {
       state = state.copyWith(villageInput: VillageInput.dirty(value: value));
 
   Future<void> _getVillages(int districtId) async {
-    final result = await _areaRepository.getVillages(districtId);
+    final result = await _areaRepository.getVillages(districtId: districtId);
     result.fold(
       (l) => setErrorMessage(l.message),
       (r) => state = state.copyWith(
