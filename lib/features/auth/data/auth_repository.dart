@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:school_watch_semeru/common/models/statistic.dart';
+import 'package:tetenger_bumi/common/models/statistic.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../domain/auth_user.dart';

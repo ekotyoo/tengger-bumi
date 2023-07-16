@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:school_watch_semeru/common/services/http_client.dart';
+import 'package:tetenger_bumi/common/services/http_client.dart';
 import '../models/school_address_text_input.dart';
 import '../models/school_name_text_input.dart';
 import '../../data/school_repository.dart';

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:school_watch_semeru/common/constants/constant.dart';
+import 'package:tetenger_bumi/common/constants/constant.dart';
 
 import '../../data/school_repository.dart';
 import '../../domain/school.dart';

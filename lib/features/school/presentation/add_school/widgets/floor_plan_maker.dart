@@ -277,7 +277,7 @@ class _FloorPlanMakerState extends State<FloorPlanMaker> {
                     TileLayer(
                       urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                       subdomains: const ['a', 'b', 'c'],
-                      userAgentPackageName: 'com.ekotyoo.school_watch_semeru',
+                      userAgentPackageName: 'com.ekotyoo.tetenger_bumi',
                       maxNativeZoom: 19,
                       maxZoom: 35,
                     ),

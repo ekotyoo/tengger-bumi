@@ -1,4 +1,4 @@
-package com.example.school_watch_semeru
+package com.example.tetenger_bumi
 
 import io.flutter.embedding.android.FlutterActivity
 

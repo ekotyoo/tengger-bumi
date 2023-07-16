@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:school_watch_semeru/features/report/domain/plant_request.dart';
+import 'package:tetenger_bumi/features/report/domain/plant_request.dart';
 
 import '../../../common/error/failure.dart';
 import '../../../common/error/network_exceptions.dart';

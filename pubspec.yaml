@@ -1,4 +1,4 @@
-name: school_watch_semeru
+name: tetenger_bumi
 description: A new Flutter project.
 publish_to: 'none'
 version: 1.0.0+1
@@ -38,6 +38,7 @@ dependencies:
   rainbow_color: ^2.0.1
   flutter_color_utils: ^0.0.1
   location: ^5.0.0
+  transparent_image: ^2.0.1
 
 dev_dependencies:
   flutter_test:
@@ -63,5 +64,5 @@ flutter:
 
 flutter_launcher_icons:
   android: "launcher_icon"
-  image_path: "assets/images/sw_logo.png"
+  image_path: "assets/images/tetenger_bumi_logo.png"
   min_sdk_android: 21

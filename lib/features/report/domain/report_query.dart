@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:school_watch_semeru/features/report/domain/category.dart';
+import 'package:tetenger_bumi/features/report/domain/category.dart';
 import '../../../common/models/regency.dart';
 import 'report_time.dart';
 

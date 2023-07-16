@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_color_utils/flutter_color_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:school_watch_semeru/features/auth/presentation/profile/profile_state.dart';
-import 'package:school_watch_semeru/features/school/domain/school_analysis.dart';
-import 'package:school_watch_semeru/features/school/domain/school_detail.dart';
+import 'package:tetenger_bumi/features/auth/presentation/profile/profile_state.dart';
+import 'package:tetenger_bumi/features/school/domain/school_analysis.dart';
+import 'package:tetenger_bumi/features/school/domain/school_detail.dart';
 import '../../../../common/models/statistic.dart';
 import '../../../../utils/analysis_utils.dart';
 import '../models/floor_plan_ui_model.dart';
@@ -31,7 +31,7 @@ class SchoolDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final schoolDetailAsync =
-    ref.watch(schoolDetailControllerProvider(schoolId));
+        ref.watch(schoolDetailControllerProvider(schoolId));
 
     return SafeArea(
       child: Scaffold(
@@ -45,16 +45,15 @@ class SchoolDetailScreen extends ConsumerWidget {
 
                 return IconButton(
                   icon: const Icon(Icons.location_on_rounded),
-                  onPressed: () =>
-                      context.pushNamed(
-                        Routes.schoolFloorPlan,
-                        params: {'schoolId': schoolId.toString()},
-                        extra: SchoolDetailFloorPlanNavArg(
-                          floorPlan:
+                  onPressed: () => context.pushNamed(
+                    Routes.schoolFloorPlan,
+                    params: {'schoolId': schoolId.toString()},
+                    extra: SchoolDetailFloorPlanNavArg(
+                      floorPlan:
                           FloorPlanUiModel.fromDomain(reportDetail.floorPlan),
-                          reports: reportDetail.reports,
-                        ),
-                      ),
+                      reports: reportDetail.reports,
+                    ),
+                  ),
                 );
               },
               error: (error, stackTrace) => Container(),
@@ -120,10 +119,7 @@ class SchoolDetailScreen extends ConsumerWidget {
             left: SWSizes.s16,
             right: SWSizes.s16,
             child: SizedBox(
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width - 2 * SWSizes.s16,
+              width: MediaQuery.of(context).size.width - 2 * SWSizes.s16,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -141,19 +137,14 @@ class SchoolDetailScreen extends ConsumerWidget {
                         Text(
                           reportDetail.name,
                           style:
-                          Theme
-                              .of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: kColorNeutral0,
-                          ),
+                              Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: kColorNeutral0,
+                                  ),
                         ),
                         Text(
                           reportDetail.address,
-                          style: Theme
-                              .of(context)
+                          style: Theme.of(context)
                               .textTheme
                               .bodySmall
                               ?.copyWith(color: kColorNeutral0),
@@ -208,9 +199,9 @@ class SchoolDetailScreen extends ConsumerWidget {
                 context,
                 label: 'Tanggap Darurat',
                 color:
-                getColorFromAnalysisScore(analysis.emergencyResponseLevel),
+                    getColorFromAnalysisScore(analysis.emergencyResponseLevel),
                 value:
-                getLabelFromAnalysisScore(analysis.emergencyResponseLevel),
+                    getLabelFromAnalysisScore(analysis.emergencyResponseLevel),
               ),
               _buildSchoolAnalysisInfo(
                 context,
@@ -225,7 +216,8 @@ class SchoolDetailScreen extends ConsumerWidget {
     );
   }
 
-  _buildSchoolAnalysisInfo(BuildContext context, {
+  _buildSchoolAnalysisInfo(
+    BuildContext context, {
     required String label,
     required String value,
     required Color color,
@@ -235,10 +227,7 @@ class SchoolDetailScreen extends ConsumerWidget {
       children: [
         Text(
           label,
-          style: Theme
-              .of(context)
-              .textTheme
-              .labelMedium,
+          style: Theme.of(context).textTheme.labelMedium,
         ),
         const SizedBox(height: SWSizes.s8),
         CircleAvatar(
@@ -252,8 +241,7 @@ class SchoolDetailScreen extends ConsumerWidget {
         const SizedBox(height: SWSizes.s8),
         Text(
           value,
-          style: Theme
-              .of(context)
+          style: Theme.of(context)
               .textTheme
               .bodyMedium
               ?.copyWith(fontWeight: FontWeight.bold),
@@ -265,7 +253,10 @@ class SchoolDetailScreen extends ConsumerWidget {
 
 class ReportListWithFilter extends StatefulWidget {
   const ReportListWithFilter(
-      {Key? key, this.reports = const [], this.stats = const [], this.total = 0})
+      {Key? key,
+      this.reports = const [],
+      this.stats = const [],
+      this.total = 0})
       : super(key: key);
 
   final List<Plant> reports;
@@ -355,12 +346,10 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
               children: [
                 SizedBox(
                     height: selectedIndex == 0 ? null : 1,
-                    child: _buildReportList(context, _reports)
-                ),
+                    child: _buildReportList(context, _reports)),
                 SizedBox(
                     height: selectedIndex == 1 ? null : 1,
-                    child: _buildPostStatistic(context, _stats, _total)
-                )
+                    child: _buildPostStatistic(context, _stats, _total))
               ],
             ),
           ],
@@ -378,23 +367,22 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
     return reports.isEmpty
         ? emptyPlaceholder
         : ListView.separated(
-      itemCount: reports.length,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) =>
-          ReportCard(
-            report: reports[index],
-            showInteractionBar: false,
-            onTap: () {
-              context.pushNamed(
-                Routes.reportDetail,
-                params: {'reportId': reports[index].id.toString()},
-              );
-            },
-          ),
-      separatorBuilder: (context, index) =>
-      const SizedBox(height: SWSizes.s8),
-    );
+            itemCount: reports.length,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) => ReportCard(
+              report: reports[index],
+              showInteractionBar: false,
+              onTap: () {
+                context.pushNamed(
+                  Routes.reportDetail,
+                  params: {'reportId': reports[index].id.toString()},
+                );
+              },
+            ),
+            separatorBuilder: (context, index) =>
+                const SizedBox(height: SWSizes.s8),
+          );
   }
 
   _buildPostStatistic(BuildContext context, List<Statistic> stats, int total) {
@@ -405,36 +393,48 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
     return stats.isEmpty
         ? emptyPlaceholder
         : Column(
-      children: [
-        const SizedBox(height: SWSizes.s16),
-        Text(
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            'Jumlah Penanaman : $total'),
-        const SizedBox(height: SWSizes.s4),
-        for (int i = 0; i < stats.length; i++)
-          Row(
             children: [
-              Image.network(stats[i].icon, cacheWidth: 20,),
+              const SizedBox(height: SWSizes.s16),
+              Text(
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
+                  'Jumlah Penanaman : $total'),
+              const SizedBox(height: SWSizes.s4),
+
+              for (int i = 0; i < stats.length; i++)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: SWSizes.s4),
+                  child: Row(
+                    children: [
+                      Image.network(
+                        stats[i].icon,
+                        width: 40,
+                        headers: {
+                          "Keep-Alive": "timeout=30,max=100",
+                          "Connection" : "Keep-Alive"
+                        },
+                      ),
+                      const SizedBox(
+                        width: SWSizes.s8,
+                      ),
+                      Expanded(
+                          child: Text(
+                        stats[i].name,
+                        softWrap: true,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      )),
+                      const SizedBox(
+                        width: SWSizes.s8,
+                      ),
+                      Text(stats[i].count.toString()),
+                    ],
+                  ),
+                ),
               const SizedBox(
-                width: SWSizes.s8,
+                height: SWSizes.s8,
               ),
-              Expanded(
-                  child: Text(
-                    stats[i].name,
-                    softWrap: true,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  )),
-              const SizedBox(
-                width: SWSizes.s8,
-              ),
-              Text(stats[i].count.toString())
             ],
-          ),
-        const SizedBox(
-          height: SWSizes.s8,
-        ),
-      ],
-    );
+          );
   }
 }

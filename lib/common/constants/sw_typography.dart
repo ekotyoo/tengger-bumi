@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:school_watch_semeru/common/constants/sw_colors.dart';
+import 'package:tetenger_bumi/common/constants/sw_colors.dart';
 
 extension on TextStyle {
   TextStyle bold() => copyWith(fontWeight: FontWeight.bold);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:school_watch_semeru/common/widgets/shimmer_container.dart';
+import 'package:tetenger_bumi/common/widgets/shimmer_container.dart';
 
 import '../../domain/plant.dart';
 import '../../../../common/constants/constant.dart';

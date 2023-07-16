@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:polylabel/polylabel.dart';
-import 'package:school_watch_semeru/common/models/position.dart';
-import 'package:school_watch_semeru/features/school/domain/school_request.dart';
+import 'package:tetenger_bumi/common/models/position.dart';
+import 'package:tetenger_bumi/features/school/domain/school_request.dart';
 
 import '../../data/school_repository.dart';
 import '../../data/i_school_repository.dart';

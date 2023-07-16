@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:school_watch_semeru/common/error/failure.dart';
+import 'package:tetenger_bumi/common/error/failure.dart';
 import '../domain/school.dart';
 import '../domain/school_detail.dart';
 import '../domain/school_request.dart';

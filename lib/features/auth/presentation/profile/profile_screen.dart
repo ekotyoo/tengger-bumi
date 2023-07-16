@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 import '../../../../common/routing/routes.dart';
 import '../../../school/presentation/school_detail/school_detail_screen.dart';
@@ -31,7 +32,8 @@ class ProfileScreen extends ConsumerWidget {
                   return [
                     PopupMenuItem(
                       child: const Text(SWStrings.labelEditProfile),
-                      onTap: () => context.pushNamed(Routes.editProfile, extra: data.user),
+                      onTap: () => context.pushNamed(Routes.editProfile,
+                          extra: data.user),
                     ),
                     PopupMenuItem(
                       child: const Text(SWStrings.labelLogout),
@@ -55,7 +57,11 @@ class ProfileScreen extends ConsumerWidget {
               children: [
                 _buildProfileHeader(context, state.user),
                 const SizedBox(height: SWSizes.s32),
-                ReportListWithFilter(reports: state.reports, stats: state.stats, total: state.total,),
+                ReportListWithFilter(
+                  reports: state.reports,
+                  stats: state.stats,
+                  total: state.total,
+                ),
               ],
             );
           },
@@ -71,12 +77,19 @@ class ProfileScreen extends ConsumerWidget {
         children: [
           CircleAvatar(
             radius: SWSizes.s56,
-            foregroundImage: userSignedIn.avatar != null
-                ? NetworkImage(userSignedIn.avatar!)
-                : null,
+            foregroundImage:
+                userSignedIn.avatar != null && userSignedIn.avatar!.isNotEmpty
+                    ? NetworkImage(userSignedIn.avatar!)
+                    : MemoryImage(kTransparentImage) as ImageProvider,
             backgroundColor: kColorPrimary50,
             child: const Icon(Icons.person,
                 color: kColorPrimary100, size: SWSizes.s56),
+            onForegroundImageError: (obj, trace) {
+              debugPrint(obj.toString());
+              debugPrint("Sumber:${userSignedIn.avatar}");
+              debugPrint("Sumber:${userSignedIn.avatar == null}");
+
+            },
           ),
           const SizedBox(height: SWSizes.s16),
           Text(

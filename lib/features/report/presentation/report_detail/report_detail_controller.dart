@@ -1,5 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:school_watch_semeru/features/report/domain/report_detail.dart';
+import 'package:tetenger_bumi/features/report/domain/report_detail.dart';
 
 import '../../domain/comment.dart';
 import '../../data/report_repository.dart';

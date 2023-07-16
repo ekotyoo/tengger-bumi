@@ -1,6 +1,6 @@
 import 'package:formz/formz.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:school_watch_semeru/features/auth/auth_controller.dart';
+import 'package:tetenger_bumi/features/auth/auth_controller.dart';
 
 import '../../data/auth_repository.dart';
 import '../models/email_text_input.dart';

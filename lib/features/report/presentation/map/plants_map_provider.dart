@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:school_watch_semeru/features/report/data/report_repository.dart';
-import 'package:school_watch_semeru/features/report/domain/plant.dart';
-import 'package:school_watch_semeru/features/report/domain/report_query.dart';
+import 'package:tetenger_bumi/features/report/data/report_repository.dart';
+import 'package:tetenger_bumi/features/report/domain/plant.dart';
+import 'package:tetenger_bumi/features/report/domain/report_query.dart';
 
 import '../../../../common/constants/constant.dart';
 

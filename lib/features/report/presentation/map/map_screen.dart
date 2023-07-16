@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:school_watch_semeru/features/report/presentation/map/plants_map_provider.dart';
+import 'package:tetenger_bumi/features/report/presentation/map/plants_map_provider.dart';
 import '../../../../common/widgets/open_street_map_attribution.dart';
 
 import '../../../../common/routing/routes.dart';
@@ -163,7 +163,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                 TileLayer(
                   urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                   subdomains: const ['a', 'b', 'c'],
-                  userAgentPackageName: 'com.ekotyoo.school_watch_semeru',
+                  userAgentPackageName: 'com.ekotyoo.tetenger_bumi',
                   maxNativeZoom: 19,
                   maxZoom: 35,
                 ),

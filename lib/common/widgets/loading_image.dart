@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:school_watch_semeru/common/constants/constant.dart';
+import 'package:tetenger_bumi/common/constants/constant.dart';
 
 class LoadingImage extends StatelessWidget {
   const LoadingImage({

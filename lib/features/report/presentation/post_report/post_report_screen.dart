@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:school_watch_semeru/features/report/presentation/post_report/widgets/planting_area_form.dart';
+import 'package:tetenger_bumi/features/report/presentation/post_report/widgets/planting_area_form.dart';
 
 import '../../../../common/widgets/sw_button.dart';
 import '../../../../utils/snackbar_utils.dart';

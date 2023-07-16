@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:school_watch_semeru/features/auth/presentation/models/name_text_input.dart';
+import 'package:tetenger_bumi/features/auth/presentation/models/name_text_input.dart';
 import '../../../../common/widgets/title_with_caption.dart';
 import '../../../../utils/snackbar_utils.dart';
 import 'edit_profile_controller.dart';

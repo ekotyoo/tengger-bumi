@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:polylabel/polylabel.dart';
-import 'package:school_watch_semeru/features/school/presentation/models/floor_plan_nav_arg.dart';
+import 'package:tetenger_bumi/features/school/presentation/models/floor_plan_nav_arg.dart';
 
 import '../../../../../common/widgets/open_street_map_attribution.dart';
 import '../../models/room_ui_model.dart';
@@ -166,7 +166,7 @@ class _FloorPlanViewerState extends State<FloorPlanViewer> {
               TileLayer(
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                 subdomains: const ['a', 'b', 'c'],
-                userAgentPackageName: 'com.ekotyoo.school_watch_semeru',
+                userAgentPackageName: 'com.ekotyoo.tetenger_bumi',
                 maxNativeZoom: 19,
                 maxZoom: 35,
               ),

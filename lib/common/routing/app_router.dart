@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:school_watch_semeru/common/widgets/image_viewer.dart';
-import 'package:school_watch_semeru/features/auth/domain/auth_user.dart';
-import 'package:school_watch_semeru/features/auth/presentation/edit_profile/edit_profile_screen.dart';
-import 'package:school_watch_semeru/features/auth/presentation/email_verification/email_verification_screen.dart';
-import 'package:school_watch_semeru/features/report/presentation/map/map_screen.dart';
-import 'package:school_watch_semeru/features/school/presentation/edit_school/edit_school_screen.dart';
+import 'package:tetenger_bumi/common/widgets/image_viewer.dart';
+import 'package:tetenger_bumi/features/auth/domain/auth_user.dart';
+import 'package:tetenger_bumi/features/auth/presentation/edit_profile/edit_profile_screen.dart';
+import 'package:tetenger_bumi/features/auth/presentation/email_verification/email_verification_screen.dart';
+import 'package:tetenger_bumi/features/report/presentation/map/map_screen.dart';
+import 'package:tetenger_bumi/features/school/presentation/edit_school/edit_school_screen.dart';
 
 import '../../features/report/presentation/report_detail/report_detail_screen.dart';
 import '../../features/school/presentation/models/school_detail_floor_plan_nav_arg.dart';

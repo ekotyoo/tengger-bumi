@@ -1,11 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:school_watch_semeru/common/models/regency.dart';
-import 'package:school_watch_semeru/common/models/village.dart';
-import 'package:school_watch_semeru/features/report/presentation/models/date_input.dart';
-import 'package:school_watch_semeru/features/report/presentation/models/district_input.dart';
-import 'package:school_watch_semeru/features/report/presentation/models/plant_name_input.dart';
-import 'package:school_watch_semeru/features/report/presentation/models/village_input.dart';
-import 'package:school_watch_semeru/features/report/presentation/post_report/post_report_screen.dart';
+import 'package:tetenger_bumi/common/models/regency.dart';
+import 'package:tetenger_bumi/common/models/village.dart';
+import 'package:tetenger_bumi/features/report/presentation/models/date_input.dart';
+import 'package:tetenger_bumi/features/report/presentation/models/district_input.dart';
+import 'package:tetenger_bumi/features/report/presentation/models/plant_name_input.dart';
+import 'package:tetenger_bumi/features/report/presentation/models/village_input.dart';
+import 'package:tetenger_bumi/features/report/presentation/post_report/post_report_screen.dart';
 
 import '../../../../common/models/district.dart';
 import '../../../../common/models/province.dart';
