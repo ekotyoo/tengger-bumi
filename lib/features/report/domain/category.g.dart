@@ -9,10 +9,12 @@ part of 'category.dart';
 _$_Category _$$_CategoryFromJson(Map<String, dynamic> json) => _$_Category(
       id: json['id'] as int,
       name: json['name'] as String,
+      icon: json['icon_path'] as String,
     );
 
 Map<String, dynamic> _$$_CategoryToJson(_$_Category instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
+      'icon_path': instance.icon,
     };

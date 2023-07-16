@@ -9,6 +9,7 @@ class Category with _$Category {
   const factory Category({
     required int id,
     required String name,
+    @JsonKey(name: 'icon_path') required String icon,
 }) = _Category;
 
   factory Category.fromJson(Map<String, Object?> json) => _$CategoryFromJson(json);

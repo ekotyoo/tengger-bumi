@@ -283,6 +283,7 @@ class ReportRepository implements IReportRepository {
 
       final categories = (response['data'] as List<dynamic>)
           .map((e) => Category.fromJson(e))
+          .map((e) => e.copyWith(icon: e.icon.replaceAll('public', kBaseUrl)))
           .toList();
 
       return right(categories);
