@@ -86,6 +86,9 @@ class PostReportController extends StateNotifier<PostReportState> {
       regencies: [],
       districts: [],
       villages: [],
+      regencyInput: RegencyInput.pure(),
+      districtInput: DistrictInput.pure(),
+      villageInput: VillageInput.pure()
     );
     await _getRegencies(value.id);
   }
@@ -105,6 +108,8 @@ class PostReportController extends StateNotifier<PostReportState> {
       regencyInput: RegencyInput.dirty(value: value),
       districts: [],
       villages: [],
+      districtInput: DistrictInput.pure(),
+      villageInput: VillageInput.pure()
     );
     await _getDistricts(value.id);
   }
@@ -123,6 +128,7 @@ class PostReportController extends StateNotifier<PostReportState> {
     state = state.copyWith(
       districtInput: DistrictInput.dirty(value: value),
       villages: [],
+      villageInput: VillageInput.pure()
     );
     await _getVillages(value.id);
   }
