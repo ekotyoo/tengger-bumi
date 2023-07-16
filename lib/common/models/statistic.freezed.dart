@@ -22,6 +22,7 @@ Statistic _$StatisticFromJson(Map<String, dynamic> json) {
 mixin _$Statistic {
   int get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
+  @JsonKey(name: 'icon_path')
   String get icon => throw _privateConstructorUsedError;
   int get count => throw _privateConstructorUsedError;
 
@@ -36,7 +37,11 @@ abstract class $StatisticCopyWith<$Res> {
   factory $StatisticCopyWith(Statistic value, $Res Function(Statistic) then) =
       _$StatisticCopyWithImpl<$Res, Statistic>;
   @useResult
-  $Res call({int id, String name, String icon, int count});
+  $Res call(
+      {int id,
+      String name,
+      @JsonKey(name: 'icon_path') String icon,
+      int count});
 }
 
 /// @nodoc
@@ -85,7 +90,11 @@ abstract class _$$_StatisticCopyWith<$Res> implements $StatisticCopyWith<$Res> {
       __$$_StatisticCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, String name, String icon, int count});
+  $Res call(
+      {int id,
+      String name,
+      @JsonKey(name: 'icon_path') String icon,
+      int count});
 }
 
 /// @nodoc
@@ -131,7 +140,7 @@ class _$_Statistic implements _Statistic {
   const _$_Statistic(
       {required this.id,
       required this.name,
-      required this.icon,
+      @JsonKey(name: 'icon_path') required this.icon,
       required this.count});
 
   factory _$_Statistic.fromJson(Map<String, dynamic> json) =>
@@ -142,6 +151,7 @@ class _$_Statistic implements _Statistic {
   @override
   final String name;
   @override
+  @JsonKey(name: 'icon_path')
   final String icon;
   @override
   final int count;
@@ -184,7 +194,7 @@ abstract class _Statistic implements Statistic {
   const factory _Statistic(
       {required final int id,
       required final String name,
-      required final String icon,
+      @JsonKey(name: 'icon_path') required final String icon,
       required final int count}) = _$_Statistic;
 
   factory _Statistic.fromJson(Map<String, dynamic> json) =
@@ -195,6 +205,7 @@ abstract class _Statistic implements Statistic {
   @override
   String get name;
   @override
+  @JsonKey(name: 'icon_path')
   String get icon;
   @override
   int get count;

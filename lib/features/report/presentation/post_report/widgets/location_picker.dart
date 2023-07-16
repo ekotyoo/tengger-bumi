@@ -101,7 +101,7 @@ class _LocationPickerState extends State<LocationPicker> {
               mapController: _mapController,
               options: MapOptions(
                 zoom: 20,
-                minZoom: 10,
+                minZoom: 3,
                 absorbPanEventsOnScrollables: false,
                 onTap: (tapPosition, point) {
                   _setNewDragMarker(point);

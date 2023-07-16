@@ -12,5 +12,6 @@ class ProfileState with _$ProfileState {
     AuthUser? user,
     @Default([]) List<Plant> reports,
     @Default([]) List<Statistic> stats,
+    @Default(0) int total,
   }) = _ProfileState;
 }
