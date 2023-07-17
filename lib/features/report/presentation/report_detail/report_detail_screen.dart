@@ -217,7 +217,7 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
       onTap: onTap,
       child: Row(
         children: [
-          Icon(icon, size: SWSizes.s16, color: color),
+          Icon(icon, color: color),
           const SizedBox(width: SWSizes.s8),
           Text(
             '$count',
@@ -236,7 +236,7 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
       children: [
         _buildInteractionButton(
           context,
-          icon: Icons.thumb_up_rounded,
+          icon: report.liked == true ? Icons.bookmark : Icons.bookmark_border,
           count: report.likesCount,
           color: report.liked == true
               ? Theme.of(context).primaryColor
@@ -245,20 +245,6 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
             ref
                 .read(reportDetailControllerProvider(widget.reportId).notifier)
                 .toggleLike();
-          },
-        ),
-        const SizedBox(width: SWSizes.s16),
-        _buildInteractionButton(
-          context,
-          icon: Icons.thumb_down_rounded,
-          count: report.dislikesCount,
-          color: report.liked == false
-              ? Theme.of(context).primaryColor
-              : kColorNeutral200,
-          onTap: () {
-            ref
-                .read(reportDetailControllerProvider(widget.reportId).notifier)
-                .toggleDislike();
           },
         ),
       ],
