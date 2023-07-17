@@ -52,7 +52,7 @@ class LoginScreen extends ConsumerWidget {
 
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
           actions: const [AppLogo()],
         ),

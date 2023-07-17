@@ -105,7 +105,7 @@ class _PostReportScreenState extends ConsumerState<PostReportScreen> {
           return true;
         },
         child: Scaffold(
-          resizeToAvoidBottomInset: false,
+          resizeToAvoidBottomInset: true,
           appBar: AppBar(
             title: Text(widget.formType == FormType.edit
                 ? SWStrings.labelEditPost
