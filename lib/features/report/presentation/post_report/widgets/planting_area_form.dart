@@ -39,7 +39,7 @@ class _PlantingAreaFormState extends ConsumerState<PlantingAreaForm> {
         const TitleWithCaption(
           title: 'Area Tanam',
           caption:
-              'Silahkan lengkapi informasi dibawah untuk mengunggah laporan.',
+              'Silahkan lengkapi informasi dibawah untuk mengunggah postingan.',
         ),
         const SizedBox(height: SWSizes.s16),
         Expanded(

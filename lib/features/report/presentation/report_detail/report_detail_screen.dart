@@ -75,7 +75,7 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
             message: successMessage,
             type: SnackbarType.success,
           );
-          if (successMessage == 'Laporan berhasil dihapus') context.pop();
+          if (successMessage == 'Postingan berhasil dihapus') context.pop();
           ref
               .read(reportDetailControllerProvider(widget.reportId).notifier)
               .setSuccessMessage(null);
@@ -139,7 +139,7 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
             final report = state.report;
 
             if (report == null) {
-              return const Center(child: Text('Data laporan tidak temukan'));
+              return const Center(child: Text('Data tidak temukan'));
             }
 
             return RefreshIndicator(

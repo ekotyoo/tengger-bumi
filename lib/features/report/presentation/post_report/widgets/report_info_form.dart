@@ -42,7 +42,7 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
         const TitleWithCaption(
           title: SWStrings.labelCompleteReport,
           caption:
-              'Silahkan lengkapi informasi dibawah untuk mengunggah laporan.',
+              'Silahkan lengkapi informasi dibawah untuk mengunggah postingan.',
         ),
         const SizedBox(height: SWSizes.s16),
         Expanded(

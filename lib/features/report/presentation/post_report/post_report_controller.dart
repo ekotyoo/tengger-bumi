@@ -363,7 +363,7 @@ class PostReportController extends StateNotifier<PostReportState> {
           _ref
               .read(reportFeedControllerProvider(reportFilter).notifier)
               .updateReport(r);
-          setSuccessMessage('Laporan berhasil disunting');
+          setSuccessMessage('Postingan berhasil disunting');
           state = state.copyWith(finalFormSubmitting: false);
         },
       );
@@ -383,7 +383,7 @@ class PostReportController extends StateNotifier<PostReportState> {
         _ref
             .read(reportFeedControllerProvider(reportFilter).notifier)
             .addReport(r);
-        setSuccessMessage('Laporan berhasil diunggah');
+        setSuccessMessage('Postingan berhasil diunggah');
         state = state.copyWith(finalFormSubmitting: false);
       },
     );

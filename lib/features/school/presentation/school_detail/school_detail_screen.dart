@@ -361,7 +361,7 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
   _buildReportList(BuildContext context, List<Plant> reports) {
     const emptyPlaceholder = Padding(
       padding: EdgeInsets.only(top: SWSizes.s16),
-      child: Center(child: Text('Belum ada data laporan')),
+      child: Center(child: Text('Belum ada data penanaman')),
     );
 
     return reports.isEmpty
@@ -389,7 +389,7 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
   _buildPostStatistic(BuildContext context, List<Statistic> stats, int total) {
     const emptyPlaceholder = Padding(
       padding: EdgeInsets.only(top: SWSizes.s16),
-      child: Expanded(child: Center(child: Text('Belum ada data laporan'))),
+      child: Expanded(child: Center(child: Text('Belum ada data penanaman'))),
     );
     return stats.isEmpty
         ? emptyPlaceholder
