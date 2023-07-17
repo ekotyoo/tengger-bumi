@@ -146,7 +146,7 @@ class EditSchoolController extends _$EditSchoolController {
 
     result.fold(
       (l) => setErrorMessage(l.message),
-      (r) => setSuccessMessage('Laporan berhasil disunting'),
+      (r) => setSuccessMessage('Postingan berhasil disunting'),
     );
 
     state = AsyncValue.data(oldState.copyWith(submitting: false));

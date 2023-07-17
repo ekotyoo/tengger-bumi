@@ -107,7 +107,7 @@ class ReportDetailController extends _$ReportDetailController {
     final result = await reportRepo.deleteReport(plantId: report.id);
     result.fold(
       (l) => setErrorMessage(l.message),
-      (r) => setSuccessMessage('Laporan berhasil dihapus'),
+      (r) => setSuccessMessage('Postingan berhasil dihapus'),
     );
 
     state = AsyncValue.data(oldState.copyWith(reportDeleting: false));

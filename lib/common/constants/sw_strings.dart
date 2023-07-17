@@ -38,13 +38,13 @@ class SWStrings {
   static const labelProfile = 'Profil';
 
   // Home
-  static const labelReportTimeline = 'Feed Laporan';
+  static const labelReportTimeline = 'Beranda';
 
   // Report
   static const labelPostReport = 'Posting';
   static const labelChooseSchool = 'Pilih Sekolah';
   static const labelChooseReportType = 'Pilih Jenis Laporan';
-  static const labelCompleteReport = 'Lengkapi Laporan';
+  static const labelCompleteReport = 'Lengkapi Data Postingan';
   static const labelPostDetail = 'Detail Postingan';
   static const descDescriptionCannotBeEmpty = 'Deskripsi tidak boleh kosong';
   static const descDescriptionTooShort = 'Deskripsi minimal terdiri dari 3 karkter';
@@ -70,7 +70,7 @@ class SWStrings {
   static const descLocationCannotBeEmpty = 'Lokasi tidak boleh kosong';
   static const descInformationCannotBeEmpty = 'Informasi tidak boleh kosong';
   static const descLabelCannotBeEmpty = 'Label tidak boleh kosong';
-  static const descNoImagePicked = 'Belum ada foto terpilih';
+  static const descNoImagePicked = 'Silahkan pilih foto (dapat lebih dari 1 foto)';
   static const descImageCannotBeEmpty = 'Foto tidak boleh kosong';
   static const labelPickLocation = 'Pilih Lokasi';
   static const descOutsideAreaMarker = 'Tanda tidak boleh berada diluar area sekolah';

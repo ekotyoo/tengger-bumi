@@ -309,7 +309,7 @@ class ReportRepository implements IReportRepository {
       if (response['status'] == 'success') {
         return right(unit);
       }
-      return left(const Failure('Gagal menghapus laporan'));
+      return left(const Failure('Gagal menghapus postingan'));
     } catch (e) {
       final exception = NetworkExceptions.getDioException(e);
       return left(Failure(exception.getErrorMessage()));

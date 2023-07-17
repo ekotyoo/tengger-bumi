@@ -113,7 +113,7 @@ class ReportFeedController extends _$ReportFeedController {
         state = AsyncValue.data(oldState.copyWith(reports: oldReports));
       },
       (r) {
-        setSuccessMessage('Laporan berhasil dihapus');
+        setSuccessMessage('Postingan berhasil dihapus');
         _deleteReport(index);
       },
     );
