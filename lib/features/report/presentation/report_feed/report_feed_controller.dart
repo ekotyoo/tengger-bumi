@@ -84,7 +84,7 @@ Future<List<Regency>> getAllRegencies(GetAllRegenciesRef ref) async {
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 class ReportFeedController extends _$ReportFeedController {
   @override
   FutureOr<ReportFeedState> build(ReportQuery query) async {
@@ -137,9 +137,9 @@ class ReportFeedController extends _$ReportFeedController {
   }
 
   void addReport(Plant report) {
+    if (!state.hasValue || state.hasError) return;
     final oldState = state.requireValue;
-    state = AsyncValue.data(
-        oldState.copyWith(reports: [report, ...oldState.reports]));
+    state = AsyncValue.data(oldState.copyWith(reports: [report, ...oldState.reports]));
   }
 
   void setSuccessMessage(String? message) {
