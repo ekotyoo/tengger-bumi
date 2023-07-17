@@ -248,8 +248,9 @@ class ReportFilter extends ConsumerWidget {
                                 ),
                               ),
                               isScrollControlled: true,
-                              builder: (context) => const CategoryFilterList(
+                              builder: (context) => CategoryFilterList(
                                 label: SWStrings.labelPlantCategory,
+                                type: type,
                               ),
                             );
                           },
@@ -340,9 +341,9 @@ class ReportFilter extends ConsumerWidget {
                                 ),
                               ),
                               isScrollControlled: true,
-                              builder: (context) =>
-                                  const PlantingAreaFilterList(
+                              builder: (context) => PlantingAreaFilterList(
                                 label: SWStrings.labelPlantingArea,
+                                type: type,
                               ),
                             );
                           },
