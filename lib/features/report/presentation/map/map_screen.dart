@@ -135,10 +135,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     final reportQuery = ref.watch(reportMapFilterStateProvider);
     final plantsMapAsync = ref.watch(getPlantsMapProvider(query: reportQuery));
 
-    final defaultCentroid = LatLng(-2.5489, 118.0149);
+    final defaultCentroid = LatLng(-2.050447, 118.899542);
     final defaultMapOption = MapOptions(
       center: defaultCentroid,
-      zoom: 10,
+      zoom: 3,
       minZoom: 3,
       maxZoom: 23,
       absorbPanEventsOnScrollables: false,
@@ -165,7 +165,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               options: plantsMapAsync.when(
                 data: (plants) {
                   return MapOptions(
-                    zoom: 10,
+                    zoom: 2,
                     minZoom: 1,
                     absorbPanEventsOnScrollables: false,
                     onPositionChanged: (MapPosition position, bool hasGesture) {
