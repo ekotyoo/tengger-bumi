@@ -19,11 +19,12 @@ class ProfileController extends _$ProfileController {
     if (authState is SignedIn) {
       final reports = await getUserReports(authState.id);
       final stats = await getUserStats(authState.id);
+      final total = stats.isEmpty ? 0 : stats.map((e) => e.count).reduce((value, element) => value + element);
       return ProfileState(
         user: authState,
         reports: reports,
         stats: stats,
-        total: stats.map((e) => e.count).reduce((value, element) => value + element)
+        total: total
       );
     }
 

@@ -50,7 +50,7 @@ class ProfileScreen extends ConsumerWidget {
         ),
         body: stateAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, stackTrace) => const Center(child: Text('error')),
+          error: (error, stackTrace) => Center(child: Text(error.toString())),
           data: (state) {
             return ListView(
               padding: const EdgeInsets.all(SWSizes.s16),
