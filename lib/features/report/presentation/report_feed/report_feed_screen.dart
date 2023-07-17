@@ -149,30 +149,67 @@ class ReportFilterHeader extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final categoriesProvider = ref.watch(getCategoriesProvider);
+    final reportQuery = ref.watch(reportFilterStateProvider);
     return SizedBox(
       height: SWSizes.s32,
-      child: Row(
-        children: [
-          InkWell(
-            onTap: () {
-              showModalBottomSheet(
-                context: context,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(SWSizes.s32),
-                    topRight: Radius.circular(SWSizes.s32),
-                  ),
+      child: Padding(
+        padding: const EdgeInsets.only(left: SWSizes.s16),
+        child: Row(
+          children: [
+            categoriesProvider.when(
+              data: (data) => Expanded(
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: data
+                      .map(
+                        (category) => Padding(
+                      padding: const EdgeInsets.only(right: SWSizes.s8),
+                      child: SelectChip(
+                        label: category.name,
+                        selected: reportQuery.category == category,
+                        onTap: () {
+                          ref
+                              .read(reportFilterStateProvider.notifier)
+                              .updateFilterState(
+                            reportQuery.copyWith(
+                              category: reportQuery.category == category
+                                  ? null
+                                  : category,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  )
+                      .toList(),
                 ),
-                isScrollControlled: true,
-                builder: (context) => const ReportFilter(),
-              );
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: SWSizes.s8),
-              child: const Center(child: Icon(Icons.more_vert_rounded)),
+              ),
+              error: (error, stackTrace) =>
+                  Center(child: Text(error.toString())),
+              loading: () => const FittedBox(child: Center(child: CircularProgressIndicator())),
             ),
-          ),
-        ],
+            InkWell(
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(SWSizes.s32),
+                      topRight: Radius.circular(SWSizes.s32),
+                    ),
+                  ),
+                  isScrollControlled: true,
+                  builder: (context) => const ReportFilter(),
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: SWSizes.s8),
+                child: const Center(child: Icon(Icons.more_vert_rounded)),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
