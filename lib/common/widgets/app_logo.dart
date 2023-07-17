@@ -11,15 +11,7 @@ class AppLogo extends StatelessWidget {
       children: [
         Image.asset(
           'assets/images/tetenger_bumi_logo.png',
-          width: SWSizes.s16,
-          height: SWSizes.s16,
-        ),
-        const SizedBox(width: SWSizes.s4),
-        Text(
-          SWStrings.appNameShort,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w700,
-              color: Theme.of(context).primaryColor),
+          height: SWSizes.s24,
         ),
         const SizedBox(width: SWSizes.s16),
       ],
