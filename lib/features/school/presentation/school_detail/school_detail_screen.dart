@@ -320,7 +320,7 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
                 Tab(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [Icon(Icons.photo), Text('Posting')],
+                    children: [Icon(Icons.photo), Text('Postingan')],
                   ),
                 ),
                 Tab(
@@ -367,6 +367,7 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
     return reports.isEmpty
         ? emptyPlaceholder
         : ListView.separated(
+            padding: const EdgeInsetsDirectional.only(top: 6),
             itemCount: reports.length,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -381,7 +382,7 @@ class _ReportListWithFilterState extends State<ReportListWithFilter>
               },
             ),
             separatorBuilder: (context, index) =>
-                const SizedBox(height: SWSizes.s8),
+                const SizedBox(height: 6),
           );
   }
 
