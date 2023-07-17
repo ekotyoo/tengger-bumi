@@ -45,6 +45,7 @@ class WelcomeScreen extends StatelessWidget {
               'Selamat Datang!',
               style: Theme.of(context).textTheme.displaySmall,
             ),
+            const SizedBox(height: SWSizes.s8,),
             const Text(SWStrings.appDesc,
                 textAlign: TextAlign.justify,
                 style: TextStyle(
