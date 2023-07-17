@@ -39,6 +39,7 @@ class SWStrings {
 
   // Home
   static const labelReportTimeline = 'Beranda';
+  static const labelPlantingFeed = 'Feed Penanaman';
 
   // Report
   static const labelPostReport = 'Posting';

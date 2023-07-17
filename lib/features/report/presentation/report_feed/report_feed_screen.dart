@@ -21,7 +21,7 @@ class ReportFeedScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(SWStrings.labelReportTimeline),
+          title: const Text(SWStrings.labelPlantingFeed),
           actions: const [AppLogo()],
         ),
         body: Column(
