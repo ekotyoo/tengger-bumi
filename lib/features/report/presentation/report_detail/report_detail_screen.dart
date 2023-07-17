@@ -174,7 +174,7 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
                               author: report.author,
                               createdAt: report.createdAt),
                           const SizedBox(height: SWSizes.s16),
-                          _buildInfoSection(context, report),
+                          // _buildInfoSection(context, report),
                           const SizedBox(height: SWSizes.s8),
                           const Divider(),
                           const SizedBox(height: SWSizes.s8),
@@ -355,6 +355,7 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
                   .displaySmall
                   ?.copyWith(fontWeight: FontWeight.bold),
             ),
+            const SizedBox(height: SWSizes.s4,),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -463,35 +464,35 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
         ));
   }
 
-  _buildInfoSection(BuildContext context, PlantDetail report) {
-    final icons = [
-      Icons.category_outlined,
-      Icons.insert_drive_file_outlined,
-      Icons.school_outlined,
-      Icons.location_on_outlined
-    ];
-
-    final infos = {
-      'Jenis Tanaman': report.category.name,
-      'Usia Tanaman': report.plantingDate.toString(),
-      'Jumlah Penanaman': report.plantingCount.toString(),
-    };
-
-    return AlignedGridView.count(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: 2,
-      itemCount: infos.length,
-      mainAxisSpacing: SWSizes.s16,
-      crossAxisSpacing: SWSizes.s16,
-      itemBuilder: (context, index) => _buildInfoTile(
-        context,
-        label: infos.keys.toList()[index],
-        value: infos.values.toList()[index],
-        icon: icons[index],
-      ),
-    );
-  }
+  // _buildInfoSection(BuildContext context, PlantDetail report) {
+  //   final icons = [
+  //     Icons.category_outlined,
+  //     Icons.insert_drive_file_outlined,
+  //     Icons.school_outlined,
+  //     Icons.location_on_outlined
+  //   ];
+  //
+  //   final infos = {
+  //     'Jenis Tanaman': report.category.name,
+  //     'Usia Tanaman': report.plantingDate.toString(),
+  //     'Jumlah Penanaman': report.plantingCount.toString(),
+  //   };
+  //
+  //   return AlignedGridView.count(
+  //     shrinkWrap: true,
+  //     physics: const NeverScrollableScrollPhysics(),
+  //     crossAxisCount: 2,
+  //     itemCount: infos.length,
+  //     mainAxisSpacing: SWSizes.s16,
+  //     crossAxisSpacing: SWSizes.s16,
+  //     itemBuilder: (context, index) => _buildInfoTile(
+  //       context,
+  //       label: infos.keys.toList()[index],
+  //       value: infos.values.toList()[index],
+  //       icon: icons[index],
+  //     ),
+  //   );
+  // }
 
   _buildInfoTile(
     BuildContext context, {
