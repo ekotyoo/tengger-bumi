@@ -97,7 +97,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
           title: const Text(SWStrings.labelEditProfile),
           centerTitle: true,

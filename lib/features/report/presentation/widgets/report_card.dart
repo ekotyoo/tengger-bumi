@@ -43,7 +43,7 @@ class ReportCard extends StatelessWidget {
           _buildImage(context, report),
           const SizedBox(height: SWSizes.s8),
           // _buildCategoryList(context, report),
-          _buildPlantTitle(context, report.address),
+          _buildPlantTitle(context, report.name),
           const SizedBox(height: SWSizes.s4),
           _buildCaption(context, report.description),
           const SizedBox(height: SWSizes.s2),

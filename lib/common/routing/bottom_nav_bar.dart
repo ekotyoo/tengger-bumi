@@ -41,8 +41,8 @@ class BottomNavBar extends StatelessWidget {
             child: const Icon(Icons.add_rounded),
           ),
           BottomNavItem(
-            icon: Icons.list,
-            label: 'Sekolah',
+            icon: Icons.bookmark,
+            label: 'Bookmark',
             onPressed: () => onTap(3),
             selected: currentIndex == 3,
           ),

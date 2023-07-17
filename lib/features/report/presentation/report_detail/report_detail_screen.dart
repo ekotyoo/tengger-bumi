@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:tetenger_bumi/utils/age.dart';
 
 import '../../../../common/routing/routes.dart';
 import '../../../../utils/snackbar_utils.dart';
@@ -161,13 +162,17 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
                           const SizedBox(height: SWSizes.s8),
                           _buildTopSection(context, report),
                           const SizedBox(height: SWSizes.s8),
+                          _buildCategory(context, report),
+                          const SizedBox(height: SWSizes.s8),
                           _buildAge(context, report),
                           const SizedBox(height: SWSizes.s8),
                           _buildQuantity(context, report),
                           const SizedBox(height: SWSizes.s8),
                           _buildDescription(context, report.description),
                           const SizedBox(height: SWSizes.s8),
-                          _buildAuthorSection(context, author: report.author, createdAt: report.createdAt),
+                          _buildAuthorSection(context,
+                              author: report.author,
+                              createdAt: report.createdAt),
                           const SizedBox(height: SWSizes.s16),
                           _buildInfoSection(context, report),
                           const SizedBox(height: SWSizes.s8),
@@ -357,9 +362,30 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              report.name,
+              style: Theme.of(context)
+                  .textTheme
+                  .displaySmall
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(Icons.maps_home_work),
+                const SizedBox(width: SWSizes.s8),
+                Expanded(
+                  child: Text(
+                    report.address,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+              ],
+            ),
             Row(
               children: [
-                Text('',
+                Text(
+                  '',
                   style: Theme.of(context)
                       .textTheme
                       .displaySmall
@@ -370,8 +396,43 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
               ],
             ),
           ],
-        )
-    );
+        ));
+  }
+
+  _buildCategory(BuildContext context, PlantDetail report) {
+    return Container(
+        decoration: const BoxDecoration(
+            color: kColorSurface,
+            borderRadius: BorderRadius.all(Radius.circular(SWSizes.s8))),
+        padding: const EdgeInsets.all(SWSizes.s8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Jenis tanaman',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            Row(
+              children: [
+                Image.network(
+                  report.category.icon,
+                  width: 25,
+                  headers: {
+                    "Keep-Alive": "timeout=30,max=100",
+                    "Connection": "Keep-Alive"
+                  },
+                ),
+                const SizedBox(
+                  width: SWSizes.s8,
+                ),
+                Text(report.category.name),
+              ],
+            ),
+          ],
+        ));
   }
 
   _buildAge(BuildContext context, PlantDetail report) {
@@ -390,7 +451,7 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
                   .bodyLarge
                   ?.copyWith(fontWeight: FontWeight.bold),
             ),
-            Text("${report.description} tahun")
+            Text(getAgeYearAndMonth(report.plantingDate))
           ],
         ));
   }
@@ -404,16 +465,16 @@ class _ReportDetailScreenState extends ConsumerState<ReportDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Jumlah Penanaman',
+            Text(
+              'Jumlah Penanaman',
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge
                   ?.copyWith(fontWeight: FontWeight.bold),
             ),
-            Text(report.description)
+            Text(report.plantingCount.toString())
           ],
-        )
-    );
+        ));
   }
 
   _buildInfoSection(BuildContext context, PlantDetail report) {
