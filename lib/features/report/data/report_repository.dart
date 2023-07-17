@@ -87,6 +87,9 @@ class ReportRepository implements IReportRepository {
         author: result.author.copyWith(
           avatar: result.author.avatar?.replaceAll('public', kBaseUrl),
         ),
+          category: result.category.copyWith(
+              icon: result.category.icon.replaceAll('public', kBaseUrl)
+          )
       );
       return right(plant);
     } catch (e) {
