@@ -245,6 +245,7 @@ class PostReportController extends StateNotifier<PostReportState> {
       await getReportDetail(reportId);
       await _populateReportDetail(state.reportDetail);
     }
+    await initReportInfoForm();
     state = state.copyWith(firstFormLoading: false);
   }
 
@@ -271,10 +272,13 @@ class PostReportController extends StateNotifier<PostReportState> {
       locationInput: LocationPickInput.dirty(value: selectedLocation),
       descriptionInput: DescriptionTextInput.dirty(value: report.description),
       imageInput: ImagePickInput.dirty(value: images),
+      nameInput: PlantNameInput.dirty(value: report.name),
+      plantingCountInput: PlantingCountInput.dirty(value: report.plantingCount),
+      plantingDateInput: DateInput.dirty(value: report.plantingDate),
     );
   }
 
-  void initReportInfoForm() async {
+  Future<void> initReportInfoForm() async {
     state = state.copyWith(infoFormLoading: true);
 
     await _getCategories();

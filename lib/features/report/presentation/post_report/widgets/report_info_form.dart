@@ -30,9 +30,6 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => ref
-        .read(postReportControllerProvider(widget.formType).notifier)
-        .initReportInfoForm());
   }
 
   @override
