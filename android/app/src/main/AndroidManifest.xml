@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
    <application
-        android:label="School Watch Semeru"
+        android:label="Tetenger Bumi"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
