@@ -318,7 +318,7 @@ class ReportCard extends StatelessWidget {
       onTap: onTap,
       child: Row(
         children: [
-          Icon(icon, size: SWSizes.s16, color: color),
+          Icon(icon, color: color),
           const SizedBox(width: SWSizes.s8),
           Text(
             '$count',
@@ -340,22 +340,12 @@ class ReportCard extends StatelessWidget {
       children: [
         _buildInteractionButton(
           context,
-          icon: Icons.thumb_up_rounded,
+          icon: report.liked == true ? Icons.bookmark : Icons.bookmark_border,
           count: report.likesCount,
           color: report.liked == true
               ? Theme.of(context).primaryColor
               : kColorNeutral200,
           onTap: onLiked,
-        ),
-        const SizedBox(width: SWSizes.s16),
-        _buildInteractionButton(
-          context,
-          icon: Icons.thumb_down_rounded,
-          count: report.dislikesCount,
-          color: report.liked == false
-              ? Theme.of(context).primaryColor
-              : kColorNeutral200,
-          onTap: onDisliked,
         ),
         const SizedBox(width: SWSizes.s16),
         _buildInteractionButton(
