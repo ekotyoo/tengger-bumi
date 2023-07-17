@@ -12,6 +12,7 @@ import '../../../../common/widgets/open_street_map_attribution.dart';
 import '../../../../common/routing/routes.dart';
 import '../../../../common/constants/constant.dart';
 import '../../../../common/widgets/sw_button.dart';
+import '../report_feed/report_feed_screen.dart';
 import '../widgets/report_card.dart';
 
 class MapScreen extends ConsumerStatefulWidget {
@@ -46,6 +47,28 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
   _buildMapControl() {
     return [
+      Align(
+        alignment: Alignment.topLeft,
+        child: IconButton(
+          iconSize: SWSizes.s32 + SWSizes.s8,
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(SWSizes.s32),
+                  topRight: Radius.circular(SWSizes.s32),
+                ),
+              ),
+              isScrollControlled: true,
+              builder: (context) => const ReportFilter(type: FilterType.map),
+            );
+          },
+          icon: const CircleAvatar(
+            child: Icon(Icons.filter_list_alt),
+          ),
+        ),
+      ),
       Align(
         alignment: Alignment.topRight,
         child: IconButton(
@@ -107,7 +130,8 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final plantsMapAsync = ref.watch(getPlantsMapProvider);
+    final reportQuery = ref.watch(reportMapFilterStateProvider);
+    final plantsMapAsync = ref.watch(getPlantsMapProvider(query: reportQuery));
 
     final defaultCentroid = LatLng(-2.5489, 118.0149);
     final defaultMapOption = MapOptions(
@@ -241,7 +265,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                                     backgroundColor: kColorPrimary100,
                                     child: Padding(
                                       padding: const EdgeInsets.all(SWSizes.s2),
-                                      child: Image(image: NetworkImage(plant.category.icon)),
+                                      child: Image(
+                                          image: NetworkImage(
+                                              plant.category.icon)),
                                     ),
                                   ),
                                 ),
@@ -257,6 +283,16 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               ],
             ),
             ..._buildMapControl(),
+            plantsMapAsync.when(
+              data: (data) => const SizedBox(),
+              error: (error, stackTrace) => const SizedBox(),
+              loading: () => Container(
+                color: Colors.black.withOpacity(0.3),
+                child: const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            ),
           ],
         ),
       ),

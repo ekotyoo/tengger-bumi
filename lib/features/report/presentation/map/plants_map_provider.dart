@@ -11,7 +11,20 @@ import '../../../../common/constants/constant.dart';
 part 'plants_map_provider.g.dart';
 
 @riverpod
-Future<List<Plant>> getPlantsMap(GetPlantsMapRef ref) async {
+class ReportMapFilterState extends _$ReportMapFilterState {
+  @override
+  ReportQuery build() {
+    return const ReportQuery();
+  }
+
+  void updateFilterState(ReportQuery state) => this.state = state;
+}
+
+@riverpod
+Future<List<Plant>> getPlantsMap(
+  GetPlantsMapRef ref, {
+  required ReportQuery query,
+}) async {
   final repo = ref.watch(reportRepositoryProvider);
 
   final cancelToken = CancelToken();
@@ -33,9 +46,12 @@ Future<List<Plant>> getPlantsMap(GetPlantsMapRef ref) async {
   await Future.delayed(kDurationLong);
   if (cancelToken.isCancelled) throw Exception();
 
-  final result = await repo.getPlants(query: const ReportQuery(), cancelToken: cancelToken);
+  final result = await repo.getPlants(
+    query: query,
+    cancelToken: cancelToken,
+  );
   return result.fold(
-        (l) => const [],
-        (r) => r,
+    (l) => const [],
+    (r) => r,
   );
 }

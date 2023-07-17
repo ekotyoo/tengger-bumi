@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tetenger_bumi/features/report/presentation/map/plants_map_provider.dart';
 
 import '../../../../common/constants/constant.dart';
 import '../../../../common/models/regency.dart';
 import '../../../../common/widgets/title_with_caption.dart';
 import '../../domain/category.dart';
 import '../report_feed/report_feed_controller.dart';
+import '../report_feed/report_feed_screen.dart';
 
 class CategoryFilterList extends ConsumerStatefulWidget {
-  const CategoryFilterList({
-    Key? key,
-    required this.label,
-  }) : super(key: key);
+  const CategoryFilterList(
+      {Key? key, required this.label, this.type = FilterType.feed})
+      : super(key: key);
 
   final String label;
+  final FilterType type;
 
   @override
   ConsumerState<CategoryFilterList> createState() => _CategoryFilterListState();
@@ -33,7 +35,9 @@ class _CategoryFilterListState extends ConsumerState<CategoryFilterList> {
   @override
   Widget build(BuildContext context) {
     final categoriesAsync = ref.watch(getCategoriesProvider);
-    final reportQuery = ref.watch(reportFilterStateProvider);
+    final reportQuery = widget.type == FilterType.feed
+        ? ref.watch(reportFilterStateProvider)
+        : ref.watch(reportMapFilterStateProvider);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: SWSizes.s16),
@@ -66,23 +70,38 @@ class _CategoryFilterListState extends ConsumerState<CategoryFilterList> {
           categoriesAsync.when(
             data: (data) {
               List<Category> filteredCategories = data
-                  .where((element) => element.name.toLowerCase().contains(_query.toLowerCase()))
+                  .where((element) =>
+                      element.name.toLowerCase().contains(_query.toLowerCase()))
                   .toList();
               return Expanded(
                 child: ListView.separated(
                   itemCount: filteredCategories.length,
                   itemBuilder: (context, index) => GestureDetector(
                     onTap: () {
-                      ref
-                          .read(reportFilterStateProvider.notifier)
-                          .updateFilterState(
-                            reportQuery.copyWith(
-                              category: reportQuery.category ==
-                                      filteredCategories[index]
-                                  ? null
-                                  : filteredCategories[index],
-                            ),
-                          );
+                      if (widget.type == FilterType.feed) {
+                        ref
+                            .read(reportFilterStateProvider.notifier)
+                            .updateFilterState(
+                              reportQuery.copyWith(
+                                category: reportQuery.category ==
+                                        filteredCategories[index]
+                                    ? null
+                                    : filteredCategories[index],
+                              ),
+                            );
+                      } else {
+                        ref
+                            .read(reportMapFilterStateProvider.notifier)
+                            .updateFilterState(
+                              reportQuery.copyWith(
+                                category: reportQuery.category ==
+                                        filteredCategories[index]
+                                    ? null
+                                    : filteredCategories[index],
+                              ),
+                            );
+                      }
+
                       context.pop();
                     },
                     child: Container(
@@ -111,20 +130,23 @@ class _CategoryFilterListState extends ConsumerState<CategoryFilterList> {
   }
 }
 
-
 class PlantingAreaFilterList extends ConsumerStatefulWidget {
   const PlantingAreaFilterList({
     Key? key,
     required this.label,
+    this.type = FilterType.feed,
   }) : super(key: key);
 
   final String label;
+  final FilterType type;
 
   @override
-  ConsumerState<PlantingAreaFilterList> createState() => _PlantingAreaFilterListState();
+  ConsumerState<PlantingAreaFilterList> createState() =>
+      _PlantingAreaFilterListState();
 }
 
-class _PlantingAreaFilterListState extends ConsumerState<PlantingAreaFilterList> {
+class _PlantingAreaFilterListState
+    extends ConsumerState<PlantingAreaFilterList> {
   String _query = '';
   late TextEditingController _searchController;
 
@@ -137,7 +159,9 @@ class _PlantingAreaFilterListState extends ConsumerState<PlantingAreaFilterList>
   @override
   Widget build(BuildContext context) {
     final regenciesAsync = ref.watch(getAllRegenciesProvider);
-    final reportQuery = ref.watch(reportFilterStateProvider);
+    final reportQuery = widget.type == FilterType.feed
+        ? ref.watch(reportFilterStateProvider)
+        : ref.watch(reportMapFilterStateProvider);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: SWSizes.s16),
@@ -170,23 +194,37 @@ class _PlantingAreaFilterListState extends ConsumerState<PlantingAreaFilterList>
           regenciesAsync.when(
             data: (data) {
               List<Regency> filteredCategories = data
-                  .where((element) => element.name.toLowerCase().contains(_query.toLowerCase()))
+                  .where((element) =>
+                      element.name.toLowerCase().contains(_query.toLowerCase()))
                   .toList();
               return Expanded(
                 child: ListView.separated(
                   itemCount: filteredCategories.length,
                   itemBuilder: (context, index) => GestureDetector(
                     onTap: () {
-                      ref
-                          .read(reportFilterStateProvider.notifier)
-                          .updateFilterState(
-                        reportQuery.copyWith(
-                          regency: reportQuery.regency ==
-                              filteredCategories[index]
-                              ? null
-                              : filteredCategories[index],
-                        ),
-                      );
+                      if (widget.type == FilterType.feed) {
+                        ref
+                            .read(reportFilterStateProvider.notifier)
+                            .updateFilterState(
+                          reportQuery.copyWith(
+                            regency: reportQuery.regency ==
+                                filteredCategories[index]
+                                ? null
+                                : filteredCategories[index],
+                          ),
+                        );
+                      } else {
+                        ref
+                            .read(reportMapFilterStateProvider.notifier)
+                            .updateFilterState(
+                          reportQuery.copyWith(
+                            regency: reportQuery.regency ==
+                                filteredCategories[index]
+                                ? null
+                                : filteredCategories[index],
+                          ),
+                        );
+                      }
                       context.pop();
                     },
                     child: Container(
@@ -202,7 +240,7 @@ class _PlantingAreaFilterListState extends ConsumerState<PlantingAreaFilterList>
                     ),
                   ),
                   separatorBuilder: (context, index) =>
-                  const SizedBox(height: SWSizes.s8),
+                      const SizedBox(height: SWSizes.s8),
                 ),
               );
             },

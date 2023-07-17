@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tetenger_bumi/features/report/presentation/map/plants_map_provider.dart';
 
 import '../../domain/report_time.dart';
 import '../widgets/filter_list.dart';
@@ -177,14 +178,21 @@ class ReportFilterHeader extends ConsumerWidget {
   }
 }
 
+enum FilterType { map, feed }
+
 class ReportFilter extends ConsumerWidget {
   const ReportFilter({
     Key? key,
+    this.type = FilterType.feed,
   }) : super(key: key);
+
+  final FilterType type;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final reportQuery = ref.watch(reportFilterStateProvider);
+    final reportQuery = type == FilterType.feed
+        ? ref.watch(reportFilterStateProvider)
+        : ref.watch(reportMapFilterStateProvider);
     final categoriesAsync = ref.watch(getCategoriesProvider);
     final regenciesAsync = ref.watch(getAllRegenciesProvider);
 
@@ -266,16 +274,31 @@ class ReportFilter extends ConsumerWidget {
                                 label: category.name,
                                 selected: reportQuery.category == category,
                                 onTap: () {
-                                  ref
-                                      .read(reportFilterStateProvider.notifier)
-                                      .updateFilterState(
-                                        reportQuery.copyWith(
-                                          category:
-                                              reportQuery.category == category
-                                                  ? null
-                                                  : category,
-                                        ),
-                                      );
+                                  if (type == FilterType.feed) {
+                                    ref
+                                        .read(
+                                            reportFilterStateProvider.notifier)
+                                        .updateFilterState(
+                                          reportQuery.copyWith(
+                                            category:
+                                                reportQuery.category == category
+                                                    ? null
+                                                    : category,
+                                          ),
+                                        );
+                                  } else {
+                                    ref
+                                        .read(reportMapFilterStateProvider
+                                            .notifier)
+                                        .updateFilterState(
+                                          reportQuery.copyWith(
+                                            category:
+                                                reportQuery.category == category
+                                                    ? null
+                                                    : category,
+                                          ),
+                                        );
+                                  }
                                   context.pop();
                                 },
                               ),
@@ -309,7 +332,7 @@ class ReportFilter extends ConsumerWidget {
                               useSafeArea: true,
                               constraints: BoxConstraints(
                                   maxHeight:
-                                  MediaQuery.of(context).size.height),
+                                      MediaQuery.of(context).size.height),
                               shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(SWSizes.s32),
@@ -317,7 +340,8 @@ class ReportFilter extends ConsumerWidget {
                                 ),
                               ),
                               isScrollControlled: true,
-                              builder: (context) => const PlantingAreaFilterList(
+                              builder: (context) =>
+                                  const PlantingAreaFilterList(
                                 label: SWStrings.labelPlantingArea,
                               ),
                             );
@@ -342,14 +366,30 @@ class ReportFilter extends ConsumerWidget {
                                 label: area.name,
                                 selected: reportQuery.regency == area,
                                 onTap: () {
-                                  ref
-                                      .read(reportFilterStateProvider.notifier)
-                                      .updateFilterState(
-                                        reportQuery.copyWith(
-                                            regency: reportQuery.regency == area
-                                                ? null
-                                                : area),
-                                      );
+                                  if (type == FilterType.feed) {
+                                    ref
+                                        .read(
+                                            reportFilterStateProvider.notifier)
+                                        .updateFilterState(
+                                          reportQuery.copyWith(
+                                              regency:
+                                                  reportQuery.regency == area
+                                                      ? null
+                                                      : area),
+                                        );
+                                  } else {
+                                    ref
+                                        .read(reportMapFilterStateProvider
+                                            .notifier)
+                                        .updateFilterState(
+                                          reportQuery.copyWith(
+                                              regency:
+                                                  reportQuery.regency == area
+                                                      ? null
+                                                      : area),
+                                        );
+                                  }
+
                                   context.pop();
                                 }),
                           )
@@ -377,15 +417,28 @@ class ReportFilter extends ConsumerWidget {
                               label: time.name,
                               selected: reportQuery.reportTime == time,
                               onTap: () {
-                                ref
-                                    .read(reportFilterStateProvider.notifier)
-                                    .updateFilterState(
-                                      reportQuery.copyWith(
-                                          reportTime:
-                                              reportQuery.reportTime == time
-                                                  ? null
-                                                  : time),
-                                    );
+                                if (type == FilterType.feed) {
+                                  ref
+                                      .read(reportFilterStateProvider.notifier)
+                                      .updateFilterState(
+                                        reportQuery.copyWith(
+                                            reportTime:
+                                                reportQuery.reportTime == time
+                                                    ? null
+                                                    : time),
+                                      );
+                                } else {
+                                  ref
+                                      .read(
+                                          reportMapFilterStateProvider.notifier)
+                                      .updateFilterState(
+                                        reportQuery.copyWith(
+                                            reportTime:
+                                                reportQuery.reportTime == time
+                                                    ? null
+                                                    : time),
+                                      );
+                                }
                               }),
                         )
                         .toList()
