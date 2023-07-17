@@ -86,7 +86,7 @@ class SWTheme {
           fillColor: kColorPrimary50,
           filled: true,
           border: InputBorder.none,
-          constraints: const BoxConstraints(maxHeight: SWSizes.s56),
+          constraints: const BoxConstraints(maxHeight: 100),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(SWSizes.s8),
             borderSide: BorderSide.none,

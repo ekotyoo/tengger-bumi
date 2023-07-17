@@ -12,9 +12,11 @@ class SWTextField extends StatefulWidget {
     this.action,
     this.controller,
     this.maxLines = 1,
+    this.minLines = 1,
     this.errorText,
     this.onChanged,
     this.enabled = true,
+    this.expands = false,
     this.initialText,
   });
 
@@ -23,7 +25,9 @@ class SWTextField extends StatefulWidget {
   final SWTextFieldType type;
   final String? hint;
   final TextInputAction? action;
-  final int maxLines;
+  final int? maxLines;
+  final int? minLines;
+  final bool expands;
   final String? errorText;
   final Function(String)? onChanged;
   final bool enabled;
@@ -80,6 +84,10 @@ class _SWTextFieldState extends State<SWTextField> {
           enabled: widget.enabled,
           textInputAction: widget.action,
           maxLines: widget.maxLines,
+          minLines: widget.minLines,
+          textAlign: TextAlign.start,
+          textAlignVertical: TextAlignVertical.top,
+          expands: widget.expands,
           style: Theme.of(context).textTheme.bodyMedium,
           obscureText: obscureText,
           decoration: InputDecoration(

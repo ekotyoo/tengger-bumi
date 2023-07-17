@@ -143,6 +143,7 @@ class _ReportInfoFormState extends ConsumerState<ReportInfoForm> {
         initialText: state.descriptionInput.value,
         hint: SWStrings.labelDescription,
         maxLines: 5,
+        minLines: 1,
         errorText: state.descriptionInput.isPure
             ? null
             : state.descriptionInput.error?.getErrorMessage(),
