@@ -55,7 +55,7 @@ final reportFilterStateProvider =
 
 typedef _$ReportFilterState = AutoDisposeNotifier<ReportQuery>;
 String _$reportFeedControllerHash() =>
-    r'46cf3b4ff359538380c24b286443034ed9f18c87';
+    r'2472d445baca2674eb72f9a29f7231693afde124';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -79,7 +79,7 @@ class _SystemHash {
 }
 
 abstract class _$ReportFeedController
-    extends BuildlessAutoDisposeAsyncNotifier<ReportFeedState> {
+    extends BuildlessAsyncNotifier<ReportFeedState> {
   late final ReportQuery query;
 
   FutureOr<ReportFeedState> build(
@@ -130,8 +130,8 @@ class ReportFeedControllerFamily extends Family<AsyncValue<ReportFeedState>> {
 }
 
 /// See also [ReportFeedController].
-class ReportFeedControllerProvider extends AutoDisposeAsyncNotifierProviderImpl<
-    ReportFeedController, ReportFeedState> {
+class ReportFeedControllerProvider
+    extends AsyncNotifierProviderImpl<ReportFeedController, ReportFeedState> {
   /// See also [ReportFeedController].
   ReportFeedControllerProvider(
     this.query,

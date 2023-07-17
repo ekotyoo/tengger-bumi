@@ -14,81 +14,23 @@ class SchoolListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isAdmin = ref.watch(authStateProvider).map(
-          signedIn: (value) => value.isAdmin,
-          signedOut: (value) => false,
-        );
-
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: const Text(SWStrings.labelPlantList),
+          title: const Text(SWStrings.labelBookmarkList),
           centerTitle: true,
-          actions: [
-            if (isAdmin)
-              GestureDetector(
-                onTap: () => context.pushNamed(Routes.addSchool),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: SWSizes.s16),
-                  child: Icon(Icons.add),
-                ),
-              )
-          ],
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: SWSizes.s16),
           child: Column(
             children: [
               const SizedBox(height: SWSizes.s16),
-              const SchoolSearchBar(),
-              const SizedBox(height: SWSizes.s16),
-              Expanded(child: SchoolList()),
+              Expanded(child: BookmarkList()),
             ],
           ),
         ),
       ),
-    );
-  }
-}
-
-class SchoolSearchBar extends ConsumerStatefulWidget {
-  const SchoolSearchBar({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  ConsumerState createState() => _SchoolSearchBarState();
-}
-
-class _SchoolSearchBarState extends ConsumerState<SchoolSearchBar> {
-  late TextEditingController _controller;
-
-  @override
-  void initState() {
-    final text = ref.read(schoolSearchQueryProvider);
-    _controller = TextEditingController(text: text);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _controller.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      controller: _controller,
-      maxLines: 1,
-      style: Theme.of(context).textTheme.bodyMedium,
-      decoration: const InputDecoration(
-        hintText: SWStrings.labelSearchPlant,
-        suffixIcon: Icon(Icons.search_rounded),
-      ),
-      onChanged: (value) =>
-          ref.read(schoolSearchQueryProvider.notifier).updateSearchQuery(value),
     );
   }
 }
@@ -158,21 +100,26 @@ class SchoolCard extends StatelessWidget {
                 _buildSchoolAnalysisInfo(
                   context,
                   label: 'Pencegahan',
-                  color: getColorFromAnalysisScore(school.analysis.preventionLevel),
+                  color: getColorFromAnalysisScore(
+                      school.analysis.preventionLevel),
                   value: getLabelFromAnalysisScore(
                       school.analysis.preventionLevel),
                 ),
                 _buildSchoolAnalysisInfo(
                   context,
                   label: 'Tanggap Darurat',
-                  color: getColorFromAnalysisScore(school.analysis.emergencyResponseLevel),
-                  value: getLabelFromAnalysisScore(school.analysis.emergencyResponseLevel),
+                  color: getColorFromAnalysisScore(
+                      school.analysis.emergencyResponseLevel),
+                  value: getLabelFromAnalysisScore(
+                      school.analysis.emergencyResponseLevel),
                 ),
                 _buildSchoolAnalysisInfo(
                   context,
                   label: 'Pemulihan',
-                  color: getColorFromAnalysisScore(school.analysis.recoveryLevel),
-                  value: getLabelFromAnalysisScore(school.analysis.recoveryLevel),
+                  color:
+                      getColorFromAnalysisScore(school.analysis.recoveryLevel),
+                  value:
+                      getLabelFromAnalysisScore(school.analysis.recoveryLevel),
                 ),
               ],
             ),
@@ -217,8 +164,8 @@ class SchoolCard extends StatelessWidget {
   }
 }
 
-class SchoolList extends ConsumerWidget {
-  SchoolList({
+class BookmarkList extends ConsumerWidget {
+  BookmarkList({
     Key? key,
   }) : super(key: key);
 
@@ -226,42 +173,36 @@ class SchoolList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final schools = ref.watch(getSchoolsProvider);
+    final bookmarksAsync = ref.watch(getBookmarksProvider);
 
-    return schools.when(
+    return bookmarksAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stackTrace) => Text('$error'),
-      data: (schools) => RefreshIndicator(
+      data: (bookmarks) => RefreshIndicator(
         key: refreshIndicatorKey,
         onRefresh: () {
           ref.invalidate(getSchoolsProvider);
           return ref.read(getSchoolsProvider.future);
         },
-        child: ListView.separated(
-          itemCount: schools.length,
+        child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            crossAxisSpacing: SWSizes.s8,
+            mainAxisSpacing: SWSizes.s8,
+          ),
+          itemCount: bookmarks.length,
           itemBuilder: (context, index) {
-            final school = schools[index];
-            return SchoolCard(
-              school: school,
-              showEditButton: school.allowEdit,
-              onEdit: () {
-                context.pushNamed(
-                  Routes.editSchool,
-                  params: {
-                    'schoolId': school.id.toString(),
-                  },
-                );
-              },
+            final plant = bookmarks[index];
+            return InkWell(
               onTap: () {
                 context.pushNamed(
-                  Routes.schoolDetail,
-                  params: {'schoolId': school.id.toString()},
+                  Routes.reportDetail,
+                  params: {'reportId': plant.id.toString()},
                 );
               },
+              child: Image.network(plant.images.first, fit: BoxFit.cover),
             );
           },
-          separatorBuilder: (context, index) =>
-              const SizedBox(height: SWSizes.s8),
         ),
       ),
     );

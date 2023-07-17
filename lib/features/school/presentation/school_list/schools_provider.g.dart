@@ -6,6 +6,20 @@ part of 'schools_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+String _$getBookmarksHash() => r'0b66ac97c3537cd2d09a3c49ed68a0a4740c0846';
+
+/// See also [getBookmarks].
+@ProviderFor(getBookmarks)
+final getBookmarksProvider = AutoDisposeFutureProvider<List<Plant>>.internal(
+  getBookmarks,
+  name: r'getBookmarksProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$getBookmarksHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef GetBookmarksRef = AutoDisposeFutureProviderRef<List<Plant>>;
 String _$getSchoolsHash() => r'f5d2687d920f5a72d873feae75cb040c701ce988';
 
 /// See also [getSchools].

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:fpdart/fpdart.dart';
+import 'package:tetenger_bumi/features/report/domain/plant.dart';
 
 import '../../../common/error/failure.dart';
 import '../../../common/models/statistic.dart';
@@ -28,6 +29,8 @@ abstract class IAuthRepository {
   });
 
   Future<Either<Failure, List<Statistic>>> getStats({required int userId});
+
+  Future<Either<Failure, List<Plant>>> getBookmarks({required int userId});
 
   Future<Either<Failure, Unit>> verifyEmail({
     required String email,

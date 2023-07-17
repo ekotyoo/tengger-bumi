@@ -7,6 +7,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tetenger_bumi/common/models/statistic.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tetenger_bumi/features/report/domain/plant.dart';
 
 import '../domain/auth_user.dart';
 import '../../../common/error/network_exceptions.dart';
@@ -228,6 +229,35 @@ class AuthRepository implements IAuthRepository {
           .toList();
 
       return right(stats);
+    } catch (e) {
+      final exception = NetworkExceptions.getDioException(e);
+      return left(Failure(exception.getErrorMessage()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Plant>>> getBookmarks({required int userId}) async {
+    try {
+      final response = await _client.get('/user/$userId/bookmarks');
+
+      final plants = (response['data'] as List<dynamic>).map(
+            (e) {
+          final r = Plant.fromJson(e);
+          final report = r.copyWith(
+              images: r.images.map((e) => e.replaceAll('public', kBaseUrl)).toList(),
+              author: r.author.copyWith(
+                avatar: r.author.avatar?.replaceAll('public', kBaseUrl),
+              ),
+              category: r.category.copyWith(
+                  icon: r.category.icon.replaceAll('public', kBaseUrl)
+              )
+          );
+
+          return report;
+        },
+      ).toList();
+
+      return right(plants);
     } catch (e) {
       final exception = NetworkExceptions.getDioException(e);
       return left(Failure(exception.getErrorMessage()));

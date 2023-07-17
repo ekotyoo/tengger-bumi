@@ -4,6 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tetenger_bumi/common/constants/constant.dart';
 
+import '../../../auth/data/auth_repository.dart';
+import '../../../auth/domain/auth_user.dart';
+import '../../../report/domain/plant.dart';
 import '../../data/school_repository.dart';
 import '../../domain/school.dart';
 
@@ -20,6 +23,21 @@ class SchoolSearchQuery extends _$SchoolSearchQuery {
 }
 
 @riverpod
+Future<List<Plant>> getBookmarks(GetBookmarksRef ref) async {
+  final authState = ref.watch(authStateProvider);
+  if (authState is SignedIn) {
+    final repo = ref.watch(authRepositoryProvider);
+    final result = await repo.getBookmarks(userId: authState.id);
+    return result.fold(
+      (l) => <Plant>[],
+      (r) => r,
+    );
+  }
+
+  return <Plant>[];
+}
+
+@riverpod
 Future<List<School>> getSchools(GetSchoolsRef ref) async {
   final schoolRepo = ref.watch(schoolRepositoryProvider);
   final query = ref.watch(schoolSearchQueryProvider);
@@ -33,8 +51,8 @@ Future<List<School>> getSchools(GetSchoolsRef ref) async {
     cancelToken.cancel();
     timer?.cancel();
   });
-  
-  ref.onCancel(() { 
+
+  ref.onCancel(() {
     timer = Timer(const Duration(seconds: 30), () {
       link.close();
     });
@@ -43,7 +61,8 @@ Future<List<School>> getSchools(GetSchoolsRef ref) async {
   await Future.delayed(kDurationLong);
   if (cancelToken.isCancelled) throw Exception();
 
-  final result = await schoolRepo.getSchools(query: query, cancelToken: cancelToken);
+  final result =
+      await schoolRepo.getSchools(query: query, cancelToken: cancelToken);
   return result.fold(
     (l) => const [],
     (r) => r,
@@ -75,7 +94,7 @@ Future<List<School>> getSchoolsMap(GetSchoolsRef ref) async {
 
   final result = await schoolRepo.getSchools(cancelToken: cancelToken);
   return result.fold(
-        (l) => const [],
-        (r) => r,
+    (l) => const [],
+    (r) => r,
   );
 }

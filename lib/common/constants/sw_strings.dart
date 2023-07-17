@@ -88,6 +88,7 @@ class SWStrings {
   static const descDateCannotBeEmpty  = 'Tanggal tidak boleh kosong';
   static const labelPlantingDate = 'Tanggal Penanaman';
   static const descPlantingCountCannotBeEmpty = 'Jumlah penanaman tidak boleh kosong';
+  static const labelBookmarkList = 'Daftar Bookmark';
 
   // School
   static const labelPlantList = 'Daftar Tanaman';
