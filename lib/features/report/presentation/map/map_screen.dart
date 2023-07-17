@@ -73,7 +73,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
         alignment: Alignment.topRight,
         child: IconButton(
           iconSize: SWSizes.s32 + SWSizes.s8,
-          onPressed: () => _mapController.rotate(0),
+          onPressed: () => {
+            _mapController.rotate(0)
+          },
           icon: const CircleAvatar(
             child: Icon(Icons.navigation_rounded),
           ),
@@ -137,7 +139,8 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     final defaultMapOption = MapOptions(
       center: defaultCentroid,
       zoom: 10,
-      minZoom: 1,
+      minZoom: 3,
+      maxZoom: 23,
       absorbPanEventsOnScrollables: false,
       onPositionChanged: (MapPosition position, bool hasGesture) {
         if (hasGesture &&
