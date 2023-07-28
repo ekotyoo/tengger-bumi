@@ -37,9 +37,12 @@ import 'post_report_state.dart';
 const kMaxAdditionalInfo = 3;
 
 class PostReportController extends StateNotifier<PostReportState> {
-  PostReportController(this._reportRepository, this._areaRepository, this._ref,
-      FormType formType)
-      : super(PostReportState(formType: formType));
+  PostReportController(
+    this._reportRepository,
+    this._areaRepository,
+    this._ref,
+    FormType formType,
+  ) : super(PostReportState(formType: formType));
 
   final IReportRepository _reportRepository;
   final IAreaRepository _areaRepository;
@@ -82,14 +85,13 @@ class PostReportController extends StateNotifier<PostReportState> {
 
   void onProvinceChange(Province value) async {
     state = state.copyWith(
-      provinceInput: ProvinceInput.dirty(value: value),
-      regencies: [],
-      districts: [],
-      villages: [],
-      regencyInput: const RegencyInput.pure(),
-      districtInput: const DistrictInput.pure(),
-      villageInput: const VillageInput.pure()
-    );
+        provinceInput: ProvinceInput.dirty(value: value),
+        regencies: [],
+        districts: [],
+        villages: [],
+        regencyInput: const RegencyInput.pure(),
+        districtInput: const DistrictInput.pure(),
+        villageInput: const VillageInput.pure());
     await _getRegencies(value.id);
   }
 
@@ -105,12 +107,11 @@ class PostReportController extends StateNotifier<PostReportState> {
 
   void onRegencyChange(Regency value) async {
     state = state.copyWith(
-      regencyInput: RegencyInput.dirty(value: value),
-      districts: [],
-      villages: [],
-      districtInput: const DistrictInput.pure(),
-      villageInput: const VillageInput.pure()
-    );
+        regencyInput: RegencyInput.dirty(value: value),
+        districts: [],
+        villages: [],
+        districtInput: const DistrictInput.pure(),
+        villageInput: const VillageInput.pure());
     await _getDistricts(value.id);
   }
 
@@ -126,10 +127,9 @@ class PostReportController extends StateNotifier<PostReportState> {
 
   void onDistrictChange(District value) async {
     state = state.copyWith(
-      districtInput: DistrictInput.dirty(value: value),
-      villages: [],
-      villageInput: const VillageInput.pure()
-    );
+        districtInput: DistrictInput.dirty(value: value),
+        villages: [],
+        villageInput: const VillageInput.pure());
     await _getVillages(value.id);
   }
 
@@ -243,7 +243,8 @@ class PostReportController extends StateNotifier<PostReportState> {
 
     if (reportId != null) {
       await getReportDetail(reportId);
-      await _populateReportDetail(state.reportDetail);
+      final reportDetail = state.reportDetail;
+      await _populateReportDetail(reportDetail);
     }
     await initReportInfoForm();
     state = state.copyWith(firstFormLoading: false);
@@ -267,6 +268,19 @@ class PostReportController extends StateNotifier<PostReportState> {
     if (report == null) return;
     final selectedLocation = report.position;
     final images = report.images.map((e) => right<XFile, String>(e)).toList();
+    if (report.province != null &&
+        report.regency != null &&
+        report.district != null &&
+        report.village != null) {
+      await _getRegencies(report.province!.id);
+      await _getDistricts(report.regency!.id);
+      await _getVillages(report.district!.id);
+      state = state.copyWith(
+          provinceInput: ProvinceInput.dirty(value: report.province),
+          regencyInput: RegencyInput.dirty(value: report.regency),
+          districtInput: DistrictInput.dirty(value: report.district),
+          villageInput: VillageInput.dirty(value: report.village));
+    }
 
     state = state.copyWith(
       locationInput: LocationPickInput.dirty(value: selectedLocation),

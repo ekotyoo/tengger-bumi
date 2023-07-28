@@ -1,6 +1,10 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../common/models/district.dart';
 import '../../../common/models/position.dart';
+import '../../../common/models/province.dart';
+import '../../../common/models/regency.dart';
+import '../../../common/models/village.dart';
 import 'category.dart';
 import 'plant.dart';
 import 'author.dart';
@@ -19,6 +23,10 @@ class PlantDetail with _$PlantDetail {
     required Author author,
     required String address,
     required Position position,
+    Village? village,
+    District? district,
+    Regency? regency,
+    Province? province,
     bool? liked,
     @JsonKey(name: 'created_at') @TimestampSerializer() required DateTime createdAt,
     @JsonKey(name: 'likes_count', defaultValue: 0) required int likesCount,
